@@ -369,10 +369,10 @@
                     </div>
                 </div>
 
-                <!-- 2. Fasilitas Bersama Seluruh Penghuni (Bentuk Tabel) -->
+                <!-- 2. Fasilitas Bersama (Bentuk Tabel) -->
                 <div class="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
                     <h3 class="text-base font-extrabold text-navy-900 uppercase tracking-wider mb-2">
-                        Fasilitas Bersama Seluruh Penghuni
+                        Fasilitas Bersama
                     </h3>
                     
                     <!-- Tabel Fasilitas Bersama -->
