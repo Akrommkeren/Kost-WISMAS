@@ -8,10 +8,14 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $rooms = Room::all();
         $facilities = Facility::all();
+
+        if (auth()->check() && auth()->user()->isOwner() && $request->query('view') !== 'preview') {
+            return view('owner', compact('rooms', 'facilities'));
+        }
 
         return view('home', compact('rooms', 'facilities'));
     }

@@ -20,6 +20,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/api/tenant/dashboard', [TenantController::class, 'getDashboardData']);
     Route::post('/api/tenant/booking', [TenantController::class, 'bookRoom']);
     Route::post('/api/tenant/pay', [TenantController::class, 'uploadPaymentProof']);
+    Route::post('/api/tenant/complaints', [TenantController::class, 'storeComplaint']);
 
     // Owner Routes
     Route::get('/api/owner/dashboard', [OwnerController::class, 'getDashboardData']);
@@ -27,6 +28,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/api/owner/rooms/{room}/price', [OwnerController::class, 'updateRoomPrice']);
     Route::post('/api/owner/payments/{payment}/approve', [OwnerController::class, 'approvePayment']);
     Route::post('/api/owner/payments/{payment}/reject', [OwnerController::class, 'rejectPayment']);
+    Route::post('/api/owner/complaints/{complaint}/status', [OwnerController::class, 'updateComplaintStatus']);
     Route::post('/api/owner/facilities', [OwnerController::class, 'storeFacility']);
     Route::delete('/api/owner/facilities/{facility}', [OwnerController::class, 'deleteFacility']);
 });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Room;
 use App\Models\Booking;
 use App\Models\Payment;
+use App\Models\Complaint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -88,6 +89,36 @@ class TenantController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Bukti pembayaran berhasil diunggah! Menunggu konfirmasi owner.',
+        ]);
+    }
+
+    public function storeComplaint(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'Silakan masuk terlebih dahulu.'], 401);
+        }
+
+        $request->validate([
+            'category' => 'required|string|max:100',
+            'message' => 'required|string|max:1000',
+        ]);
+
+        $booking = Booking::with('room')->where('user_id', $user->id)->first();
+        $roomNumber = $booking && $booking->room ? $booking->room->number : null;
+
+        $complaint = Complaint::create([
+            'user_id' => $user->id,
+            'room_number' => $roomNumber,
+            'category' => $request->category,
+            'message' => $request->message,
+            'status' => 'pending',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pengaduan berhasil dikirim dan dicatat ke daftar kendala pengelola kost!',
+            'complaint' => $complaint,
         ]);
     }
 }

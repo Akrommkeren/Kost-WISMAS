@@ -6,30 +6,44 @@ use App\Models\Room;
 use App\Models\Facility;
 use App\Models\Payment;
 use App\Models\Booking;
+use App\Models\Complaint;
 use Illuminate\Http\Request;
 
 class OwnerController extends Controller
 {
     public function getDashboardData()
     {
-        $rooms = Room::all();
-        $facilities = Facility::all();
-        $pendingPayments = Payment::with(['user', 'room'])->where('status', 'pending')->get();
+        $rooms = Room::with(['bookings' => function($q) {
+            $q->with('user')->latest();
+        }])->get();
 
-        $occupiedCount = Room::where('status', 'occupied')->count();
-        $totalRooms = Room::count();
-        $totalRevenue = Payment::where('status', 'approved')->sum('amount');
-        $pendingAmount = Payment::where('status', 'pending')->sum('amount');
+        $facilities = Facility::all();
+        $payments = Payment::with(['user', 'room'])->latest()->get();
+        $pendingPayments = $payments->where('status', 'pending')->values();
+        $approvedPayments = $payments->where('status', 'approved')->values();
+
+        $complaints = Complaint::with('user')->latest()->get();
+        $unresolvedComplaintsCount = $complaints->where('status', '!=', 'resolved')->count();
+
+        $totalRooms = $rooms->count();
+        $occupiedCount = $rooms->where('status', 'occupied')->count();
+        $availableCount = $rooms->where('status', 'available')->count();
+        $totalRevenue = $approvedPayments->sum('amount');
+        $pendingAmount = $pendingPayments->sum('amount');
 
         return response()->json([
             'rooms' => $rooms,
             'facilities' => $facilities,
+            'payments' => $payments,
             'pendingPayments' => $pendingPayments,
+            'complaints' => $complaints,
             'stats' => [
-                'occupiedCount' => $occupiedCount,
                 'totalRooms' => $totalRooms,
+                'occupiedCount' => $occupiedCount,
+                'availableCount' => $availableCount,
                 'totalRevenue' => $totalRevenue,
                 'pendingAmount' => $pendingAmount,
+                'unresolvedComplaintsCount' => $unresolvedComplaintsCount,
             ]
         ]);
     }
@@ -110,6 +124,28 @@ class OwnerController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Fasilitas ' . $name . ' dihapus.',
+        ]);
+    }
+
+    public function updateComplaintStatus(Request $request, Complaint $complaint)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,in_progress,resolved'
+        ]);
+
+        $complaint->status = $request->status;
+        $complaint->save();
+
+        $statusLabels = [
+            'pending' => 'Belum Diperbaiki',
+            'in_progress' => 'Sedang Dikerjakan',
+            'resolved' => 'Selesai Diperbaiki'
+        ];
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status pengaduan #' . $complaint->id . ' diubah menjadi ' . ($statusLabels[$complaint->status] ?? $complaint->status),
+            'complaint' => $complaint->load('user'),
         ]);
     }
 }

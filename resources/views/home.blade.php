@@ -79,6 +79,19 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-orange-500 selection:text-white flex flex-col min-h-screen">
 
+    @auth
+        @if(Auth::user()->isOwner())
+            <div class="bg-navy-950 text-white px-4 py-2.5 text-xs flex flex-wrap justify-between items-center z-50 sticky top-0 border-b border-navy-800">
+                <span class="font-medium text-slate-200">
+                    <i class="fa-solid fa-eye text-orange-400 mr-2"></i> Mode Pratinjau Website Kost (Masuk sebagai Owner: <b>{{ Auth::user()->name }}</b>)
+                </span>
+                <a href="{{ route('home') }}" class="bg-orange-600 hover:bg-orange-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center shadow-sm">
+                    <i class="fa-solid fa-arrow-left mr-1.5"></i> Kembali ke Sistem Manajemen Owner
+                </a>
+            </div>
+        @endif
+    @endauth
+
     <!-- MAIN NAVBAR (WHITE GLASS) -->
     <header class="sticky top-0 z-40 glass-navbar shadow-sm transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -89,28 +102,29 @@
                     <div class="w-12 h-12 bg-white rounded-xl p-1 shadow-sm flex items-center justify-center overflow-hidden border border-slate-200 transition transform group-hover:scale-105 shrink-0">
                         <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
                     </div>
-                    <div class="flex flex-col justify-center">
-                        <span class="text-xs font-extrabold text-orange-600 tracking-widest uppercase">KOST</span>
-                        <span class="text-xl font-extrabold text-navy-950 tracking-tight leading-tight">WISMA S</span>
+                    <div>
+                        <span class="font-black text-xl tracking-tight text-navy-900 group-hover:text-orange-600 transition">Kost Wisma S</span>
+                        <p class="text-[11px] font-semibold text-slate-600 tracking-wider uppercase">Purwokerto Selatan</p>
                     </div>
                 </a>
 
-                <!-- Navigation Links -->
-                <nav class="hidden md:flex items-center space-x-7 text-sm font-bold text-slate-700">
-                    <a href="#beranda" class="hover:text-orange-600 transition py-1">Beranda</a>
-                    <a href="#kamar" class="hover:text-orange-600 transition py-1">Kamar</a>
-                    <a href="#aturan" class="hover:text-orange-600 transition py-1">Ketentuan</a>
-                    <a href="#pengaduan" class="hover:text-orange-600 transition py-1">Pengaduan</a>
-                    <a href="#lokasi" class="hover:text-orange-600 transition py-1">Lokasi</a>
+                <!-- Desktop Menu Nav -->
+                <nav class="hidden lg:flex items-center space-x-7 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                    <a href="#beranda" class="hover:text-orange-600 transition">Beranda</a>
+                    <a href="#kamar" class="hover:text-orange-600 transition">Kamar</a>
+                    <a href="#fasilitas" class="hover:text-orange-600 transition">Fasilitas</a>
+                    <a href="#aturan" class="hover:text-orange-600 transition">Ketentuan</a>
+                    <a href="#pengaduan" class="hover:text-orange-600 transition">Pengaduan</a>
+                    <a href="#lokasi" class="hover:text-orange-600 transition">Lokasi</a>
                 </nav>
 
                 <!-- Auth Buttons (Desktop & Tablet) -->
                 <div class="hidden sm:flex items-center space-x-3" id="navAuthArea">
                     @auth
                         @if(Auth::user()->isOwner())
-                            <button onclick="openOwnerDashboard()" class="px-4 py-2.5 text-xs font-bold text-white bg-navy-900 hover:bg-navy-800 rounded-lg transition shadow-sm flex items-center">
-                                <i class="fa-solid fa-user-tie text-orange-400 mr-2"></i> Portal Owner
-                            </button>
+                            <a href="{{ route('home') }}" class="px-4 py-2.5 text-xs font-bold text-white bg-orange-600 hover:bg-orange-700 rounded-lg transition shadow-sm flex items-center">
+                                <i class="fa-solid fa-gauge-high mr-2"></i> Sistem Manajemen Owner
+                            </a>
                         @else
                             <button onclick="openTenantDashboard()" class="px-4 py-2.5 text-xs font-bold text-navy-950 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg transition shadow-sm flex items-center">
                                 <i class="fa-solid fa-user text-orange-600 mr-2"></i> Akun Saya
@@ -279,14 +293,15 @@
             <!-- Room Grid -->
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="roomContainer">
                 @foreach($rooms as $room)
-                <div class="bg-white rounded-xl overflow-hidden border border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-md transition duration-200 room-card" 
+                <div class="bg-white rounded-xl overflow-hidden border border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-md transition duration-200 room-card cursor-pointer group" 
                      data-status="{{ $room->status }}" 
                      data-price="{{ $room->price }}" 
-                     data-type="{{ $room->type }}">
+                     data-type="{{ $room->type }}"
+                     onclick="handleRoomClick({{ $room->id }}, '{{ $room->number }}', '{{ $room->type }}', {{ $room->price }}, '{{ $room->status }}', {{ json_encode($room->features ?? []) }})">
                     
                     <!-- Room Image Container -->
                     <div class="relative h-52 bg-slate-100 overflow-hidden">
-                        <img src="{{ $room->image }}" alt="{{ $room->number }}" class="w-full h-full object-cover">
+                        <img src="{{ $room->image }}" alt="{{ $room->number }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                         
                         <!-- Badges -->
                         <div class="absolute top-3 left-3 flex items-center space-x-1.5">
@@ -306,7 +321,7 @@
                     <div class="p-5">
                         <div class="flex justify-between items-start mb-2">
                             <div>
-                                <h3 class="font-extrabold text-navy-900 text-lg">{{ $room->number }}</h3>
+                                <h3 class="font-extrabold text-navy-900 text-lg group-hover:text-orange-600 transition">{{ $room->number }}</h3>
                                 <p class="text-xs font-semibold text-orange-600">{{ $room->type }}</p>
                             </div>
                             <div class="text-right">
@@ -327,9 +342,14 @@
                             @endif
                         </div>
 
+                        <!-- Button Rincian & Spesifikasi Fasilitas -->
+                        <button type="button" onclick="event.stopPropagation(); handleRoomClick({{ $room->id }}, '{{ $room->number }}', '{{ $room->type }}', {{ $room->price }}, '{{ $room->status }}', {{ json_encode($room->features ?? []) }})" class="w-full mb-2 py-2 bg-slate-50 hover:bg-slate-100 text-navy-900 border border-slate-200 font-bold text-xs rounded-lg transition flex items-center justify-center">
+                            <i class="fa-solid fa-circle-info mr-1.5 text-orange-600"></i> Rincian & Spesifikasi Fasilitas
+                        </button>
+
                         <!-- Action Button -->
                         @if($room->status === 'available')
-                            <button onclick="handleBooking({{ $room->id }}, '{{ $room->number }}')" class="w-full py-2 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs rounded-lg transition flex items-center justify-center shadow-sm">
+                            <button onclick="event.stopPropagation(); handleBooking({{ $room->id }}, '{{ $room->number }}')" class="w-full py-2 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs rounded-lg transition flex items-center justify-center shadow-sm">
                                 <i class="fa-solid fa-calendar-check mr-1.5"></i> Booking Kamar
                             </button>
                         @else
@@ -893,6 +913,127 @@
     </div>
 
     <!-- ========================================================================= -->
+    <!-- MODAL SPESIFIKASI & RINCIAN FASILITAS KAMAR -->
+    <!-- ========================================================================= -->
+    <div id="roomDetailModal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-6 sm:p-7 shadow-2xl relative border border-slate-200 max-h-[92vh] overflow-y-auto">
+            
+            <button onclick="closeRoomDetailModal()" class="absolute top-4 right-4 text-slate-400 hover:text-navy-900 w-8 h-8 rounded bg-slate-100 flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Header Modal -->
+            <div class="flex items-center space-x-3 pb-4 border-b border-slate-200 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center font-extrabold text-lg">
+                    <i class="fa-solid fa-door-open"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <h3 class="text-lg font-extrabold text-navy-900" id="detailRoomNumber">Kamar 101</h3>
+                        <span id="detailRoomBadge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Tersedia</span>
+                    </div>
+                    <p class="text-xs text-orange-600 font-semibold" id="detailRoomType">Tipe Standard</p>
+                </div>
+            </div>
+
+            <!-- Foto Kamar -->
+            <div class="mb-5 rounded-xl overflow-hidden border border-slate-200">
+                <img id="detailRoomImage" src="{{ asset('images/foto-kost.jpg') }}" alt="Foto Kamar" class="w-full h-48 sm:h-56 object-cover">
+            </div>
+
+            <!-- Harga & Status -->
+            <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl mb-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div>
+                    <span class="text-[11px] text-slate-500 font-medium block">Tarif Sewa Kamar</span>
+                    <span class="text-lg font-extrabold text-navy-900" id="detailRoomPrice">Rp 1.500.000</span>
+                    <span class="text-xs text-slate-500 font-normal"> / bulan</span>
+                </div>
+                <div id="detailActionContainer">
+                    <!-- Tombol Booking Kamar -->
+                </div>
+            </div>
+
+            <!-- Spesifikasi Rincian Fasilitas Kamar -->
+            <div class="space-y-4">
+                <h4 class="text-xs font-bold text-navy-900 uppercase tracking-wider flex items-center">
+                    <i class="fa-solid fa-list-check text-orange-600 mr-2"></i> Spesifikasi & Rincian Fasilitas Kamar
+                </h4>
+
+                <!-- Grid Spesifikasi -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-slate-700">
+                    <div class="p-3 bg-white border border-slate-200 rounded-xl flex items-start space-x-2.5 shadow-sm">
+                        <i class="fa-solid fa-ruler-combined text-orange-600 mt-0.5 shrink-0"></i>
+                        <div>
+                            <span class="font-bold text-navy-900 block">Luas & Dimensi</span>
+                            <span class="text-slate-500 text-[11px]">3 x 4 Meter (Kamar Lega)</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-white border border-slate-200 rounded-xl flex items-start space-x-2.5 shadow-sm">
+                        <i class="fa-solid fa-bath text-orange-600 mt-0.5 shrink-0"></i>
+                        <div>
+                            <span class="font-bold text-navy-900 block">Kamar Mandi</span>
+                            <span class="text-slate-500 text-[11px]">Kamar Mandi Dalam + Kloset Duduk & Shower</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-white border border-slate-200 rounded-xl flex items-start space-x-2.5 shadow-sm">
+                        <i class="fa-solid fa-snowflake text-orange-600 mt-0.5 shrink-0"></i>
+                        <div>
+                            <span class="font-bold text-navy-900 block">Pendingin Ruangan (AC)</span>
+                            <span class="text-slate-500 text-[11px]">AC Dingin & Hemat Listrik</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-white border border-slate-200 rounded-xl flex items-start space-x-2.5 shadow-sm">
+                        <i class="fa-solid fa-bed text-orange-600 mt-0.5 shrink-0"></i>
+                        <div>
+                            <span class="font-bold text-navy-900 block">Tempat Tidur</span>
+                            <span class="text-slate-500 text-[11px]">Springbed Premium + Bantal & Sprei</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-white border border-slate-200 rounded-xl flex items-start space-x-2.5 shadow-sm">
+                        <i class="fa-solid fa-chair text-orange-600 mt-0.5 shrink-0"></i>
+                        <div>
+                            <span class="font-bold text-navy-900 block">Area Belajar & Kerja</span>
+                            <span class="text-slate-500 text-[11px]">Meja Kerja, Kursi & Stop Kontak Ganda</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-white border border-slate-200 rounded-xl flex items-start space-x-2.5 shadow-sm">
+                        <i class="fa-solid fa-door-closed text-orange-600 mt-0.5 shrink-0"></i>
+                        <div>
+                            <span class="font-bold text-navy-900 block">Lemari Pakaian</span>
+                            <span class="text-slate-500 text-[11px]">Lemari 2 Pintu Luas + Cermin Rias</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-white border border-slate-200 rounded-xl flex items-start space-x-2.5 shadow-sm">
+                        <i class="fa-solid fa-wifi text-orange-600 mt-0.5 shrink-0"></i>
+                        <div>
+                            <span class="font-bold text-navy-900 block">Internet Wi-Fi</span>
+                            <span class="text-slate-500 text-[11px]">High Speed Wi-Fi 50 Mbps Tanpa Batas</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-white border border-slate-200 rounded-xl flex items-start space-x-2.5 shadow-sm">
+                        <i class="fa-solid fa-bolt text-orange-600 mt-0.5 shrink-0"></i>
+                        <div>
+                            <span class="font-bold text-navy-900 block">Kelistrikan Kamar</span>
+                            <span class="text-slate-500 text-[11px]">Token Mandiri (900 VA)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fasilitas Bersama Kost -->
+                <div class="p-3.5 bg-orange-50/60 border border-orange-200/70 rounded-xl text-xs text-orange-950">
+                    <p class="font-bold mb-1 flex items-center">
+                        <i class="fa-solid fa-circle-check text-orange-600 mr-1.5"></i> Termasuk Fasilitas Bersama Kost:
+                    </p>
+                    <p class="text-[11px] text-orange-900 leading-relaxed">
+                        Dispenser air minum galon gratis, dapur bersama & kulkas, tempat jemuran terlindung hujan, parkir motor & mobil aman di dalam pagar, dan pengawasan kamera CCTV 24 Jam.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
     <!-- MODAL DASHBOARD PELANGGAN / PENYEWA -->
     <!-- ========================================================================= -->
     <div id="tenantDashboardModal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center hidden p-4">
@@ -1352,6 +1493,49 @@
             document.querySelectorAll('.pw-toggle-btn i').forEach(icon => {
                 icon.className = 'fa-solid fa-eye text-xs';
             });
+        }
+
+        // Room Detail & Specification Modal Operations
+        function handleRoomClick(roomId, roomNumber, roomType, roomPrice, roomStatus, features) {
+            @guest
+                openAuthModal('login', 'tenant');
+            @else
+                openRoomDetailModal(roomId, roomNumber, roomType, roomPrice, roomStatus, features);
+            @endguest
+        }
+
+        function openRoomDetailModal(roomId, roomNumber, roomType, roomPrice, roomStatus, features) {
+            document.getElementById('detailRoomNumber').textContent = `Kamar ${roomNumber}`;
+            document.getElementById('detailRoomType').textContent = roomType;
+            document.getElementById('detailRoomPrice').textContent = 'Rp ' + Number(roomPrice).toLocaleString('id-ID');
+            
+            const badge = document.getElementById('detailRoomBadge');
+            const actionContainer = document.getElementById('detailActionContainer');
+
+            if (roomStatus === 'available') {
+                badge.className = "px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200";
+                badge.textContent = "Tersedia";
+                actionContainer.innerHTML = `
+                    <button onclick="closeRoomDetailModal(); handleBooking(${roomId}, '${roomNumber}')" class="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs rounded-xl shadow-sm hover:shadow transition flex items-center">
+                        <i class="fa-solid fa-calendar-check mr-1.5"></i> Booking Kamar Ini
+                    </button>
+                `;
+            } else {
+                badge.className = "px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300";
+                badge.textContent = "Kamar Terisi";
+                actionContainer.innerHTML = `
+                    <span class="px-3.5 py-2 bg-slate-200 text-slate-500 font-bold text-xs rounded-xl flex items-center">
+                        <i class="fa-solid fa-lock mr-1.5"></i> Kamar Terisi
+                    </span>
+                `;
+            }
+
+            document.getElementById('roomDetailModal').classList.remove('hidden');
+        }
+
+        function closeRoomDetailModal() {
+            const modal = document.getElementById('roomDetailModal');
+            if (modal) modal.classList.add('hidden');
         }
 
         function setAuthRole(role = 'tenant') {
@@ -2001,6 +2185,28 @@
                 return;
             }
 
+            // Simpan pengaduan ke database (tercatat langsung di sistem pengelola kost)
+            try {
+                const res = await fetch('/api/tenant/complaints', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        category: opsi,
+                        message: pesan
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Pengaduan Anda berhasil tercatat di sistem pengelola kost! Status: Belum Diperbaiki (Akan segera ditindaklanjuti).');
+                }
+            } catch (err) {
+                console.error(err);
+            }
+
             const alamatKost = "Kost Wisma S, Perumahan Griya Karang Indah Blok S-15 RT 01 RW 12, Kel. Karangpucung, Kec. Purwokerto Selatan, Kab. Banyumas 53142";
             const targetPhone = '6281234567890';
 
@@ -2025,6 +2231,7 @@ ${alamatKost}
 ---------------------------------------
 _Pesan dikirim dari Formulir Pengaduan Kost Wisma S_`;
 
+            if (pesanEl) pesanEl.value = '';
             const waUrl = `https://wa.me/${targetPhone}?text=${encodeURIComponent(waText)}`;
             window.open(waUrl, '_blank');
         }
