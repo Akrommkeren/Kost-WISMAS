@@ -134,22 +134,12 @@
         </div>
     </header>
 
-    <!-- BREADCRUMB & BACK NAVIGATION -->
+    <!-- BACK NAVIGATION -->
     <div class="bg-white border-b border-slate-200 py-3.5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between flex-wrap gap-2 text-xs">
-                <nav class="flex items-center space-x-2 text-slate-500 font-medium">
-                    <a href="{{ route('home') }}" class="hover:text-orange-600 transition flex items-center">
-                        <i class="fa-solid fa-house mr-1.5"></i> Beranda
-                    </a>
-                    <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
-                    <a href="{{ route('home') }}#kamar" class="hover:text-orange-600 transition">Daftar Kamar</a>
-                    <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
-                    <span class="text-navy-900 font-bold">{{ $room->number }} ({{ $room->type }})</span>
-                </nav>
-
+            <div class="flex items-center text-xs">
                 <a href="{{ route('home') }}#kamar" class="inline-flex items-center text-xs font-bold text-orange-600 hover:text-orange-700 transition">
-                    <i class="fa-solid fa-arrow-left mr-1.5"></i> Kembali ke Daftar Kamar
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Daftar Kamar
                 </a>
             </div>
         </div>
