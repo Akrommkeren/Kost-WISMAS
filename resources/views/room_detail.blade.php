@@ -763,7 +763,7 @@
                 <div class="w-12 h-12 bg-white rounded-xl p-1 shadow-sm flex items-center justify-center mx-auto mb-2 border border-slate-200">
                     <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
                 </div>
-                <h3 class="text-xl font-black text-navy-900" id="authModalTitle">Masuk ke Kost Wisma S</h3>
+                <h3 class="text-xl font-black text-navy-900" id="authModalTitle">Masuk</h3>
                 <p class="text-xs text-slate-500 mt-1" id="authModalSubtitle">Silakan masuk atau daftar untuk melanjutkan booking kamar.</p>
             </div>
 
@@ -773,7 +773,7 @@
                     Masuk
                 </button>
                 <button type="button" id="tabRegister" onclick="switchAuthTab('register')" class="w-1/2 pb-2.5 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-600 transition">
-                    Daftar Akun Baru
+                    Daftar Akun
                 </button>
             </div>
 
@@ -844,8 +844,9 @@
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" id="btnAuthSubmit" class="w-full py-2.5 bg-orange-600 hover:bg-orange-700 active:scale-95 text-white font-bold text-xs rounded-xl shadow transition">
-                    Masuk Sekarang
+                <button type="submit" id="btnAuthSubmit" class="w-full py-2.5 bg-orange-600 hover:bg-orange-700 active:scale-95 text-white font-bold text-xs rounded-xl shadow transition flex items-center justify-center space-x-1.5">
+                    <i class="fa-solid fa-right-to-bracket text-xs"></i>
+                    <span>Masuk Sekarang</span>
                 </button>
             </form>
         </div>
@@ -1062,18 +1063,18 @@
                 regName.classList.add('hidden');
                 regPhone.classList.add('hidden');
                 regKtp.classList.add('hidden');
-                title.textContent = "Masuk ke Kost Wisma S";
+                title.textContent = "Masuk";
                 subtitle.textContent = "Masuk untuk melanjutkan booking kamar ini.";
-                btnSubmit.textContent = "Masuk Sekarang";
+                btnSubmit.innerHTML = '<i class="fa-solid fa-right-to-bracket text-xs mr-1.5"></i><span>Masuk Sekarang</span>';
             } else {
                 tabRegister.className = "w-1/2 pb-2.5 text-xs font-bold border-b-2 border-orange-600 text-orange-600 transition";
                 tabLogin.className = "w-1/2 pb-2.5 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-600 transition";
                 regName.classList.remove('hidden');
                 regPhone.classList.remove('hidden');
                 regKtp.classList.remove('hidden');
-                title.textContent = "Daftar Akun Penghuni";
+                title.textContent = "Daftar Akun";
                 subtitle.textContent = "Lengkapi data untuk proses pemesanan kamar.";
-                btnSubmit.textContent = "Daftar & Booking";
+                btnSubmit.innerHTML = '<i class="fa-solid fa-user-plus text-xs mr-1.5"></i><span>Daftar Sekarang</span>';
             }
         }
 
