@@ -8,6 +8,7 @@ use App\Http\Controllers\OwnerController;
 
 // Public Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/kamar/{room}', [HomeController::class, 'showRoom'])->name('rooms.show');
 Route::get('/api/rooms', [HomeController::class, 'getRoomsData']);
 
 // Auth Routes

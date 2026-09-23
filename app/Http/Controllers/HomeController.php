@@ -20,6 +20,13 @@ class HomeController extends Controller
         return view('home', compact('rooms', 'facilities'));
     }
 
+    public function showRoom($id)
+    {
+        $room = Room::findOrFail($id);
+        $otherRooms = Room::where('id', '!=', $room->id)->take(3)->get();
+        return view('room_detail', compact('room', 'otherRooms'));
+    }
+
     public function getRoomsData()
     {
         $rooms = Room::all();

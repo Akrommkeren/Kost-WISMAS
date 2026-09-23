@@ -295,8 +295,7 @@
                 <div class="bg-white rounded-xl overflow-hidden border border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-md transition duration-200 room-card cursor-pointer group" 
                      data-status="{{ $room->status }}" 
                      data-price="{{ $room->price }}" 
-                     data-type="{{ $room->type }}"
-                     onclick="handleRoomClick({{ $room->id }}, '{{ $room->number }}', '{{ $room->type }}', {{ $room->price }}, '{{ $room->status }}', {{ json_encode($room->features ?? []) }})">
+                     onclick="handleRoomClick({{ $room->id }})">
                     
                     <!-- Room Image Container -->
                     <div class="relative h-52 bg-slate-100 overflow-hidden">
@@ -342,7 +341,7 @@
                         </div>
 
                         <!-- Button Rincian & Spesifikasi Fasilitas -->
-                        <button type="button" onclick="event.stopPropagation(); handleRoomClick({{ $room->id }}, '{{ $room->number }}', '{{ $room->type }}', {{ $room->price }}, '{{ $room->status }}', {{ json_encode($room->features ?? []) }})" class="w-full mb-2 py-2 bg-slate-50 hover:bg-slate-100 text-navy-900 border border-slate-200 font-bold text-xs rounded-lg transition flex items-center justify-center">
+                        <button type="button" onclick="event.stopPropagation(); handleRoomClick({{ $room->id }})" class="w-full mb-2 py-2 bg-slate-50 hover:bg-slate-100 text-navy-900 border border-slate-200 font-bold text-xs rounded-lg transition flex items-center justify-center">
                             <i class="fa-solid fa-circle-info mr-1.5 text-orange-600"></i> Rincian & Spesifikasi Fasilitas
                         </button>
 
@@ -1494,13 +1493,9 @@
             });
         }
 
-        // Room Detail & Specification Modal Operations
-        function handleRoomClick(roomId, roomNumber, roomType, roomPrice, roomStatus, features) {
-            @guest
-                openAuthModal('login', 'tenant');
-            @else
-                openRoomDetailModal(roomId, roomNumber, roomType, roomPrice, roomStatus, features);
-            @endguest
+        // Room Detail & Specification Navigation
+        function handleRoomClick(roomId) {
+            window.location.href = '/kamar/' + roomId;
         }
 
         function openRoomDetailModal(roomId, roomNumber, roomType, roomPrice, roomStatus, features) {
