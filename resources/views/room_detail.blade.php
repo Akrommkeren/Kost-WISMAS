@@ -137,14 +137,7 @@
     <!-- MAIN DETAIL CONTENT -->
     <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-8 w-full">
 
-        <!-- BACK NAVIGATION (DI KIRI & SEJAJAR KONTEN) -->
-        <div class="mb-5">
-            <a href="{{ route('home') }}#kamar" class="inline-flex items-center text-xs sm:text-sm font-bold text-orange-600 hover:text-orange-700 transition">
-                <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Daftar Kamar
-            </a>
-        </div>
-
-        <!-- TITLE & BADGE HEADER -->
+        <!-- TITLE & ACTION HEADER -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-200 mb-8">
             <div>
                 <div class="flex items-center space-x-3 mb-2 flex-wrap gap-y-2">
@@ -170,11 +163,11 @@
                 </div>
             </div>
 
-            <!-- Price Card Header (Mobile / Desktop) -->
-            <div class="flex items-baseline space-x-2 bg-orange-50 border border-orange-200 px-4 py-2.5 rounded-xl self-start md:self-auto">
-                <span class="text-xs text-orange-800 font-medium">Tarif Sewa:</span>
-                <span class="text-xl sm:text-2xl font-black text-orange-600">Rp {{ number_format($room->price, 0, ',', '.') }}</span>
-                <span class="text-xs text-orange-700 font-semibold">/ bulan</span>
+            <!-- Tombol Kembali ke Daftar Kamar (Di Sebelah Kanan & Sejajar) -->
+            <div class="self-start md:self-auto">
+                <a href="{{ route('home') }}#kamar" class="inline-flex items-center text-xs sm:text-sm font-bold text-orange-600 hover:text-orange-700 transition">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Daftar Kamar
+                </a>
             </div>
         </div>
 
