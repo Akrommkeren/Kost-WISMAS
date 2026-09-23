@@ -202,16 +202,16 @@
 
                     <!-- Dropdown Options Menu (1 Kalimat, Warna Hitam Saja, Tanpa Icon) -->
                     <div id="menuFilterType" class="hidden absolute left-0 right-0 top-full mt-1.5 z-50 bg-white rounded-lg shadow-xl border border-slate-200 p-1 space-y-0.5">
-                        <div onclick="selectCustomOption('type', 'all', 'Semua Tipe Kamar')" class="type-opt-all px-3 py-1.5 rounded-md hover:bg-slate-100 cursor-pointer transition text-xs sm:text-sm font-medium text-slate-900 bg-slate-100 truncate">
+                        <div onclick="selectCustomOption('type', 'all', 'Semua Tipe Kamar')" data-val="all" class="type-opt-all px-3 py-1.5 rounded-md hover:bg-slate-100 cursor-pointer transition text-xs sm:text-sm font-medium text-slate-900 bg-slate-100 truncate">
                             Semua Tipe Kamar
                         </div>
-                        <div onclick="selectCustomOption('type', 'Standard', 'Standard Single')" class="type-opt-Standard px-3 py-1.5 rounded-md hover:bg-slate-100 cursor-pointer transition text-xs sm:text-sm font-medium text-slate-900 truncate">
+                        <div onclick="selectCustomOption('type', 'Standard', 'Standard Single')" data-val="Standard" class="type-opt-Standard px-3 py-1.5 rounded-md hover:bg-slate-100 cursor-pointer transition text-xs sm:text-sm font-medium text-slate-900 truncate">
                             Standard Single
                         </div>
-                        <div onclick="selectCustomOption('type', 'Executive', 'Executive Deluxe')" class="type-opt-Executive px-3 py-1.5 rounded-md hover:bg-slate-100 cursor-pointer transition text-xs sm:text-sm font-medium text-slate-900 truncate">
+                        <div onclick="selectCustomOption('type', 'Executive', 'Executive Deluxe')" data-val="Executive" class="type-opt-Executive px-3 py-1.5 rounded-md hover:bg-slate-100 cursor-pointer transition text-xs sm:text-sm font-medium text-slate-900 truncate">
                             Executive Deluxe
                         </div>
-                        <div onclick="selectCustomOption('type', 'VIP', 'VIP King Suite')" class="type-opt-VIP px-3 py-1.5 rounded-md hover:bg-slate-100 cursor-pointer transition text-xs sm:text-sm font-medium text-slate-900 truncate">
+                        <div onclick="selectCustomOption('type', 'VIP', 'VIP King Suite')" data-val="VIP" class="type-opt-VIP px-3 py-1.5 rounded-md hover:bg-slate-100 cursor-pointer transition text-xs sm:text-sm font-medium text-slate-900 truncate">
                             VIP King Suite
                         </div>
                     </div>
@@ -295,6 +295,7 @@
                 <div class="bg-white rounded-xl overflow-hidden border border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-md transition duration-200 room-card cursor-pointer group" 
                      data-status="{{ $room->status }}" 
                      data-price="{{ $room->price }}" 
+                     data-type="{{ $room->type }}"
                      onclick="handleRoomClick({{ $room->id }})">
                     
                     <!-- Room Image Container -->
@@ -1361,12 +1362,12 @@
             let visibleCount = 0;
 
             roomCards.forEach(card => {
-                const roomStatus = card.dataset.status;
-                const roomPrice = parseInt(card.dataset.price);
-                const roomType = card.dataset.type;
+                const roomStatus = (card.dataset.status || '').trim().toLowerCase();
+                const roomPrice = parseInt(card.dataset.price) || 0;
+                const roomType = (card.dataset.type || '').trim().toLowerCase();
 
-                let matchStatus = (statusFilter === 'all' || roomStatus === statusFilter);
-                let matchType = (typeFilter === 'all' || roomType.toLowerCase().includes(typeFilter.toLowerCase()));
+                let matchStatus = (statusFilter === 'all' || roomStatus === statusFilter.toLowerCase());
+                let matchType = (typeFilter === 'all' || roomType.includes(typeFilter.toLowerCase()) || typeFilter.toLowerCase().includes(roomType));
                 
                 let matchPrice = true;
                 if (priceFilter === 'under13') {
@@ -1378,7 +1379,7 @@
                 }
 
                 if (matchStatus && matchType && matchPrice) {
-                    card.style.display = 'block';
+                    card.style.display = '';
                     visibleCount++;
                 } else {
                     card.style.display = 'none';
@@ -1428,7 +1429,8 @@
             const menu = document.getElementById(`menuFilter${cap}`);
             if (menu) {
                 menu.querySelectorAll('[class*="-opt-"]').forEach(item => {
-                    if (item.classList.contains(`${filterType}-opt-${val}`)) {
+                    const itemVal = item.dataset.val;
+                    if (itemVal === String(val) || item.classList.contains(`${filterType}-opt-${val}`)) {
                         item.classList.add('bg-slate-100');
                     } else {
                         item.classList.remove('bg-slate-100');
