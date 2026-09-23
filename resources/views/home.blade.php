@@ -317,14 +317,14 @@
 
                     <!-- Room Information -->
                     <div class="p-5">
-                        <div class="flex justify-between items-start mb-2">
-                            <div>
+                        <div class="mb-2">
+                            <div class="flex justify-between items-baseline">
                                 <h3 class="font-extrabold text-navy-900 text-lg group-hover:text-orange-600 transition">{{ $room->number }}</h3>
-                                <p class="text-xs font-semibold text-orange-600">{{ $room->type }}</p>
+                                <div class="text-lg font-extrabold text-navy-900">Rp {{ number_format($room->price, 0, ',', '.') }}</div>
                             </div>
-                            <div class="text-right">
-                                <div class="text-lg font-extrabold text-navy-900 leading-tight">Rp {{ number_format($room->price, 0, ',', '.') }}</div>
-                                <span class="text-[11px] text-slate-500 font-normal block -mt-1">/ bulan</span>
+                            <div class="flex justify-between items-baseline mt-0.5">
+                                <p class="text-xs font-semibold text-orange-600">{{ $room->type }}</p>
+                                <span class="text-[11px] text-slate-500 font-normal">/ bulan</span>
                             </div>
                         </div>
 
