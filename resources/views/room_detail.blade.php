@@ -639,7 +639,7 @@
         <section class="mt-16 pt-10 border-t border-slate-200">
             <div class="flex items-center justify-between mb-6">
                 <div>
-                    <h3 class="text-xl font-black text-navy-900">Kamar Lainnya di Kost Wisma S</h3>
+                    <h3 class="text-xl font-black text-navy-900">Kamar Lainnya</h3>
                     <p class="text-xs text-slate-500 mt-0.5">Pilihan kamar lain yang tersedia untuk Anda huni</p>
                 </div>
                 <a href="{{ route('home') }}#kamar" class="text-xs font-bold text-orange-600 hover:text-orange-700 transition flex items-center">
@@ -672,7 +672,7 @@
                             </div>
                         </div>
                         <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                            <span class="text-[11px] text-orange-600 font-bold">Rincian Kamar <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i></span>
+                            <span class="text-[11px] text-navy-900 font-bold group-hover:text-orange-600 transition">Rincian Kamar <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i></span>
                         </div>
                     </div>
                 </a>
