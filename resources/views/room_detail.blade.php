@@ -547,18 +547,17 @@
                         </div>
 
                         <!-- Teks Kecil Harga Special -->
-                        <p class="text-[11px] text-slate-500 font-medium mt-2 text-center">
+                        <p class="text-[11px] text-slate-500 font-medium mt-2 text-left">
                             Harga special untuk sewa tahunan!
                         </p>
                     </div>
 
                     <!-- Status Banner -->
-                    <div class="p-3 rounded-xl {{ $room->status === 'available' ? 'bg-emerald-50 border border-emerald-200 text-emerald-800' : 'bg-slate-100 border border-slate-300 text-slate-700' }} text-xs flex items-center justify-between font-bold">
-                        <span>Status Kamar:</span>
+                    <div class="p-3 rounded-xl {{ $room->status === 'available' ? 'bg-emerald-50 border border-emerald-200 text-emerald-700' : 'bg-slate-100 border border-slate-300 text-slate-700' }} text-xs flex items-center justify-center font-bold text-center">
                         @if($room->status === 'available')
-                            <span class="text-emerald-700 flex items-center"><i class="fa-solid fa-circle-check mr-1.5 text-emerald-600"></i> Siap Huni</span>
+                            <span class="inline-flex items-center"><i class="fa-solid fa-circle-check mr-2 text-emerald-600 text-sm"></i> Kamar Tersedia (Siap Huni)</span>
                         @else
-                            <span class="text-slate-600 flex items-center"><i class="fa-solid fa-lock mr-1.5"></i> Sudah Terisi</span>
+                            <span class="inline-flex items-center"><i class="fa-solid fa-lock mr-2 text-slate-500 text-sm"></i> Kamar Terisi (Penuh)</span>
                         @endif
                     </div>
 
