@@ -126,36 +126,10 @@ class DatabaseSeeder extends Seeder
             Facility::create($fac);
         }
 
-        // Booking & Payment for Tenant (Budi Santoso - Kamar 102)
+        // Kamar 102
         $kamar102 = Room::where('number', 'Kamar 102')->first();
 
-        Booking::create([
-            'user_id' => $tenant->id,
-            'room_id' => $kamar102->id,
-            'start_date' => now()->startOfMonth(),
-            'status' => 'confirmed',
-        ]);
-
-        Payment::create([
-            'user_id' => $tenant->id,
-            'room_id' => $kamar102->id,
-            'title' => 'Sewa Bulan Oktober 2026',
-            'amount' => 1500000,
-            'due_date' => '15 Okt 2026',
-            'status' => 'pending',
-        ]);
-
-        Payment::create([
-            'user_id' => $tenant->id,
-            'room_id' => $kamar102->id,
-            'title' => 'Sewa Bulan September 2026',
-            'amount' => 1500000,
-            'due_date' => '15 Sep 2026',
-            'payment_method' => 'BCA Flash',
-            'status' => 'approved',
-        ]);
-
-        // Booking & Payment for Tenant Agung (Kamar 102)
+        // Booking & Payment for Tenant Agung (Kamar 102 - Satu-satunya akun contoh yang sudah punya kamar)
         Booking::create([
             'user_id' => $agung->id,
             'room_id' => $kamar102->id,

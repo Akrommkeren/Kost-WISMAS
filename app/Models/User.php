@@ -39,6 +39,13 @@ class User extends Authenticatable
         return in_array($this->role, ['penghuni', 'tenant']);
     }
 
+    public function hasActiveBooking(): bool
+    {
+        return $this->bookings()
+            ->whereIn('status', ['confirmed', 'approved', 'active'])
+            ->exists();
+    }
+
     public function bookings()
     {
         return $this->hasMany(Booking::class);

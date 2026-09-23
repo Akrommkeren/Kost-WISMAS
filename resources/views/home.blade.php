@@ -125,10 +125,17 @@
                                 <i class="fa-solid fa-gauge-high mr-2"></i> Sistem Manajemen Owner
                             </a>
                         @else
-                            <a href="{{ route('tenant.room') }}" title="Lihat Kamar Anda" class="px-3.5 py-2 text-xs font-bold text-navy-950 bg-slate-100 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-300 border border-slate-300 rounded-lg flex items-center shadow-sm transition group">
-                                <i class="fa-solid fa-user text-orange-600 mr-2 group-hover:scale-110 transition-transform"></i>
-                                <span>{{ Auth::user()->name }}</span>
-                            </a>
+                            @if(Auth::user()->hasActiveBooking())
+                                <a href="{{ route('tenant.room') }}" title="Lihat Kamar Anda" class="px-3.5 py-2 text-xs font-bold text-navy-950 bg-slate-100 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-300 border border-slate-300 rounded-lg flex items-center shadow-sm transition group">
+                                    <i class="fa-solid fa-user text-orange-600 mr-2 group-hover:scale-110 transition-transform"></i>
+                                    <span>{{ Auth::user()->name }}</span>
+                                </a>
+                            @else
+                                <button type="button" onclick="handleTenantNoBookingClick()" title="Akun Anda belum booking kamar" class="px-3.5 py-2 text-xs font-bold text-navy-950 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg flex items-center shadow-sm transition group">
+                                    <i class="fa-solid fa-user text-slate-500 group-hover:text-orange-600 mr-2 transition-colors"></i>
+                                    <span>{{ Auth::user()->name }}</span>
+                                </button>
+                            @endif
                         @endif
                         <button onclick="logout()" class="px-3.5 py-2 text-xs font-bold text-slate-600 hover:text-red-600 hover:bg-slate-100 rounded-lg transition">
                             <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Keluar
@@ -150,9 +157,15 @@
                         <button onclick="openAuthModal('register', 'penghuni')" class="px-3 py-1.5 text-xs font-bold text-white bg-orange-600 hover:bg-orange-700 rounded-md shadow-sm transition">Daftar</button>
                     @else
                         @if(!Auth::user()->isOwner())
-                            <a href="{{ route('tenant.room') }}" title="Lihat Kamar Anda" class="px-2.5 py-1.5 text-xs font-bold text-navy-950 bg-slate-100 hover:bg-orange-50 hover:text-orange-600 border border-slate-300 rounded-md flex items-center shadow-sm transition">
-                                <i class="fa-solid fa-user text-orange-600 mr-1"></i> {{ Auth::user()->name }}
-                            </a>
+                            @if(Auth::user()->hasActiveBooking())
+                                <a href="{{ route('tenant.room') }}" title="Lihat Kamar Anda" class="px-2.5 py-1.5 text-xs font-bold text-navy-950 bg-slate-100 hover:bg-orange-50 hover:text-orange-600 border border-slate-300 rounded-md flex items-center shadow-sm transition">
+                                    <i class="fa-solid fa-user text-orange-600 mr-1"></i> {{ Auth::user()->name }}
+                                </a>
+                            @else
+                                <button type="button" onclick="handleTenantNoBookingClick()" title="Akun Anda belum booking kamar" class="px-2.5 py-1.5 text-xs font-bold text-navy-950 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-md flex items-center shadow-sm transition">
+                                    <i class="fa-solid fa-user text-slate-500 mr-1"></i> {{ Auth::user()->name }}
+                                </button>
+                            @endif
                         @endif
                         <button onclick="logout()" class="px-3 py-1.5 text-xs font-bold text-slate-700 bg-slate-100 rounded-md">Keluar</button>
                     @endguest
@@ -2524,7 +2537,19 @@ _Pesan dikirim dari Formulir Pengaduan Kost Wisma S_`;
                     sessionStorage.removeItem('autoOpenTenantDashboard');
                 } catch (e) {}
             @endauth
+
+            @if(session('access_denied'))
+                alert(@json(session('access_denied')));
+            @endif
         });
+
+        function handleTenantNoBookingClick() {
+            alert('Halo, akun Anda belum melakukan pemesanan sewa kamar di Kost Wisma S.\n\nHalaman Informasi Kamar & Tagihan hanya dapat diakses setelah Anda resmi memiliki kamar sewa aktif.');
+            const kamarSection = document.getElementById('kamar');
+            if (kamarSection) {
+                kamarSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
     </script>
 </body>
 </html>

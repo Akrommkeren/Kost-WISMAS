@@ -178,15 +178,12 @@ class TenantController extends Controller
             ->latest()
             ->first();
 
-        // Jika belum ada yang aktif, ambil booking terakhir (misal pending)
-        if (!$booking) {
-            $booking = Booking::with('room')
-                ->where('user_id', $user->id)
-                ->latest()
-                ->first();
+        // Jika belum memiliki kamar yang disewa (seperti akun akrom@gmail.com), tidak bisa akses halaman ini
+        if (!$booking || !$booking->room) {
+            return redirect()->route('home')->with('access_denied', 'Akun Anda belum melakukan booking sewa kamar di Kost Wisma S. Halaman Informasi Kamar & Tagihan Anda hanya dapat diakses oleh penghuni yang telah memiliki kamar aktif.');
         }
 
-        $room = $booking ? $booking->room : null;
+        $room = $booking->room;
 
         // Ambil riwayat pembayaran
         $payments = Payment::where('user_id', $user->id)
