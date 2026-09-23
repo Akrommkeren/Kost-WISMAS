@@ -654,9 +654,13 @@
                         <img src="{{ $other->image }}" alt="{{ $other->number }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                         <div class="absolute top-2.5 left-2.5">
                             @if($other->status === 'available')
-                                <span class="px-2 py-0.5 bg-emerald-600 text-white font-bold text-[10px] rounded shadow">Tersedia</span>
+                                <span class="px-2.5 py-1 bg-emerald-600 text-white font-bold text-[10px] rounded shadow inline-flex items-center">
+                                    <i class="fa-solid fa-circle-check mr-1"></i> Tersedia
+                                </span>
                             @else
-                                <span class="px-2 py-0.5 bg-slate-700 text-white font-bold text-[10px] rounded shadow">Terisi</span>
+                                <span class="px-2.5 py-1 bg-slate-700 text-white font-bold text-[10px] rounded shadow inline-flex items-center">
+                                    <i class="fa-solid fa-lock mr-1"></i> Kamar Terisi
+                                </span>
                             @endif
                         </div>
                     </div>
