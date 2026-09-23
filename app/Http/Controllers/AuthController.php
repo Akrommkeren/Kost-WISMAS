@@ -25,8 +25,8 @@ class AuthController extends Controller
             // Determine role by email domain
             if (str_ends_with(strtolower($user->email), '@wismas.com') && $user->role !== 'owner') {
                 $user->update(['role' => 'owner']);
-            } elseif (str_ends_with(strtolower($user->email), '@gmail.com') && $user->role !== 'tenant') {
-                $user->update(['role' => 'tenant']);
+            } elseif (str_ends_with(strtolower($user->email), '@gmail.com') && $user->role !== 'penghuni') {
+                $user->update(['role' => 'penghuni']);
             }
 
             Auth::login($user);
@@ -55,7 +55,7 @@ class AuthController extends Controller
     {
         $email = strtolower(trim($request->email ?? ''));
         $isOwner = str_ends_with($email, '@wismas.com');
-        $role = $isOwner ? 'owner' : 'tenant';
+        $role = $isOwner ? 'owner' : 'penghuni';
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],

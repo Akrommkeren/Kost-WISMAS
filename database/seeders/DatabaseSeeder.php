@@ -31,12 +31,12 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
 
-        // Tenant Users
+        // Penghuni Users
         $tenant = User::create([
             'name' => 'Akrom',
             'email' => 'akrom@gmail.com',
             'phone' => '081234567777',
-            'role' => 'tenant',
+            'role' => 'penghuni',
             'password' => Hash::make('password'),
         ]);
 
@@ -44,7 +44,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Budi Santoso',
             'email' => 'budi@gmail.com',
             'phone' => '081234567890',
-            'role' => 'tenant',
+            'role' => 'penghuni',
             'password' => Hash::make('password'),
         ]);
 

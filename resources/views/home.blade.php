@@ -133,10 +133,10 @@
                             <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Keluar
                         </button>
                     @else
-                        <button onclick="openAuthModal('login', 'tenant')" class="px-4 py-2.5 text-xs font-bold text-slate-700 hover:text-orange-600 transition flex items-center">
+                        <button onclick="openAuthModal('login', 'penghuni')" class="px-4 py-2.5 text-xs font-bold text-slate-700 hover:text-orange-600 transition flex items-center">
                             <i class="fa-solid fa-arrow-right-to-bracket mr-1.5"></i> Masuk
                         </button>
-                        <button onclick="openAuthModal('register', 'tenant')" class="px-5 py-2.5 text-xs font-bold text-white bg-orange-600 hover:bg-orange-700 rounded-lg shadow-sm transition">
+                        <button onclick="openAuthModal('register', 'penghuni')" class="px-5 py-2.5 text-xs font-bold text-white bg-orange-600 hover:bg-orange-700 rounded-lg shadow-sm transition">
                             <i class="fa-solid fa-user-plus mr-1.5"></i> Daftar
                         </button>
                     @endauth
@@ -145,8 +145,8 @@
                 <!-- Mobile Action Menu -->
                 <div class="sm:hidden flex items-center space-x-1.5">
                     @guest
-                        <button onclick="openAuthModal('login', 'tenant')" class="px-2.5 py-1.5 text-xs font-bold text-slate-700 border border-slate-300 rounded-md hover:bg-slate-50 transition">Masuk</button>
-                        <button onclick="openAuthModal('register', 'tenant')" class="px-3 py-1.5 text-xs font-bold text-white bg-orange-600 hover:bg-orange-700 rounded-md shadow-sm transition">Daftar</button>
+                        <button onclick="openAuthModal('login', 'penghuni')" class="px-2.5 py-1.5 text-xs font-bold text-slate-700 border border-slate-300 rounded-md hover:bg-slate-50 transition">Masuk</button>
+                        <button onclick="openAuthModal('register', 'penghuni')" class="px-3 py-1.5 text-xs font-bold text-white bg-orange-600 hover:bg-orange-700 rounded-md shadow-sm transition">Daftar</button>
                     @else
                         @if(!Auth::user()->isOwner())
                             <button onclick="openTenantDashboard()" class="px-2.5 py-1.5 text-xs font-bold text-navy-950 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-md transition shadow-sm flex items-center">
@@ -872,7 +872,7 @@
             <form id="authForm" onsubmit="handleAuthSubmit(event)" enctype="multipart/form-data" class="space-y-4">
                 
                 <input type="hidden" id="authMode" value="login">
-                <input type="hidden" id="authRole" value="tenant">
+                <input type="hidden" id="authRole" value="penghuni">
 
                 <!-- Register Only: Nama Lengkap -->
                 <div id="registerFieldsName" class="hidden">
@@ -1076,7 +1076,7 @@
                         <i class="fa-solid fa-user"></i>
                     </div>
                     <div>
-                        <h3 class="text-lg font-extrabold text-navy-900" id="tenantWelcomeName">Portal Penyewa</h3>
+                        <h3 class="text-lg font-extrabold text-navy-900" id="tenantWelcomeName">Portal Penghuni</h3>
                         <p class="text-xs text-slate-500">Kelola informasi sewa kamar dan pembayaran Anda</p>
                     </div>
                 </div>
@@ -1342,7 +1342,7 @@
     <!-- ========================================================================= -->
     <script>
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        let currentRole = 'tenant';
+        let currentRole = 'penghuni';
 
         // Filter Rooms by Tabs
         function filterRooms(status) {
@@ -1507,7 +1507,7 @@
         }
 
         // Auth Modal Operations
-        function openAuthModal(mode = 'login', role = 'tenant') {
+        function openAuthModal(mode = 'login', role = 'penghuni') {
             const modal = document.getElementById('authModal');
             if (modal) modal.classList.remove('hidden');
             switchAuthTab(mode);
@@ -1557,7 +1557,7 @@
             if (modal) modal.classList.add('hidden');
         }
 
-        function setAuthRole(role = 'tenant') {
+        function setAuthRole(role = 'penghuni') {
             currentRole = role;
         }
 
@@ -1633,7 +1633,7 @@
                 formData.append('email', document.getElementById('authEmail').value.trim());
                 formData.append('phone', document.getElementById('regPhone').value.trim());
                 formData.append('password', document.getElementById('authPassword').value);
-                formData.append('role', 'tenant');
+                formData.append('role', 'penghuni');
 
                 const ktpInput = document.getElementById('regKtp');
                 if (ktpInput && ktpInput.files && ktpInput.files[0]) {
@@ -1656,7 +1656,7 @@
                 if (res.ok && data.success) {
                     closeAuthModal();
                     alert(data.message);
-                    if (data.user && data.user.role === 'tenant') {
+                    if (data.user && (data.user.role === 'penghuni' || data.user.role === 'tenant')) {
                         sessionStorage.setItem('autoOpenTenantDashboard', 'true');
                     }
                     location.reload();
@@ -1700,14 +1700,14 @@
                 });
                 const data = await res.json();
                 if (data.user) {
-                    document.getElementById('tenantWelcomeName').innerText = `Portal Penyewa - ${data.user.name}`;
+                    document.getElementById('tenantWelcomeName').innerText = `Portal Penghuni - ${data.user.name}`;
                     if (data.booking && data.booking.room) {
                         document.getElementById('tenantRoomNumber').innerText = `${data.booking.room.number} - ${data.booking.room.type}`;
                         document.getElementById('tenantRoomPrice').innerText = `Rp ${data.booking.room.price.toLocaleString('id-ID')}`;
                     }
                     document.getElementById('tenantDashboardModal').classList.remove('hidden');
                 } else {
-                    openAuthModal('login', 'tenant');
+                    openAuthModal('login', 'penghuni');
                 }
             } catch (err) {
                 console.error(err);
@@ -1933,7 +1933,7 @@
                     sessionStorage.setItem('pendingBookingRoomId', roomId);
                     sessionStorage.setItem('pendingBookingRoomNumber', roomNumber);
                 } catch (e) {}
-                openAuthModal('login', 'tenant');
+                openAuthModal('login', 'penghuni');
                 return;
             @else
                 const res = await fetch('/api/tenant/booking', {
@@ -1957,7 +1957,7 @@
         function handleFooterBooking(e) {
             @guest
                 if (e) e.preventDefault();
-                openAuthModal('login', 'tenant');
+                openAuthModal('login', 'penghuni');
             @else
                 const section = document.getElementById('kamar');
                 if (section) section.scrollIntoView({ behavior: 'smooth' });
@@ -1967,7 +1967,7 @@
         function handleFooterPengaduan(e) {
             @guest
                 if (e) e.preventDefault();
-                openAuthModal('login', 'tenant');
+                openAuthModal('login', 'penghuni');
             @else
                 const section = document.getElementById('pengaduan');
                 if (section) section.scrollIntoView({ behavior: 'smooth' });
@@ -2074,11 +2074,11 @@
                 try {
                     sessionStorage.setItem('pendingOpenReview', 'true');
                 } catch (e) {}
-                openAuthModal('login', 'tenant');
+                openAuthModal('login', 'penghuni');
                 return;
             @else
                 @if(Auth::user()->isOwner())
-                    alert('Hanya akun Penghuni / Penyewa yang dapat memberikan ulasan kost.');
+                    alert('Hanya akun Penghuni yang dapat memberikan ulasan kost.');
                 @else
                     openReviewModal();
                 @endif
@@ -2209,11 +2209,11 @@
                     } catch (e) {}
                 }
 
-                openAuthModal('login', 'tenant');
+                openAuthModal('login', 'penghuni');
                 return;
             @else
                 @if(Auth::user()->isOwner())
-                    alert('Hanya akun Penghuni / Penyewa yang dapat mengirimkan pengaduan fasilitas.');
+                    alert('Hanya akun Penghuni yang dapat mengirimkan pengaduan fasilitas.');
                     return;
                 @endif
             @endguest

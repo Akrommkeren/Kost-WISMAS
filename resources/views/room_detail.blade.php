@@ -111,10 +111,10 @@
                             <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Keluar
                         </button>
                     @else
-                        <button onclick="openAuthModal('login', 'tenant')" class="px-4 py-2.5 text-xs font-bold text-slate-700 hover:text-orange-600 transition flex items-center">
+                        <button onclick="openAuthModal('login', 'penghuni')" class="px-4 py-2.5 text-xs font-bold text-slate-700 hover:text-orange-600 transition flex items-center">
                             <i class="fa-solid fa-arrow-right-to-bracket mr-1.5"></i> Masuk
                         </button>
-                        <button onclick="openAuthModal('register', 'tenant')" class="px-5 py-2.5 text-xs font-bold text-white bg-orange-600 hover:bg-orange-700 rounded-lg shadow-sm transition">
+                        <button onclick="openAuthModal('register', 'penghuni')" class="px-5 py-2.5 text-xs font-bold text-white bg-orange-600 hover:bg-orange-700 rounded-lg shadow-sm transition">
                             <i class="fa-solid fa-user-plus mr-1.5"></i> Daftar
                         </button>
                     @endauth
@@ -123,8 +123,8 @@
                 <!-- Mobile Action Menu -->
                 <div class="sm:hidden flex items-center space-x-1.5">
                     @guest
-                        <button onclick="openAuthModal('login', 'tenant')" class="px-2.5 py-1.5 text-xs font-bold text-slate-700 border border-slate-300 rounded-md hover:bg-slate-50 transition">Masuk</button>
-                        <button onclick="openAuthModal('register', 'tenant')" class="px-3 py-1.5 text-xs font-bold text-white bg-orange-600 hover:bg-orange-700 rounded-md shadow-sm transition">Daftar</button>
+                        <button onclick="openAuthModal('login', 'penghuni')" class="px-2.5 py-1.5 text-xs font-bold text-slate-700 border border-slate-300 rounded-md hover:bg-slate-50 transition">Masuk</button>
+                        <button onclick="openAuthModal('register', 'penghuni')" class="px-3 py-1.5 text-xs font-bold text-white bg-orange-600 hover:bg-orange-700 rounded-md shadow-sm transition">Daftar</button>
                     @else
                         @if(!Auth::user()->isOwner())
                             <a href="{{ route('home') }}?portal=1" class="px-2.5 py-1.5 text-xs font-bold text-navy-950 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-md transition shadow-sm flex items-center">
@@ -786,7 +786,7 @@
             <form id="authForm" onsubmit="handleAuthSubmit(event)" enctype="multipart/form-data" class="space-y-4">
                 
                 <input type="hidden" id="authMode" value="login">
-                <input type="hidden" id="authRole" value="tenant">
+                <input type="hidden" id="authRole" value="penghuni">
 
                 <!-- Register Only: Nama Lengkap -->
                 <div id="registerFieldsName" class="hidden">
@@ -1001,7 +1001,7 @@
                     sessionStorage.setItem('pendingBookingPeriod', selectedPeriod);
                 } catch (e) {}
 
-                openAuthModal('login', 'tenant');
+                openAuthModal('login', 'penghuni');
                 return;
             @else
                 @if(Auth::user()->isOwner())
@@ -1040,7 +1040,7 @@
         }
 
         // Auth Modal Operations
-        function openAuthModal(mode = 'login', role = 'tenant') {
+        function openAuthModal(mode = 'login', role = 'penghuni') {
             const modal = document.getElementById('authModal');
             if (modal) modal.classList.remove('hidden');
             switchAuthTab(mode);
@@ -1121,7 +1121,7 @@
                 formData.append('email', document.getElementById('authEmail').value.trim());
                 formData.append('phone', document.getElementById('regPhone').value.trim());
                 formData.append('password', document.getElementById('authPassword').value);
-                formData.append('role', 'tenant');
+                formData.append('role', 'penghuni');
 
                 const ktpInput = document.getElementById('regKtp');
                 if (ktpInput && ktpInput.files && ktpInput.files[0]) {

@@ -31,7 +31,12 @@ class User extends Authenticatable
 
     public function isTenant(): bool
     {
-        return $this->role === 'tenant';
+        return in_array($this->role, ['penghuni', 'tenant']);
+    }
+
+    public function isPenghuni(): bool
+    {
+        return in_array($this->role, ['penghuni', 'tenant']);
     }
 
     public function bookings()
