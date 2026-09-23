@@ -323,8 +323,8 @@
                                 <p class="text-xs font-semibold text-orange-600">{{ $room->type }}</p>
                             </div>
                             <div class="text-right">
-                                <div class="text-lg font-extrabold text-navy-900">Rp {{ number_format($room->price, 0, ',', '.') }}</div>
-                                <span class="text-[11px] text-slate-500 font-normal">per bulan</span>
+                                <div class="text-lg font-extrabold text-navy-900 leading-tight">Rp {{ number_format($room->price, 0, ',', '.') }}</div>
+                                <span class="text-[11px] text-slate-500 font-normal block -mt-1">/ bulan</span>
                             </div>
                         </div>
 
