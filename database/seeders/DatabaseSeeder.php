@@ -14,8 +14,16 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Owner User
+        // Owner Users
         $owner = User::create([
+            'name' => 'Iskandar',
+            'email' => 'iskandar@wismas.com',
+            'phone' => '081299991111',
+            'role' => 'owner',
+            'password' => Hash::make('password'),
+        ]);
+
+        User::create([
             'name' => 'Owner Wisma S',
             'email' => 'owner@wismas.com',
             'phone' => '081299990000',
@@ -23,8 +31,16 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
 
-        // Tenant User
+        // Tenant Users
         $tenant = User::create([
+            'name' => 'Akrom',
+            'email' => 'akrom@gmail.com',
+            'phone' => '081234567777',
+            'role' => 'tenant',
+            'password' => Hash::make('password'),
+        ]);
+
+        User::create([
             'name' => 'Budi Santoso',
             'email' => 'budi@gmail.com',
             'phone' => '081234567890',

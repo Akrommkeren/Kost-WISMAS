@@ -103,8 +103,8 @@
                                 <i class="fa-solid fa-gauge-high mr-2"></i> Sistem Manajemen Owner
                             </a>
                         @else
-                            <a href="{{ route('home') }}" class="px-4 py-2.5 text-xs font-bold text-navy-950 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg transition shadow-sm flex items-center">
-                                <i class="fa-solid fa-user text-orange-600 mr-2"></i> Akun Saya
+                            <a href="{{ route('home') }}?portal=1" class="px-4 py-2.5 text-xs font-bold text-navy-950 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg transition shadow-sm flex items-center">
+                                <i class="fa-solid fa-user text-orange-600 mr-2"></i> Portal Penghuni
                             </a>
                         @endif
                         <button onclick="logout()" class="px-3.5 py-2 text-xs font-bold text-slate-600 hover:text-red-600 hover:bg-slate-100 rounded-lg transition">
@@ -126,6 +126,11 @@
                         <button onclick="openAuthModal('login', 'tenant')" class="px-2.5 py-1.5 text-xs font-bold text-slate-700 border border-slate-300 rounded-md hover:bg-slate-50 transition">Masuk</button>
                         <button onclick="openAuthModal('register', 'tenant')" class="px-3 py-1.5 text-xs font-bold text-white bg-orange-600 hover:bg-orange-700 rounded-md shadow-sm transition">Daftar</button>
                     @else
+                        @if(!Auth::user()->isOwner())
+                            <a href="{{ route('home') }}?portal=1" class="px-2.5 py-1.5 text-xs font-bold text-navy-950 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-md transition shadow-sm flex items-center">
+                                <i class="fa-solid fa-user text-orange-600 mr-1"></i> Penghuni
+                            </a>
+                        @endif
                         <button onclick="logout()" class="px-3 py-1.5 text-xs font-bold text-slate-700 bg-slate-100 rounded-md">Keluar</button>
                     @endguest
                 </div>

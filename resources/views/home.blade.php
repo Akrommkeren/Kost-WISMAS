@@ -126,7 +126,7 @@
                             </a>
                         @else
                             <button onclick="openTenantDashboard()" class="px-4 py-2.5 text-xs font-bold text-navy-950 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg transition shadow-sm flex items-center">
-                                <i class="fa-solid fa-user text-orange-600 mr-2"></i> Akun Saya
+                                <i class="fa-solid fa-user text-orange-600 mr-2"></i> Portal Penghuni
                             </button>
                         @endif
                         <button onclick="logout()" class="px-3.5 py-2 text-xs font-bold text-slate-600 hover:text-red-600 hover:bg-slate-100 rounded-lg transition">
@@ -148,6 +148,11 @@
                         <button onclick="openAuthModal('login', 'tenant')" class="px-2.5 py-1.5 text-xs font-bold text-slate-700 border border-slate-300 rounded-md hover:bg-slate-50 transition">Masuk</button>
                         <button onclick="openAuthModal('register', 'tenant')" class="px-3 py-1.5 text-xs font-bold text-white bg-orange-600 hover:bg-orange-700 rounded-md shadow-sm transition">Daftar</button>
                     @else
+                        @if(!Auth::user()->isOwner())
+                            <button onclick="openTenantDashboard()" class="px-2.5 py-1.5 text-xs font-bold text-navy-950 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-md transition shadow-sm flex items-center">
+                                <i class="fa-solid fa-user text-orange-600 mr-1"></i> Penghuni
+                            </button>
+                        @endif
                         <button onclick="logout()" class="px-3 py-1.5 text-xs font-bold text-slate-700 bg-slate-100 rounded-md">Keluar</button>
                     @endguest
                 </div>
@@ -1651,6 +1656,9 @@
                 if (res.ok && data.success) {
                     closeAuthModal();
                     alert(data.message);
+                    if (data.user && data.user.role === 'tenant') {
+                        sessionStorage.setItem('autoOpenTenantDashboard', 'true');
+                    }
                     location.reload();
                 } else {
                     let errMsg = data.message || 'Gagal autentikasi.';
@@ -1687,7 +1695,9 @@
         // Tenant Dashboard Functions
         async function openTenantDashboard() {
             try {
-                const res = await fetch('/api/tenant/dashboard');
+                const res = await fetch('/api/tenant/dashboard', {
+                    headers: { 'Accept': 'application/json' }
+                });
                 const data = await res.json();
                 if (data.user) {
                     document.getElementById('tenantWelcomeName').innerText = `Portal Penyewa - ${data.user.name}`;
@@ -2301,6 +2311,15 @@ _Pesan dikirim dari Formulir Pengaduan Kost Wisma S_`;
                     if (savedKategori) {
                         pilihOpsiFasilitas(savedKategori);
                         sessionStorage.removeItem('pendingPengaduanKategori');
+                    }
+
+                    // Auto open portal penghuni jika ada parameter ?portal=1 atau session
+                    const urlParams = new URLSearchParams(window.location.search);
+                    if (urlParams.get('portal') === '1' || sessionStorage.getItem('autoOpenTenantDashboard') === 'true') {
+                        sessionStorage.removeItem('autoOpenTenantDashboard');
+                        setTimeout(() => {
+                            openTenantDashboard();
+                        }, 250);
                     }
                 } catch (e) {}
             @endauth
