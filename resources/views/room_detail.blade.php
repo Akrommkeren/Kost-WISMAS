@@ -268,79 +268,11 @@
             <!-- LEFT COLUMN: DETAIL & SPESIFIKASI FASILITAS (7 COLS) -->
             <div class="lg:col-span-8 space-y-8">
 
-                <!-- 1. Ringkasan Fitur Unggulan -->
-                <div class="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200 shadow-sm">
-                    <h3 class="text-base font-extrabold text-navy-900 uppercase tracking-wider mb-4 flex items-center">
-                        <i class="fa-solid fa-star text-orange-500 mr-2.5"></i> Fasilitas Utama Kamar
-                    </h3>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5">
-                        <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
-                                <i class="fa-solid fa-ruler-combined text-sm"></i>
-                            </div>
-                            <div class="min-w-0">
-                                <span class="text-[11px] text-slate-500 font-medium block">Luas Kamar</span>
-                                <span class="text-xs font-bold text-navy-900 truncate block">{{ $dimensi }}</span>
-                            </div>
-                        </div>
-
-                        <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
-                                <i class="fa-solid fa-bed text-sm"></i>
-                            </div>
-                            <div class="min-w-0">
-                                <span class="text-[11px] text-slate-500 font-medium block">Tempat Tidur</span>
-                                <span class="text-xs font-bold text-navy-900 truncate block">Kasur Premium</span>
-                            </div>
-                        </div>
-
-                        <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
-                                <i class="fa-solid fa-snowflake text-sm"></i>
-                            </div>
-                            <div class="min-w-0">
-                                <span class="text-[11px] text-slate-500 font-medium block">Pendingin</span>
-                                <span class="text-xs font-bold text-navy-900 truncate block">AC Dingin</span>
-                            </div>
-                        </div>
-
-                        <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
-                                <i class="fa-solid fa-bath text-sm"></i>
-                            </div>
-                            <div class="min-w-0">
-                                <span class="text-[11px] text-slate-500 font-medium block">Kamar Mandi</span>
-                                <span class="text-xs font-bold text-navy-900 truncate block">Kloset & Shower</span>
-                            </div>
-                        </div>
-
-                        <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
-                                <i class="fa-solid fa-wifi text-sm"></i>
-                            </div>
-                            <div class="min-w-0">
-                                <span class="text-[11px] text-slate-500 font-medium block">Internet</span>
-                                <span class="text-xs font-bold text-navy-900 truncate block">Wi-Fi 50 Mbps</span>
-                            </div>
-                        </div>
-
-                        <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
-                                <i class="fa-solid fa-bolt text-sm"></i>
-                            </div>
-                            <div class="min-w-0">
-                                <span class="text-[11px] text-slate-500 font-medium block">Listrik</span>
-                                <span class="text-xs font-bold text-navy-900 truncate block">Token Mandiri</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 2. Rincian & Spesifikasi Lengkap Kamar -->
+                <!-- 1. Rincian & Spesifikasi Kamar -->
                 <div class="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-6">
                     <div>
-                        <h3 class="text-base font-extrabold text-navy-900 uppercase tracking-wider mb-2 flex items-center">
-                            <i class="fa-solid fa-list-check text-orange-600 mr-2.5"></i> Rincian & Spesifikasi Fasilitas Kamar
+                        <h3 class="text-base font-extrabold text-navy-900 uppercase tracking-wider mb-2">
+                            Rincian & Spesifikasi Kamar
                         </h3>
                         <p class="text-xs text-slate-600 leading-relaxed">
                             Kamar {{ $room->number }} dirancang khusus untuk kenyamanan istirahat maksimal, privasi terjaga, dan produktivitas belajar maupun bekerja dengan standar kebersihan tinggi.
@@ -410,61 +342,61 @@
                     </div>
                 </div>
 
-                <!-- 3. Fasilitas Bersama Kost -->
+                <!-- 2. Fasilitas Bersama Seluruh Penghuni (Bentuk Tabel) -->
                 <div class="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
-                    <h3 class="text-base font-extrabold text-navy-900 uppercase tracking-wider flex items-center">
-                        <i class="fa-solid fa-building-user text-orange-600 mr-2.5"></i> Fasilitas Bersama Seluruh Penghuni
+                    <h3 class="text-base font-extrabold text-navy-900 uppercase tracking-wider mb-2">
+                        Fasilitas Bersama Seluruh Penghuni
                     </h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-700">
-                        <div class="flex items-start space-x-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
-                            <i class="fa-solid fa-fire-burner text-orange-500 text-sm mt-0.5"></i>
-                            <div>
-                                <span class="font-bold text-navy-900 block">Dapur Bersama Lengkap</span>
-                                <span class="text-slate-500 text-[11px]">Kompor gas, tabung gas gratis, dan wastafel cuci piring.</span>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
-                            <i class="fa-solid fa-cubes-stacked text-orange-500 text-sm mt-0.5"></i>
-                            <div>
-                                <span class="font-bold text-navy-900 block">Kulkas & Dispenser Bersama</span>
-                                <span class="text-slate-500 text-[11px]">Kulkas pantry dan air galon minum siap pakai bersama.</span>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
-                            <i class="fa-solid fa-shirt text-orange-500 text-sm mt-0.5"></i>
-                            <div>
-                                <span class="font-bold text-navy-900 block">Area Jemuran Pakaian Luas</span>
-                                <span class="text-slate-500 text-[11px]">Terletak di area terlindung hujan dan terkena sinar matahari optimal.</span>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
-                            <i class="fa-solid fa-motorcycle text-orange-500 text-sm mt-0.5"></i>
-                            <div>
-                                <span class="font-bold text-navy-900 block">Parkir Motor Luas & Berpagar</span>
-                                <span class="text-slate-500 text-[11px]">Parkir motor aman di dalam gerbang tertutup dengan kunci mandiri.</span>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
-                            <i class="fa-solid fa-video text-orange-500 text-sm mt-0.5"></i>
-                            <div>
-                                <span class="font-bold text-navy-900 block">CCTV Keamanan 24 Jam</span>
-                                <span class="text-slate-500 text-[11px]">Area koridor, gerbang, dan parkiran termonitor demi rasa aman.</span>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
-                            <i class="fa-solid fa-broom text-orange-500 text-sm mt-0.5"></i>
-                            <div>
-                                <span class="font-bold text-navy-900 block">Kebersihan Koridor Rutin</span>
-                                <span class="text-slate-500 text-[11px]">Area koridor, dapur, dan lingkungan luar dibersihkan secara teratur.</span>
-                            </div>
-                        </div>
+                    
+                    <!-- Tabel Fasilitas Bersama -->
+                    <div class="overflow-hidden border border-slate-200 rounded-xl">
+                        <table class="w-full text-left text-xs">
+                            <tbody class="divide-y divide-slate-100">
+                                <tr class="bg-slate-50">
+                                    <td class="py-3 px-4 font-bold text-navy-900 w-1/3 flex items-center">
+                                        <i class="fa-solid fa-fire-burner text-orange-500 mr-2"></i> Dapur Bersama
+                                    </td>
+                                    <td class="py-3 px-4 text-slate-700">Kompor gas, tabung gas gratis, dan wastafel cuci piring</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-bold text-navy-900 flex items-center">
+                                        <i class="fa-solid fa-cubes-stacked text-orange-500 mr-2"></i> Kulkas & Dispenser
+                                    </td>
+                                    <td class="py-3 px-4 text-slate-700">Kulkas pantry dan air galon minum siap pakai bersama</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="py-3 px-4 font-bold text-navy-900 flex items-center">
+                                        <i class="fa-solid fa-shirt text-orange-500 mr-2"></i> Area Jemuran Pakaian
+                                    </td>
+                                    <td class="py-3 px-4 text-slate-700">Area jemuran pakaian luas terlindung hujan & terkena sinar matahari optimal</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-bold text-navy-900 flex items-center">
+                                        <i class="fa-solid fa-motorcycle text-orange-500 mr-2"></i> Parkir Motor
+                                    </td>
+                                    <td class="py-3 px-4 text-slate-700">Parkir motor aman dan tertata rapi di dalam gerbang tertutup dengan kunci mandiri</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="py-3 px-4 font-bold text-navy-900 flex items-center">
+                                        <i class="fa-solid fa-video text-orange-500 mr-2"></i> Keamanan CCTV 24 Jam
+                                    </td>
+                                    <td class="py-3 px-4 text-slate-700">Area koridor, gerbang masuk, dan parkiran termonitor demi rasa aman penghuni</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-bold text-navy-900 flex items-center">
+                                        <i class="fa-solid fa-broom text-orange-500 mr-2"></i> Kebersihan Lingkungan
+                                    </td>
+                                    <td class="py-3 px-4 text-slate-700">Area koridor, dapur, dan lingkungan luar dibersihkan secara teratur oleh pengelola</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-                <!-- 4. Ketentuan & Kebijakan Kamar -->
+                <!-- 3. Ketentuan Sewa -->
                 <div class="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
-                    <h3 class="text-base font-extrabold text-navy-900 uppercase tracking-wider flex items-center">
-                        <i class="fa-solid fa-shield-halved text-orange-600 mr-2.5"></i> Ketentuan Sewa Kamar Ini
+                    <h3 class="text-base font-extrabold text-navy-900 uppercase tracking-wider mb-2">
+                        Ketentuan Sewa
                     </h3>
                     <ul class="space-y-2.5 text-xs text-slate-700">
                         <li class="flex items-start space-x-2">
