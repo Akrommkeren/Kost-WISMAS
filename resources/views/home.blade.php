@@ -102,9 +102,9 @@
                     <div class="w-12 h-12 bg-white rounded-xl p-1 shadow-sm flex items-center justify-center overflow-hidden border border-slate-200 transition transform group-hover:scale-105 shrink-0">
                         <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
                     </div>
-                    <div>
-                        <span class="font-black text-xl tracking-tight text-navy-900 group-hover:text-orange-600 transition">Kost Wisma S</span>
-                        <p class="text-[11px] font-semibold text-slate-600 tracking-wider uppercase">Purwokerto Selatan</p>
+                    <div class="flex flex-col justify-center">
+                        <span class="text-xs font-black text-orange-600 tracking-widest uppercase leading-none mb-0.5">Kost</span>
+                        <span class="text-lg sm:text-xl font-black text-navy-900 tracking-tight leading-tight">WISMA S</span>
                     </div>
                 </a>
 
