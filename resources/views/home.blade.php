@@ -1984,8 +1984,8 @@
         let currentDurationMonths = 1;
         let currentDurationMultiplier = 1;
 
-        function openBookingTransactionModal(roomId, roomNumber) {
-            const room = allRoomsData.find(r => r.id === roomId);
+        function openBookingTransactionModal(roomId, roomNumber, period = 'bulanan') {
+            const room = allRoomsData.find(r => r.id == roomId);
             if (!room) {
                 alert('Informasi kamar tidak ditemukan.');
                 return;
@@ -2016,13 +2016,26 @@
             const chosenLabel = periodInfo.label;
 
             // Isi rincian data kamar
-            document.getElementById('transRoomId').value = room.id;
-            document.getElementById('transDuration').value = chosenLabel;
-            document.getElementById('transAmount').value = chosenPrice;
-            document.getElementById('transPaymentMethod').value = 'Midtrans Payment Gateway';
-            document.getElementById('transRoomNumber').textContent = 'Kamar ' + room.number;
-            document.getElementById('transRoomType').textContent = room.type;
-            document.getElementById('transTotalDisplay').textContent = 'Rp ' + Number(chosenPrice).toLocaleString('id-ID');
+            const transRoomIdEl = document.getElementById('transRoomId');
+            if (transRoomIdEl) transRoomIdEl.value = room.id;
+
+            const transDurationEl = document.getElementById('transDuration');
+            if (transDurationEl) transDurationEl.value = chosenLabel;
+
+            const transAmountEl = document.getElementById('transAmount');
+            if (transAmountEl) transAmountEl.value = chosenPrice;
+
+            const transPaymentMethodEl = document.getElementById('transPaymentMethod');
+            if (transPaymentMethodEl) transPaymentMethodEl.value = 'Midtrans Payment Gateway';
+
+            const transRoomNumberEl = document.getElementById('transRoomNumber');
+            if (transRoomNumberEl) transRoomNumberEl.textContent = 'Kamar ' + room.number;
+
+            const transRoomTypeEl = document.getElementById('transRoomType');
+            if (transRoomTypeEl) transRoomTypeEl.textContent = room.type;
+
+            const transTotalDisplayEl = document.getElementById('transTotalDisplay');
+            if (transTotalDisplayEl) transTotalDisplayEl.textContent = 'Rp ' + Number(chosenPrice).toLocaleString('id-ID');
             
             const badgeEl = document.getElementById('transPeriodBadge');
             if (badgeEl) badgeEl.textContent = chosenLabel;
@@ -2031,11 +2044,12 @@
             if (periodTextEl) periodTextEl.innerHTML = `<i class="fa-solid fa-circle-check text-[9px] mr-1"></i> Periode ${chosenLabel}`;
 
             const imgEl = document.getElementById('transRoomImage');
-            if (imgEl) imgEl.src = room.image;
+            if (imgEl && room.image) imgEl.src = room.image;
 
             // Data user (jika login)
             @auth
-                document.getElementById('transUserName').value = "{{ Auth::user()->name }}";
+                const nameEl = document.getElementById('transUserName');
+                if (nameEl) nameEl.value = "{{ Auth::user()->name }}";
                 const phoneInput = document.getElementById('transUserPhone');
                 if (phoneInput && !phoneInput.value) {
                     phoneInput.value = "{{ Auth::user()->phone ?? '' }}";
@@ -2055,8 +2069,11 @@
             }
 
             // Reset tampilan
-            document.getElementById('bookingTransactionFormSection').classList.remove('hidden');
-            document.getElementById('bookingTransactionSuccessSection').classList.add('hidden');
+            const formSection = document.getElementById('bookingTransactionFormSection');
+            if (formSection) formSection.classList.remove('hidden');
+
+            const successSection = document.getElementById('bookingTransactionSuccessSection');
+            if (successSection) successSection.classList.add('hidden');
 
             // Tampilkan modal
             const modal = document.getElementById('bookingTransactionModal');
@@ -2139,11 +2156,12 @@
             }
         }
 
-        async function handleBooking(roomId, roomNumber) {
+        async function handleBooking(roomId, roomNumber, period = 'bulanan') {
             @guest
                 try {
                     sessionStorage.setItem('pendingBookingRoomId', roomId);
                     sessionStorage.setItem('pendingBookingRoomNumber', roomNumber);
+                    sessionStorage.setItem('pendingBookingPeriod', period);
                 } catch (e) {}
                 openAuthModal('login', 'penghuni');
                 return;
@@ -2152,7 +2170,7 @@
                     alert('Akun Owner tidak dapat melakukan booking kamar. Silakan masuk menggunakan akun penghuni.');
                     return;
                 @endif
-                openBookingTransactionModal(roomId, roomNumber);
+                openBookingTransactionModal(roomId, roomNumber, period);
             @endguest
         }
 
@@ -2472,10 +2490,12 @@ _Pesan dikirim dari Formulir Pengaduan Kost Wisma S_`;
                     // Cek jika sebelumnya ingin mengajukan booking kamar
                     const pendingRoomId = sessionStorage.getItem('pendingBookingRoomId');
                     const pendingRoomNumber = sessionStorage.getItem('pendingBookingRoomNumber');
+                    const pendingPeriod = sessionStorage.getItem('pendingBookingPeriod') || 'bulanan';
                     if (pendingRoomId && pendingRoomNumber) {
                         sessionStorage.removeItem('pendingBookingRoomId');
                         sessionStorage.removeItem('pendingBookingRoomNumber');
-                        handleBooking(parseInt(pendingRoomId), pendingRoomNumber);
+                        sessionStorage.removeItem('pendingBookingPeriod');
+                        handleBooking(parseInt(pendingRoomId), pendingRoomNumber, pendingPeriod);
                         return;
                     }
 
