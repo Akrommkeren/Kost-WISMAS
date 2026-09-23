@@ -471,11 +471,89 @@
                 <!-- Main Booking Card -->
                 <div class="bg-white rounded-2xl p-6 sm:p-7 border-2 border-orange-500 shadow-xl space-y-5">
                     
+                    @php
+                        $basePrice = $room->price;
+                        $priceWeekly = round(($basePrice * 0.35) / 10000) * 10000;
+                        $priceMonthly = $basePrice;
+                        $priceSemester = round(($basePrice * 6 * 0.95) / 50000) * 50000;
+                        $priceYearly = $basePrice * 11;
+
+                        $rentalOptions = [
+                            'mingguan' => [
+                                'label' => 'Mingguan',
+                                'suffix' => '/ minggu',
+                                'price' => $priceWeekly,
+                                'price_formatted' => 'Rp ' . number_format($priceWeekly, 0, ',', '.')
+                            ],
+                            'bulanan' => [
+                                'label' => 'Bulanan',
+                                'suffix' => '/ bulan',
+                                'price' => $priceMonthly,
+                                'price_formatted' => 'Rp ' . number_format($priceMonthly, 0, ',', '.')
+                            ],
+                            'semester' => [
+                                'label' => 'Semester (6 Bulan)',
+                                'suffix' => '/ semester (6 bln)',
+                                'price' => $priceSemester,
+                                'price_formatted' => 'Rp ' . number_format($priceSemester, 0, ',', '.')
+                            ],
+                            'tahunan' => [
+                                'label' => 'Tahunan',
+                                'suffix' => '/ tahun',
+                                'price' => $priceYearly,
+                                'price_formatted' => 'Rp ' . number_format($priceYearly, 0, ',', '.')
+                            ]
+                        ];
+                    @endphp
+
+                    <!-- Harga Sewa & Pilihan Durasi -->
                     <div>
-                        <span class="text-xs text-slate-500 uppercase tracking-wider font-semibold block mb-1">Tarif Bulanan</span>
-                        <div class="flex items-baseline space-x-1.5">
-                            <span class="text-3xl font-black text-navy-900">Rp {{ number_format($room->price, 0, ',', '.') }}</span>
-                            <span class="text-xs text-slate-500 font-semibold">/ bulan</span>
+                        <span class="text-xs text-slate-500 uppercase tracking-wider font-semibold block mb-1.5">Harga Sewa</span>
+                        <div class="flex items-baseline space-x-2 flex-wrap gap-y-1">
+                            <span id="displayedPrice" class="text-2xl sm:text-3xl font-black text-navy-900 transition-all duration-200">
+                                Rp {{ number_format($priceMonthly, 0, ',', '.') }}
+                            </span>
+                            <div class="relative inline-block">
+                                <select id="rentalPeriodSelect" 
+                                        onchange="updateRentalOption(this.value)" 
+                                        class="text-xs font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 border border-orange-200 rounded-lg px-2.5 py-1 pr-6 focus:outline-none focus:ring-2 focus:ring-orange-500 cursor-pointer transition appearance-none">
+                                    <option value="mingguan">/ minggu</option>
+                                    <option value="bulanan" selected>/ bulan</option>
+                                    <option value="semester">/ semester (6 bulan)</option>
+                                    <option value="tahunan">/ tahun</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1.5 text-orange-600">
+                                    <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pill Buttons Pilihan Cepat -->
+                        <div class="grid grid-cols-4 gap-1.5 mt-3">
+                            <button type="button" 
+                                    onclick="updateRentalOption('mingguan')" 
+                                    id="pill_mingguan"
+                                    class="rental-pill py-1.5 px-1 text-center rounded-lg border border-slate-200 bg-slate-50 hover:bg-orange-50 text-[11px] font-bold text-slate-700 transition">
+                                Minggu
+                            </button>
+                            <button type="button" 
+                                    onclick="updateRentalOption('bulanan')" 
+                                    id="pill_bulanan"
+                                    class="rental-pill py-1.5 px-1 text-center rounded-lg border-2 border-orange-500 bg-orange-50 text-[11px] font-bold text-orange-600 transition shadow-xs">
+                                Bulan
+                            </button>
+                            <button type="button" 
+                                    onclick="updateRentalOption('semester')" 
+                                    id="pill_semester"
+                                    class="rental-pill py-1.5 px-1 text-center rounded-lg border border-slate-200 bg-slate-50 hover:bg-orange-50 text-[11px] font-bold text-slate-700 transition">
+                                6 Bulan
+                            </button>
+                            <button type="button" 
+                                    onclick="updateRentalOption('tahunan')" 
+                                    id="pill_tahunan"
+                                    class="rental-pill py-1.5 px-1 text-center rounded-lg border border-slate-200 bg-slate-50 hover:bg-orange-50 text-[11px] font-bold text-slate-700 transition">
+                                Tahun
+                            </button>
                         </div>
                     </div>
 
@@ -489,26 +567,6 @@
                         @endif
                     </div>
 
-                    <!-- Checklist Keuntungan Sewa -->
-                    <div class="space-y-2 py-3 border-y border-slate-100 text-xs text-slate-600">
-                        <div class="flex items-center space-x-2">
-                            <i class="fa-solid fa-check text-emerald-600 text-xs"></i>
-                            <span>Termasuk Wi-Fi Cepat 50 Mbps</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <i class="fa-solid fa-check text-emerald-600 text-xs"></i>
-                            <span>Termasuk Biaya Air Bersih Jernih</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <i class="fa-solid fa-check text-emerald-600 text-xs"></i>
-                            <span>Termasuk Iuran Sampah & Koridor Bersih</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <i class="fa-solid fa-check text-emerald-600 text-xs"></i>
-                            <span>Bebas Akses Dapur & Parkir Motor</span>
-                        </div>
-                    </div>
-
                     <!-- Action Buttons -->
                     <div class="space-y-3 pt-1">
                         @if($room->status === 'available')
@@ -516,7 +574,7 @@
                                     onclick="triggerBookingAction()" 
                                     class="w-full py-3.5 px-4 bg-orange-600 hover:bg-orange-700 active:scale-95 text-white font-extrabold text-sm rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center space-x-2">
                                 <i class="fa-solid fa-calendar-check text-base"></i>
-                                <span>Booking Kamar Ini</span>
+                                <span>Booking Kamar</span>
                             </button>
                         @else
                             <button disabled 
@@ -525,22 +583,11 @@
                                 <span>Kamar Sudah Terisi</span>
                             </button>
                         @endif
-
-                        <!-- WhatsApp Consultation Button -->
-                        @php
-                            $waMessage = urlencode("Halo Pengelola Kost Wisma S, saya tertarik dengan {$room->number} ({$room->type}) seharga Rp " . number_format($room->price, 0, ',', '.') . "/bulan. Apakah saya bisa survei lokasi atau booking?");
-                        @endphp
-                        <a href="https://wa.me/6281234567890?text={{ $waMessage }}" 
-                           target="_blank" 
-                           class="w-full py-3 px-4 bg-white hover:bg-slate-50 text-emerald-700 border-2 border-emerald-500 font-bold text-xs sm:text-sm rounded-xl transition flex items-center justify-center space-x-2 shadow-sm">
-                            <i class="fa-brands fa-whatsapp text-lg text-emerald-600"></i>
-                            <span>Tanya Pemilik via WhatsApp</span>
-                        </a>
                     </div>
 
                     <p class="text-[11px] text-slate-400 text-center leading-relaxed">
                         <i class="fa-solid fa-info-circle mr-1 text-orange-500"></i>
-                        Booking aman & verifikasi langsung tercatat di portal manajemen penghuni kost.
+                        Booking aman & verifikasi langsung..
                     </p>
 
                 </div>
@@ -874,6 +921,38 @@
             });
         })();
 
+        // Rental Period Selector Logic
+        const rentalData = @json($rentalOptions);
+        let selectedPeriod = 'bulanan';
+
+        function updateRentalOption(period) {
+            if (!rentalData || !rentalData[period]) return;
+            selectedPeriod = period;
+
+            // Sync select dropdown
+            const select = document.getElementById('rentalPeriodSelect');
+            if (select) select.value = period;
+
+            // Update displayed price
+            const priceEl = document.getElementById('displayedPrice');
+            if (priceEl) {
+                priceEl.textContent = rentalData[period].price_formatted;
+            }
+
+            // Sync pill buttons
+            const pills = ['mingguan', 'bulanan', 'semester', 'tahunan'];
+            pills.forEach(p => {
+                const btn = document.getElementById('pill_' + p);
+                if (btn) {
+                    if (p === period) {
+                        btn.className = "rental-pill py-1.5 px-1 text-center rounded-lg border-2 border-orange-500 bg-orange-50 text-[11px] font-bold text-orange-600 transition shadow-xs";
+                    } else {
+                        btn.className = "rental-pill py-1.5 px-1 text-center rounded-lg border border-slate-200 bg-slate-50 hover:bg-orange-50 text-[11px] font-bold text-slate-700 transition";
+                    }
+                }
+            });
+        }
+
         // Trigger Booking Action
         async function triggerBookingAction() {
             if (currentRoomStatus !== 'available') {
@@ -886,6 +965,7 @@
                 try {
                     sessionStorage.setItem('pendingBookingRoomId', currentRoomId);
                     sessionStorage.setItem('pendingBookingRoomNumber', currentRoomNumber);
+                    sessionStorage.setItem('pendingBookingPeriod', selectedPeriod);
                 } catch (e) {}
 
                 openAuthModal('login', 'tenant');
@@ -896,7 +976,9 @@
                     return;
                 @endif
 
-                if (!confirm(`Konfirmasi: Apakah Anda ingin mengajukan booking untuk ${currentRoomNumber}?`)) {
+                const periodLabel = (rentalData && rentalData[selectedPeriod]) ? rentalData[selectedPeriod].label : 'Bulanan';
+                const periodPrice = (rentalData && rentalData[selectedPeriod]) ? rentalData[selectedPeriod].price_formatted : '';
+                if (!confirm(`Konfirmasi: Apakah Anda ingin mengajukan booking untuk ${currentRoomNumber} (Paket ${periodLabel} - ${periodPrice})?`)) {
                     return;
                 }
 
