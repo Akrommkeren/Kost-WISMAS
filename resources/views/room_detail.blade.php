@@ -547,7 +547,7 @@
                         </div>
 
                         <!-- Teks Kecil Harga Special -->
-                        <p class="text-[11px] text-orange-600 font-medium mt-2 text-center">
+                        <p class="text-[11px] text-slate-500 font-medium mt-2 text-center">
                             Harga special untuk sewa tahunan!
                         </p>
                     </div>
