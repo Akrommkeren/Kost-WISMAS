@@ -591,17 +591,42 @@
                 </div>
 
                 <!-- Info Lokasi Mini Card -->
-                <div class="bg-white rounded-2xl p-5 border border-slate-200 text-xs space-y-2.5 text-slate-600 shadow-sm">
-                    <h4 class="font-extrabold text-navy-900 uppercase tracking-wider flex items-center">
-                        <i class="fa-solid fa-location-dot text-orange-600 mr-2"></i> Lokasi Strategis
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 text-xs space-y-3 text-slate-600 shadow-sm">
+                    <h4 class="font-extrabold text-navy-900 uppercase tracking-wider">
+                        Lokasi Strategis
                     </h4>
-                    <p class="leading-relaxed">
-                        Griya Karang Indah Blok S-15, Karangpucung, Purwokerto Selatan.
-                    </p>
-                    <div class="space-y-1 text-[11px] text-slate-500 pt-1 border-t border-slate-100">
+                    <div class="space-y-1 text-[11px] text-slate-500">
                         <p>• 7 Menit ke Kampus & Fasilitas Kuliner</p>
                         <p>• 10 Menit ke Stasiun Purwokerto</p>
                         <p>• Lingkungan aman, tenang, dan bebas banjir</p>
+                    </div>
+
+                    <!-- Embed Google Maps -->
+                    <div class="rounded-xl overflow-hidden border border-slate-200 shadow-xs">
+                        <iframe 
+                            class="w-full h-44 rounded-xl border-0" 
+                            src="https://maps.google.com/maps?q=Perumahan+Griya+Karang+Indah+Blok+S-15+RT+01+RW+12+Karangpucung+Purwokerto+Selatan+Banyumas+53142&t=&z=17&ie=UTF8&iwloc=&output=embed" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+
+                    <!-- Akses Buka Maps -->
+                    <a href="https://www.google.com/maps/search/?api=1&query=Perumahan+Griya+Karang+Indah+Blok+S-15+RT+01+RW+12+Karangpucung+Purwokerto+Selatan+Banyumas+53142" 
+                       target="_blank" 
+                       class="inline-flex items-center justify-center w-full py-2 px-3 bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold text-xs rounded-xl border border-orange-200 transition space-x-1.5 shadow-xs">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                        <span>Buka di Google Maps</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-0.5"></i>
+                    </a>
+
+                    <!-- Alamat Lengkap -->
+                    <div class="pt-2 border-t border-slate-100">
+                        <p class="text-[11px] text-slate-500 leading-relaxed">
+                            <strong class="text-navy-900 block mb-0.5">Alamat Lengkap:</strong>
+                            Perumahan Griya Karang Indah Blok S-15 RT 01 RW 12, Kel. Karangpucung, Kec. Purwokerto Selatan, Kab. Banyumas 53142
+                        </p>
                     </div>
                 </div>
 
