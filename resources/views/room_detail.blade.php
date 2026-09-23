@@ -134,11 +134,13 @@
         </div>
     </header>
 
-    <!-- BACK NAVIGATION -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5">
-        <a href="{{ route('home') }}#kamar" class="inline-flex items-center text-xs font-bold text-orange-600 hover:text-orange-700 transition">
-            <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Daftar Kamar
-        </a>
+    <!-- BACK NAVIGATION (DI SEBELAH KIRI) -->
+    <div class="w-full px-4 sm:px-6 lg:px-8 pt-5 pb-1">
+        <div class="flex items-center justify-start text-left">
+            <a href="{{ route('home') }}#kamar" class="inline-flex items-center text-xs sm:text-sm font-bold text-orange-600 hover:text-orange-700 transition">
+                <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Daftar Kamar
+            </a>
+        </div>
     </div>
 
     <!-- MAIN DETAIL CONTENT -->
