@@ -125,9 +125,9 @@
                                 <i class="fa-solid fa-gauge-high mr-2"></i> Sistem Manajemen Owner
                             </a>
                         @else
-                            <button onclick="openTenantDashboard()" class="px-4 py-2.5 text-xs font-bold text-navy-950 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg transition shadow-sm flex items-center">
-                                <i class="fa-solid fa-user text-orange-600 mr-2"></i> Portal Penghuni
-                            </button>
+                            <span class="px-3.5 py-2 text-xs font-bold text-navy-950 bg-slate-100 border border-slate-300 rounded-lg flex items-center shadow-sm">
+                                <i class="fa-solid fa-user text-orange-600 mr-2"></i> {{ Auth::user()->name }}
+                            </span>
                         @endif
                         <button onclick="logout()" class="px-3.5 py-2 text-xs font-bold text-slate-600 hover:text-red-600 hover:bg-slate-100 rounded-lg transition">
                             <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Keluar
@@ -149,9 +149,9 @@
                         <button onclick="openAuthModal('register', 'penghuni')" class="px-3 py-1.5 text-xs font-bold text-white bg-orange-600 hover:bg-orange-700 rounded-md shadow-sm transition">Daftar</button>
                     @else
                         @if(!Auth::user()->isOwner())
-                            <button onclick="openTenantDashboard()" class="px-2.5 py-1.5 text-xs font-bold text-navy-950 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-md transition shadow-sm flex items-center">
-                                <i class="fa-solid fa-user text-orange-600 mr-1"></i> Penghuni
-                            </button>
+                            <span class="px-2.5 py-1.5 text-xs font-bold text-navy-950 bg-slate-100 border border-slate-300 rounded-md flex items-center shadow-sm">
+                                <i class="fa-solid fa-user text-orange-600 mr-1"></i> {{ Auth::user()->name }}
+                            </span>
                         @endif
                         <button onclick="logout()" class="px-3 py-1.5 text-xs font-bold text-slate-700 bg-slate-100 rounded-md">Keluar</button>
                     @endguest
@@ -1064,98 +1064,7 @@
         </div>
     </div>
 
-    <!-- ========================================================================= -->
-    <!-- MODAL DASHBOARD PELANGGAN / PENYEWA -->
-    <!-- ========================================================================= -->
-    <div id="tenantDashboardModal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl relative border border-slate-200">
-            
-            <div class="flex justify-end items-center pb-3 border-b border-slate-200">
-                <button onclick="closeDashboard('tenant')" class="text-slate-400 hover:text-navy-900 w-8 h-8 rounded bg-slate-100 flex items-center justify-center transition">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
 
-            <div class="mt-6 space-y-6">
-                <!-- Status Sewa Aktif Card -->
-                <div class="bg-navy-900 text-white p-5 rounded-xl border border-navy-800" id="tenantRoomCard">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                        <div>
-                            <span class="px-2.5 py-0.5 bg-emerald-600 text-white rounded text-[11px] font-bold">Status Sewa: Aktif</span>
-                            <h4 class="text-xl font-extrabold mt-2 text-white" id="tenantRoomNumber">Kamar 102 - Executive Deluxe</h4>
-                            <p class="text-xs text-slate-300 mt-1"><i class="fa-regular fa-calendar mr-1.5 text-orange-400"></i> Jatuh Tempo Berikutnya: 15 Oktober 2026</p>
-                        </div>
-                        <div class="bg-navy-800 p-3 rounded-lg border border-navy-700 text-right min-w-[140px]">
-                            <p class="text-[11px] text-slate-400">Sewa Bulanan</p>
-                            <p class="text-lg font-extrabold text-orange-400" id="tenantRoomPrice">Rp 1.500.000</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Two-Column Cards: Unpaid Bill & History -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    
-                    <!-- Tagihan Belum Dibayar -->
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                        <h4 class="font-bold text-navy-900 text-xs mb-3 flex items-center uppercase tracking-wider">
-                            <i class="fa-solid fa-file-invoice text-orange-600 mr-2"></i> Tagihan Belum Dibayar
-                        </h4>
-                        
-                        <div id="pendingPaymentsList" class="space-y-2">
-                            <div class="bg-white p-3.5 rounded-lg border border-slate-200 flex justify-between items-center">
-                                <div>
-                                    <p class="font-bold text-xs text-navy-900">Sewa Bulan Oktober 2026</p>
-                                    <p class="text-[11px] text-slate-500">Jatuh Tempo: 15 Okt 2026</p>
-                                    <p class="text-xs font-bold text-orange-600 mt-1">Rp 1.500.000</p>
-                                </div>
-                                <span class="px-2 py-1 bg-amber-100 text-amber-800 text-[10px] font-bold rounded">Menunggu Bayar</span>
-                            </div>
-                        </div>
-
-                        <button onclick="simulasiBayar()" class="w-full mt-3 py-2.5 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded-lg transition flex items-center justify-center">
-                            <i class="fa-solid fa-receipt mr-1.5"></i> Konfirmasi Bukti Transfer
-                        </button>
-                    </div>
-
-                    <!-- Riwayat Pembayaran -->
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                        <h4 class="font-bold text-navy-900 text-xs mb-3 flex items-center uppercase tracking-wider">
-                            <i class="fa-solid fa-clock-rotate-left text-navy-700 mr-2"></i> Riwayat Pembayaran Lunas
-                        </h4>
-                        
-                        <div class="space-y-2" id="paidPaymentsList">
-                            <div class="bg-white p-3 rounded-lg border border-slate-200 flex justify-between items-center text-xs">
-                                <div>
-                                    <p class="font-bold text-navy-900">Sewa Bulan September 2026</p>
-                                    <p class="text-[10px] text-slate-400">14 Sep 2026 • BCA Flash</p>
-                                </div>
-                                <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-bold rounded text-[10px]">Lunas</span>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- Rekening Pembayaran Kost -->
-                <div class="p-4 bg-orange-50 border border-orange-200 rounded-xl text-xs text-slate-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                    <div>
-                        <p class="font-bold text-navy-900 mb-0.5">Rekening Resmi Pembayaran Kost:</p>
-                        <p class="text-slate-600">Bank Central Asia (BCA) : <strong>8820-1928-334</strong> a/n <strong>Pemilik Wisma S</strong></p>
-                    </div>
-                    <a href="https://wa.me/6281234567890?text=Halo%20Pengelola%20Kost%20Wisma%20S,%20saya%20ingin%20konfirmasi%20pembayaran" target="_blank" class="px-3.5 py-2 bg-navy-900 text-white rounded-lg text-xs font-bold hover:bg-navy-800 transition shrink-0">
-                        Kirim Bukti WA
-                    </a>
-                </div>
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="mt-6 pt-4 border-t border-slate-200 flex justify-end">
-                <button onclick="logout()" class="px-4 py-2 text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg transition">
-                    <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Keluar dari Akun
-                </button>
-            </div>
-        </div>
-    </div>
 
     <!-- ========================================================================= -->
     <!-- MODAL DASHBOARD OWNER / PENGELOLA KOST -->
@@ -1647,9 +1556,6 @@
                 if (res.ok && data.success) {
                     closeAuthModal();
                     alert(data.message);
-                    if (data.user && (data.user.role === 'penghuni' || data.user.role === 'tenant')) {
-                        sessionStorage.setItem('autoOpenTenantDashboard', 'true');
-                    }
                     location.reload();
                 } else {
                     let errMsg = data.message || 'Gagal autentikasi.';
@@ -1683,27 +1589,8 @@
             }
         }
 
-        // Tenant Dashboard Functions
-        async function openTenantDashboard() {
-            try {
-                const res = await fetch('/api/tenant/dashboard', {
-                    headers: { 'Accept': 'application/json' }
-                });
-                const data = await res.json();
-                if (data.user) {
-                    if (data.booking && data.booking.room) {
-                        document.getElementById('tenantRoomNumber').innerText = `${data.booking.room.number} - ${data.booking.room.type}`;
-                        document.getElementById('tenantRoomPrice').innerText = `Rp ${data.booking.room.price.toLocaleString('id-ID')}`;
-                    }
-                    document.getElementById('tenantDashboardModal').classList.remove('hidden');
-                } else {
-                    openAuthModal('login', 'penghuni');
-                }
-            } catch (err) {
-                console.error(err);
-                document.getElementById('tenantDashboardModal').classList.remove('hidden');
-            }
-        }
+        // Tenant Dashboard Functions (ditiadakan)
+        function openTenantDashboard() {}
 
         // Owner Dashboard Functions
         async function openOwnerDashboard() {
@@ -1890,9 +1777,11 @@
 
         function closeDashboard(type) {
             if (type === 'tenant') {
-                document.getElementById('tenantDashboardModal').classList.add('hidden');
+                const modal = document.getElementById('tenantDashboardModal');
+                if (modal) modal.classList.add('hidden');
             } else {
-                document.getElementById('ownerDashboardModal').classList.add('hidden');
+                const modal = document.getElementById('ownerDashboardModal');
+                if (modal) modal.classList.add('hidden');
             }
         }
 
@@ -1937,7 +1826,6 @@
                 const data = await res.json();
                 if (data.success) {
                     alert(data.message);
-                    openTenantDashboard();
                 } else {
                     alert(data.message);
                 }
@@ -2061,26 +1949,18 @@
 
         function handleBuatUlasan() {
             @guest
-                try {
-                    sessionStorage.setItem('autoOpenTenantDashboard', 'true');
-                } catch (e) {}
                 openAuthModal('login', 'penghuni');
                 return;
             @else
-                @if(Auth::user()->isOwner())
-                    alert('Hanya akun Penghuni yang dapat mengakses halaman khusus penghuni.');
-                @else
-                    openTenantDashboard();
-                @endif
+                const section = document.getElementById('lokasi');
+                if (section) section.scrollIntoView({ behavior: 'smooth' });
             @endguest
         }
 
         function openReviewModal() {
-            @auth
-                openTenantDashboard();
-            @else
+            @guest
                 openAuthModal('login', 'penghuni');
-            @endauth
+            @endguest
         }
 
         function closeReviewModal() {
@@ -2199,10 +2079,6 @@
                         sessionStorage.setItem('pendingPengaduanKategori', opsi);
                     } catch (e) {}
                 }
-                try {
-                    sessionStorage.setItem('autoOpenTenantDashboard', 'true');
-                } catch (e) {}
-
                 openAuthModal('login', 'penghuni');
                 return;
             @else
@@ -2303,14 +2179,8 @@ _Pesan dikirim dari Formulir Pengaduan Kost Wisma S_`;
                         sessionStorage.removeItem('pendingPengaduanKategori');
                     }
 
-                    // Auto open portal penghuni jika ada parameter ?portal=1 atau session
-                    const urlParams = new URLSearchParams(window.location.search);
-                    if (urlParams.get('portal') === '1' || sessionStorage.getItem('autoOpenTenantDashboard') === 'true') {
-                        sessionStorage.removeItem('autoOpenTenantDashboard');
-                        setTimeout(() => {
-                            openTenantDashboard();
-                        }, 250);
-                    }
+                    // Bersihkan session portal penghuni jika ada
+                    sessionStorage.removeItem('autoOpenTenantDashboard');
                 } catch (e) {}
             @endauth
         });
