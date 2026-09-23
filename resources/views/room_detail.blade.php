@@ -226,24 +226,6 @@
                     @foreach($highlightPhotos as $index => $photo)
                     <div class="w-full h-full shrink-0 relative">
                         <img src="{{ $photo['url'] }}" alt="{{ $photo['label'] }}" class="w-full h-full object-cover pointer-events-none">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-black/30 pointer-events-none"></div>
-
-                        <!-- Badge Foto Aktif -->
-                        <div class="absolute top-4 left-4 z-10 pointer-events-none">
-                            <span class="px-3 py-1.5 bg-black/60 backdrop-blur-md text-white text-xs font-bold rounded-lg border border-white/20 inline-flex items-center">
-                                <i class="fa-solid fa-image text-orange-400 mr-2"></i> Foto {{ $index + 1 }} dari {{ count($highlightPhotos) }}
-                            </span>
-                        </div>
-
-                        <!-- Overlay Caption -->
-                        <div class="absolute bottom-5 left-4 right-16 sm:right-28 text-white z-10 pointer-events-none">
-                            <h3 class="text-base sm:text-xl font-bold tracking-tight text-white mb-1 drop-shadow-md">
-                                {{ $photo['label'] }}
-                            </h3>
-                            <p class="text-xs sm:text-sm text-slate-200 drop-shadow">
-                                {{ $photo['sub'] }}
-                            </p>
-                        </div>
                     </div>
                     @endforeach
                 </div>
@@ -266,8 +248,8 @@
                     <i class="fa-solid fa-chevron-right text-sm sm:text-base"></i>
                 </button>
 
-                <!-- Dots Indicator di Bagian Bawah Kanan -->
-                <div class="absolute bottom-5 right-4 z-20 flex items-center space-x-1.5 sm:space-x-2">
+                <!-- Dots Indicator di Bagian Bawah Tengah -->
+                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center space-x-1.5 sm:space-x-2 px-3 py-1.5 rounded-full bg-black/35 backdrop-blur-md border border-white/20">
                     @foreach($highlightPhotos as $index => $photo)
                     <button type="button" 
                             onclick="goToPhotoSlide({{ $index }})" 
