@@ -134,17 +134,15 @@
         </div>
     </header>
 
-    <!-- BACK NAVIGATION (DI SEBELAH KIRI) -->
-    <div class="w-full px-4 sm:px-6 lg:px-8 pt-5 pb-1">
-        <div class="flex items-center justify-start text-left">
+    <!-- MAIN DETAIL CONTENT -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-8 w-full">
+
+        <!-- BACK NAVIGATION (DI KIRI & SEJAJAR KONTEN) -->
+        <div class="mb-5">
             <a href="{{ route('home') }}#kamar" class="inline-flex items-center text-xs sm:text-sm font-bold text-orange-600 hover:text-orange-700 transition">
                 <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Daftar Kamar
             </a>
         </div>
-    </div>
-
-    <!-- MAIN DETAIL CONTENT -->
-    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
 
         <!-- TITLE & BADGE HEADER -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-200 mb-8">
