@@ -1200,6 +1200,7 @@
             </div>
 
             <form id="formReview" onsubmit="handleReviewSubmit(event)" class="space-y-4">
+                <!-- Rate Bintang -->
                 <div>
                     <label class="block text-xs font-bold text-navy-900 uppercase mb-1">Rating Bintang</label>
                     <div class="flex items-center space-x-1.5 text-amber-500 text-2xl select-none" id="starRatingContainer">
@@ -1213,21 +1214,13 @@
                     <input type="hidden" id="reviewRating" value="5">
                 </div>
 
+                <!-- Kolom Pesan -->
                 <div>
-                    <label class="block text-xs font-bold text-navy-900 uppercase mb-1">Pekerjaan / Profesi</label>
-                    <input type="text" id="reviewOccupation" required placeholder="Contoh: Mahasiswi / Karyawan Swasta" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-navy-600 focus:outline-none text-xs font-medium">
+                    <label class="block text-xs font-bold text-navy-900 uppercase mb-1">Pesan Ulasan</label>
+                    <textarea id="reviewText" rows="4" required placeholder="Tuliskan pengalaman atau ulasan Anda selama tinggal di Kost Wisma S..." class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-navy-600 focus:outline-none text-xs font-medium leading-relaxed"></textarea>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-bold text-navy-900 uppercase mb-1">Kamar yang Ditempati</label>
-                    <input type="text" id="reviewRoom" placeholder="Contoh: Kamar 104" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-navy-600 focus:outline-none text-xs font-medium">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-navy-900 uppercase mb-1">Isi Ulasan</label>
-                    <textarea id="reviewText" rows="4" required placeholder="Ceritakan kenyamanan fasilitas, kebersihan, respon pengelola, dan suasana tinggal di Kost Wisma S..." class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-navy-600 focus:outline-none text-xs font-medium leading-relaxed"></textarea>
-                </div>
-
+                <!-- Button Kirim Ulasan -->
                 <div class="pt-2">
                     <button type="submit" class="w-full py-3 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-lg shadow-sm transition text-xs flex items-center justify-center">
                         <i class="fa-solid fa-paper-plane mr-2"></i> Kirim Ulasan
@@ -1952,15 +1945,15 @@
                 openAuthModal('login', 'penghuni');
                 return;
             @else
-                const section = document.getElementById('lokasi');
-                if (section) section.scrollIntoView({ behavior: 'smooth' });
+                openReviewModal();
             @endguest
         }
 
         function openReviewModal() {
-            @guest
-                openAuthModal('login', 'penghuni');
-            @endguest
+            const modal = document.getElementById('reviewModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+            }
         }
 
         function closeReviewModal() {
@@ -1989,8 +1982,6 @@
         function handleReviewSubmit(e) {
             e.preventDefault();
             const rating = parseInt(document.getElementById('reviewRating').value) || 5;
-            const occupation = document.getElementById('reviewOccupation').value.trim();
-            const room = document.getElementById('reviewRoom').value.trim() || 'Penghuni Kost';
             const text = document.getElementById('reviewText').value.trim();
             
             @auth
@@ -2025,7 +2016,7 @@
                     <div class="w-8 h-8 rounded-full bg-orange-600 text-white flex items-center justify-center font-bold text-xs">${initials}</div>
                     <div>
                         <p class="font-bold text-xs text-navy-900">${userName}</p>
-                        <p class="text-[10px] text-slate-500">${room} • ${occupation}</p>
+                        <p class="text-[10px] text-slate-500">Penghuni Kost</p>
                     </div>
                 </div>
             `;
