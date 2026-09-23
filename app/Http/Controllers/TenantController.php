@@ -158,4 +158,85 @@ class TenantController extends Controller
             'complaint' => $complaint,
         ]);
     }
+
+    public function showTenantRoom()
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('home');
+        }
+
+        // Jika akun owner, redirect ke beranda
+        if ($user->isOwner()) {
+            return redirect()->route('home');
+        }
+
+        // Ambil booking kamar penghuni yang aktif / confirmed
+        $booking = Booking::with('room')
+            ->where('user_id', $user->id)
+            ->whereIn('status', ['confirmed', 'approved', 'active'])
+            ->latest()
+            ->first();
+
+        // Jika belum ada yang aktif, ambil booking terakhir (misal pending)
+        if (!$booking) {
+            $booking = Booking::with('room')
+                ->where('user_id', $user->id)
+                ->latest()
+                ->first();
+        }
+
+        $room = $booking ? $booking->room : null;
+
+        // Ambil riwayat pembayaran
+        $payments = Payment::where('user_id', $user->id)
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $paidPayments = $payments->where('status', 'approved');
+        $pendingPayments = $payments->where('status', 'pending');
+
+        // Tagihan terdekat yang harus dibayar (tenggat waktu)
+        $upcomingPayment = $pendingPayments->first();
+
+        // Total akumulasi pembayaran lunas
+        $totalPaid = $paidPayments->sum('amount');
+
+        return view('tenant_room', compact(
+            'user',
+            'booking',
+            'room',
+            'payments',
+            'paidPayments',
+            'pendingPayments',
+            'upcomingPayment',
+            'totalPaid'
+        ));
+    }
+
+    public function payPendingBill(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'Silakan masuk terlebih dahulu.'], 401);
+        }
+
+        $request->validate([
+            'payment_id' => 'required|exists:payments,id',
+            'payment_method' => 'nullable|string'
+        ]);
+
+        $payment = Payment::where('user_id', $user->id)->findOrFail($request->payment_id);
+        
+        $paymentMethod = $request->input('payment_method', 'Midtrans Payment Gateway');
+        $payment->payment_method = $paymentMethod;
+        $payment->status = 'approved';
+        $payment->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pembayaran ' . $payment->title . ' berhasil diselesaikan via ' . $paymentMethod . '!',
+            'payment' => $payment
+        ]);
+    }
 }

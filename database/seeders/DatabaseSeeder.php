@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
 
-        User::create([
+        $agung = User::create([
             'name' => 'Agung',
             'email' => 'agung@gmail.com',
             'phone' => '081234568888',
@@ -153,6 +153,47 @@ class DatabaseSeeder extends Seeder
             'due_date' => '15 Sep 2026',
             'payment_method' => 'BCA Flash',
             'status' => 'approved',
+        ]);
+
+        // Booking & Payment for Tenant Agung (Kamar 102)
+        Booking::create([
+            'user_id' => $agung->id,
+            'room_id' => $kamar102->id,
+            'start_date' => '2026-08-01',
+            'status' => 'confirmed',
+        ]);
+
+        Payment::create([
+            'user_id' => $agung->id,
+            'room_id' => $kamar102->id,
+            'title' => 'Sewa Kamar 102 - Bulan Agustus 2026',
+            'amount' => 1500000,
+            'due_date' => '05 Agu 2026',
+            'payment_method' => 'Midtrans (BCA Virtual Account)',
+            'status' => 'approved',
+            'created_at' => '2026-08-01 08:30:00',
+        ]);
+
+        Payment::create([
+            'user_id' => $agung->id,
+            'room_id' => $kamar102->id,
+            'title' => 'Sewa Kamar 102 - Bulan September 2026',
+            'amount' => 1500000,
+            'due_date' => '05 Sep 2026',
+            'payment_method' => 'Midtrans (GoPay / QRIS)',
+            'status' => 'approved',
+            'created_at' => '2026-09-01 09:15:00',
+        ]);
+
+        Payment::create([
+            'user_id' => $agung->id,
+            'room_id' => $kamar102->id,
+            'title' => 'Sewa Kamar 102 - Bulan Oktober 2026',
+            'amount' => 1500000,
+            'due_date' => '05 Okt 2026',
+            'payment_method' => 'Midtrans Payment Gateway',
+            'status' => 'pending',
+            'created_at' => '2026-09-20 10:00:00',
         ]);
     }
 }

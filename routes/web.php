@@ -16,11 +16,13 @@ Route::post('/api/login', [AuthController::class, 'login'])->name('login');
 Route::post('/api/register', [AuthController::class, 'register'])->name('register');
 Route::post('/api/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Tenant Routes
+// Tenant Routes & Pages
 Route::middleware(['auth'])->group(function () {
+    Route::get('/kamar-anda', [TenantController::class, 'showTenantRoom'])->name('tenant.room');
     Route::get('/api/tenant/dashboard', [TenantController::class, 'getDashboardData']);
     Route::post('/api/tenant/booking', [TenantController::class, 'bookRoom']);
     Route::post('/api/tenant/pay', [TenantController::class, 'uploadPaymentProof']);
+    Route::post('/api/tenant/pay-bill', [TenantController::class, 'payPendingBill'])->name('tenant.payBill');
     Route::post('/api/tenant/complaints', [TenantController::class, 'storeComplaint']);
 
     // Owner Routes
