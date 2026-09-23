@@ -687,12 +687,12 @@
 
     </main>
 
-    <!-- FOOTER LENGKAP -->
-    <footer class="bg-navy-950 text-slate-400 pt-12 pb-8 border-t border-navy-900 mt-16">
+    <!-- FOOTER -->
+    <footer class="bg-navy-900 text-slate-300 py-12 border-t border-navy-800 mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 pb-10 border-b border-navy-900">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
                 
-                <!-- Brand & Tagline -->
+                <!-- Brand & Tagline (Lebih leluasa di kiri) -->
                 <div class="md:col-span-4 lg:col-span-5 space-y-3">
                     <div class="flex items-center space-x-3">
                         <div class="w-10 h-10 bg-white rounded-lg p-0.5 shadow flex items-center justify-center overflow-hidden shrink-0">
@@ -704,11 +704,11 @@
                         </div>
                     </div>
                     <p class="text-xs text-slate-300 leading-relaxed max-w-sm">
-                        Kost Nyaman, Bersih & Strategis di Lingkungan Aman. Pilihan Tepat Mahasiswa & Karyawan di Purwokerto Selatan.
+                        Kost Nyaman, Bersih & Strategis di Lingkungan Aman.
                     </p>
                 </div>
 
-                <!-- MENU -->
+                <!-- MENU (Digeser ke kanan) -->
                 <div class="md:col-span-2 lg:col-span-2 md:pl-4 lg:pl-8">
                     <h4 class="text-xs font-bold text-white uppercase mb-3 tracking-wider">MENU</h4>
                     <ul class="space-y-2 text-xs">
@@ -720,12 +720,17 @@
                     </ul>
                 </div>
 
-                <!-- LAYANAN -->
+                <!-- LAYANAN (Digeser ke kanan bersama MENU) -->
                 <div class="md:col-span-2 lg:col-span-2 md:pl-4 lg:pl-8">
                     <h4 class="text-xs font-bold text-white uppercase mb-3 tracking-wider">Layanan</h4>
                     <ul class="space-y-2 text-xs">
-                        <li><a href="{{ route('home') }}#kamar" class="hover:text-orange-400 transition">Booking Kamar</a></li>
+                        <li><a href="{{ route('home') }}#kamar" class="hover:text-orange-400 transition">Booking</a></li>
                         <li><a href="{{ route('home') }}#pengaduan" class="hover:text-orange-400 transition">Pengaduan</a></li>
+                        @auth
+                            @if(Auth::user()->isOwner())
+                                <li><a href="{{ route('home') }}" class="hover:text-orange-400 transition">Portal Owner</a></li>
+                            @endif
+                        @endauth
                     </ul>
                 </div>
 
@@ -739,11 +744,6 @@
                     </div>
                 </div>
 
-            </div>
-
-            <div class="pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-2">
-                <p>&copy; 2026 Kost Wisma S. Hak Cipta Dilindungi.</p>
-                <p>Designed with care for peaceful living.</p>
             </div>
         </div>
     </footer>
