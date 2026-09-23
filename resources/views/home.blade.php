@@ -837,74 +837,101 @@
     <!-- MODAL AUTHENTICATION (LOGIN & SIGN UP) -->
     <!-- ========================================================================= -->
     <div id="authModal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white rounded-xl max-w-md w-full p-6 sm:p-7 shadow-2xl relative border border-slate-200 max-h-[92vh] overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-7 shadow-2xl relative border border-slate-200 max-h-[92vh] overflow-y-auto">
             
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-navy-900 w-8 h-8 rounded bg-slate-100 flex items-center justify-center transition">
+            <button type="button" onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-navy-900 w-8 h-8 rounded bg-slate-100 flex items-center justify-center transition">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
-            <!-- Form Switcher Tabs (Login / Register) -->
-            <div class="border-b border-slate-200 mb-5 flex space-x-6 text-xs font-bold">
-                <button id="tabLogin" onclick="switchAuthTab('login')" class="pb-2 border-b-2 border-orange-600 text-orange-600">Masuk Akun</button>
-                <button id="tabRegister" onclick="switchAuthTab('register')" class="pb-2 text-slate-400 hover:text-navy-900">Daftar Akun Baru</button>
+            <!-- Modal Header Brand -->
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 bg-white rounded-xl p-1 shadow-sm flex items-center justify-center mx-auto mb-2 border border-slate-200">
+                    <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
+                </div>
+                <h3 class="text-xl font-black text-navy-900" id="authModalTitle">Masuk</h3>
+                <p class="text-xs text-slate-500 mt-1" id="authModalSubtitle">Silakan masuk atau daftar untuk melanjutkan booking kamar.</p>
             </div>
 
-            <!-- FORM LOGIN -->
-            <form id="formLogin" onsubmit="handleAuthSubmit(event, 'login')" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-navy-900 uppercase mb-1">Email atau No. WhatsApp</label>
-                    <input type="text" id="loginEmail" required placeholder="nama@email.com atau 0812xxx" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-navy-600 focus:outline-none text-xs font-medium">
+            <!-- Tab Switcher (Masuk / Daftar) -->
+            <div class="flex border-b border-slate-200 mb-5">
+                <button type="button" id="tabLogin" onclick="switchAuthTab('login')" class="w-1/2 pb-2.5 text-xs font-bold border-b-2 border-orange-600 text-orange-600 transition">
+                    Masuk
+                </button>
+                <button type="button" id="tabRegister" onclick="switchAuthTab('register')" class="w-1/2 pb-2.5 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-600 transition">
+                    Daftar Akun
+                </button>
+            </div>
+
+            <!-- Form Content -->
+            <form id="authForm" onsubmit="handleAuthSubmit(event)" enctype="multipart/form-data" class="space-y-4">
+                
+                <input type="hidden" id="authMode" value="login">
+                <input type="hidden" id="authRole" value="tenant">
+
+                <!-- Register Only: Nama Lengkap -->
+                <div id="registerFieldsName" class="hidden">
+                    <label class="block text-xs font-bold text-navy-900 uppercase mb-1">Nama Lengkap</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-regular fa-user text-xs"></i>
+                        </span>
+                        <input type="text" id="regName" class="w-full pl-9 pr-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-navy-600 focus:outline-none" placeholder="Masukkan nama lengkap">
+                    </div>
                 </div>
+
+                <!-- Input Email -->
+                <div>
+                    <label class="block text-xs font-bold text-navy-900 uppercase mb-1">Alamat Email</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-regular fa-envelope text-xs"></i>
+                        </span>
+                        <input type="email" id="authEmail" required class="w-full pl-9 pr-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-navy-600 focus:outline-none" placeholder="email@gmail.com">
+                    </div>
+                </div>
+
+                <!-- Register Only: No WhatsApp -->
+                <div id="registerFieldsPhone" class="hidden">
+                    <label class="block text-xs font-bold text-navy-900 uppercase mb-1">Nomor WhatsApp</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-brands fa-whatsapp text-xs"></i>
+                        </span>
+                        <input type="tel" id="regPhone" class="w-full pl-9 pr-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-navy-600 focus:outline-none" placeholder="08xxxxxxxxxx">
+                    </div>
+                </div>
+
+                <!-- Input Password -->
                 <div>
                     <label class="block text-xs font-bold text-navy-900 uppercase mb-1">Kata Sandi</label>
                     <div class="relative">
-                        <input type="password" id="loginPassword" required placeholder="Masukkan kata sandi" class="w-full px-3.5 py-2.5 pr-10 rounded-lg border border-slate-300 focus:ring-2 focus:ring-navy-600 focus:outline-none text-xs font-medium">
-                        <button type="button" onclick="togglePasswordVisibility('loginPassword', this)" class="pw-toggle-btn absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-navy-900 focus:outline-none transition p-1" title="Lihat kata sandi">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-solid fa-lock text-xs"></i>
+                        </span>
+                        <input type="password" id="authPassword" required class="w-full pl-9 pr-9 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-navy-600 focus:outline-none" placeholder="••••••••">
+                        <button type="button" onclick="togglePasswordVisibility('authPassword')" class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600">
                             <i class="fa-solid fa-eye text-xs"></i>
                         </button>
                     </div>
                 </div>
-                <div class="flex justify-between items-center text-[11px]">
-                    <label class="flex items-center text-slate-600">
-                        <input type="checkbox" class="rounded text-navy-900 mr-1.5" checked> Ingat saya
-                    </label>
-                    <a href="https://wa.me/6281234567890?text=Halo%20Admin,%20saya%20lupa%20password%20akun%20Wisma%20S" target="_blank" class="text-orange-600 font-semibold hover:underline">Lupa kata sandi?</a>
-                </div>
-                <button type="submit" class="w-full py-3 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-lg shadow-sm transition text-xs flex items-center justify-center">
-                    <i class="fa-solid fa-arrow-right-to-bracket mr-1.5"></i> Masuk Sekarang
-                </button>
-            </form>
 
-            <!-- FORM REGISTER -->
-            <form id="formRegister" onsubmit="handleAuthSubmit(event, 'register')" class="space-y-3.5 hidden">
-                <div>
-                    <label class="block text-xs font-bold text-navy-900 uppercase mb-1">Nama Lengkap</label>
-                    <input type="text" id="regName" required placeholder="Contoh: Budi Santoso" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-navy-600 focus:outline-none text-xs font-medium">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-navy-900 uppercase mb-1">Alamat Email</label>
-                    <input type="email" id="regEmail" required placeholder="nama@email.com" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-navy-600 focus:outline-none text-xs font-medium">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-navy-900 uppercase mb-1">Nomor WhatsApp Aktif</label>
-                    <input type="tel" id="regPhone" required placeholder="081234567890" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-navy-600 focus:outline-none text-xs font-medium">
-                </div>
-                <div>
+                <!-- Register Only: Upload File KTP -->
+                <div id="registerFieldsKtp" class="hidden">
                     <label class="block text-xs font-bold text-navy-900 uppercase mb-1">Foto KTP / Fotokopi KTP</label>
-                    <input type="file" id="regKtp" required accept="image/*,.pdf" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-navy-900 file:text-white hover:file:bg-navy-800 file:cursor-pointer border border-slate-300 rounded-lg p-1.5 focus:outline-none focus:ring-2 focus:ring-navy-600">
-                    <p class="text-[10px] text-slate-400 mt-1">Format file: JPG, PNG, atau PDF (Maks. 2MB)</p>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-navy-900 uppercase mb-1">Buat Kata Sandi</label>
-                    <div class="relative">
-                        <input type="password" id="regPassword" required placeholder="Minimal 4 karakter" class="w-full px-3.5 py-2.5 pr-10 rounded-lg border border-slate-300 focus:ring-2 focus:ring-navy-600 focus:outline-none text-xs font-medium">
-                        <button type="button" onclick="togglePasswordVisibility('regPassword', this)" class="pw-toggle-btn absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-navy-900 focus:outline-none transition p-1" title="Lihat kata sandi">
-                            <i class="fa-solid fa-eye text-xs"></i>
-                        </button>
+                    <div class="border-2 border-dashed border-slate-300 hover:border-orange-500 rounded-xl p-3 text-center cursor-pointer transition relative bg-slate-50">
+                        <input type="file" id="regKtp" accept="image/*,.pdf" onchange="previewKtpFileName(this)" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full">
+                        <div class="space-y-1">
+                            <i class="fa-solid fa-id-card text-2xl text-orange-500"></i>
+                            <p class="text-xs font-bold text-navy-900" id="regKtpLabel">Pilih file foto KTP</p>
+                            <p class="text-[10px] text-slate-400">Format JPG, PNG, atau PDF (Maks. 2MB)</p>
+                        </div>
                     </div>
                 </div>
-                <button type="submit" class="w-full py-3 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-lg shadow-sm transition text-xs flex items-center justify-center">
-                    <i class="fa-solid fa-user-plus mr-1.5"></i> Buat Akun Penyewa
+
+                <!-- Submit Button -->
+                <button type="submit" id="btnAuthSubmit" class="w-full py-2.5 bg-orange-600 hover:bg-orange-700 active:scale-95 text-white font-bold text-xs rounded-xl shadow transition flex items-center justify-center space-x-1.5">
+                    <i class="fa-solid fa-right-to-bracket text-xs"></i>
+                    <span>Masuk Sekarang</span>
                 </button>
             </form>
         </div>
@@ -1473,24 +1500,15 @@
         }
 
         // Auth Modal Operations
-        function openAuthModal(tab = 'login', role = 'tenant') {
+        function openAuthModal(mode = 'login', role = 'tenant') {
             const modal = document.getElementById('authModal');
             if (modal) modal.classList.remove('hidden');
-            setAuthRole(role);
-            switchAuthTab(tab);
+            switchAuthTab(mode);
         }
 
         function closeAuthModal() {
             const modal = document.getElementById('authModal');
             if (modal) modal.classList.add('hidden');
-
-            ['loginPassword', 'regPassword'].forEach(id => {
-                const input = document.getElementById(id);
-                if (input) input.type = 'password';
-            });
-            document.querySelectorAll('.pw-toggle-btn i').forEach(icon => {
-                icon.className = 'fa-solid fa-eye text-xs';
-            });
         }
 
         // Room Detail & Specification Navigation
@@ -1536,76 +1554,93 @@
             currentRole = role;
         }
 
-        function togglePasswordVisibility(inputId, btnEl) {
-            const input = document.getElementById(inputId);
+        function togglePasswordVisibility(id) {
+            const input = document.getElementById(id);
             if (!input) return;
-            const icon = btnEl.querySelector('i');
-            if (input.type === 'password') {
-                input.type = 'text';
-                if (icon) {
-                    icon.classList.remove('fa-eye');
-                    icon.classList.add('fa-eye-slash');
-                }
-            } else {
-                input.type = 'password';
-                if (icon) {
-                    icon.classList.remove('fa-eye-slash');
-                    icon.classList.add('fa-eye');
-                }
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function previewKtpFileName(input) {
+            const label = document.getElementById('regKtpLabel');
+            if (input && input.files && input.files[0]) {
+                label.textContent = "File: " + input.files[0].name;
+                label.classList.add('text-emerald-700');
             }
         }
 
-        function switchAuthTab(tab) {
-            const formLogin = document.getElementById('formLogin');
-            const formRegister = document.getElementById('formRegister');
+        function switchAuthTab(mode) {
+            const authModeInput = document.getElementById('authMode');
+            if (authModeInput) authModeInput.value = mode;
+
             const tabLogin = document.getElementById('tabLogin');
             const tabRegister = document.getElementById('tabRegister');
+            const regName = document.getElementById('registerFieldsName');
+            const regPhone = document.getElementById('registerFieldsPhone');
+            const regKtp = document.getElementById('registerFieldsKtp');
+            const title = document.getElementById('authModalTitle');
+            const subtitle = document.getElementById('authModalSubtitle');
+            const btnSubmit = document.getElementById('btnAuthSubmit');
 
-            if (tab === 'login') {
-                formLogin.classList.remove('hidden');
-                formRegister.classList.add('hidden');
-                tabLogin.className = "pb-2 border-b-2 border-orange-600 text-orange-600 font-bold";
-                tabRegister.className = "pb-2 text-slate-400 hover:text-navy-900 font-bold";
+            if (mode === 'login') {
+                if (tabLogin) tabLogin.className = "w-1/2 pb-2.5 text-xs font-bold border-b-2 border-orange-600 text-orange-600 transition";
+                if (tabRegister) tabRegister.className = "w-1/2 pb-2.5 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-600 transition";
+                if (regName) regName.classList.add('hidden');
+                if (regPhone) regPhone.classList.add('hidden');
+                if (regKtp) regKtp.classList.add('hidden');
+                if (title) title.textContent = "Masuk";
+                if (subtitle) subtitle.textContent = "Silakan masuk atau daftar untuk melanjutkan booking kamar.";
+                if (btnSubmit) btnSubmit.innerHTML = '<i class="fa-solid fa-right-to-bracket text-xs mr-1.5"></i><span>Masuk Sekarang</span>';
             } else {
-                formRegister.classList.remove('hidden');
-                formLogin.classList.add('hidden');
-                tabRegister.className = "pb-2 border-b-2 border-orange-600 text-orange-600 font-bold";
-                tabLogin.className = "pb-2 text-slate-400 hover:text-navy-900 font-bold";
+                if (tabRegister) tabRegister.className = "w-1/2 pb-2.5 text-xs font-bold border-b-2 border-orange-600 text-orange-600 transition";
+                if (tabLogin) tabLogin.className = "w-1/2 pb-2.5 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-600 transition";
+                if (regName) regName.classList.remove('hidden');
+                if (regPhone) regPhone.classList.remove('hidden');
+                if (regKtp) regKtp.classList.remove('hidden');
+                if (title) title.textContent = "Daftar Akun";
+                if (subtitle) subtitle.textContent = "Lengkapi data untuk proses pemesanan kamar.";
+                if (btnSubmit) btnSubmit.innerHTML = '<i class="fa-solid fa-user-plus text-xs mr-1.5"></i><span>Daftar Sekarang</span>';
             }
         }
 
-        async function handleAuthSubmit(e, mode) {
+        async function handleAuthSubmit(e) {
             e.preventDefault();
+            const mode = document.getElementById('authMode').value;
             const endpoint = mode === 'login' ? '/api/login' : '/api/register';
-
-            let fetchOptions = {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken,
-                    'Accept': 'application/json'
-                }
-            };
+            let fetchOptions = {};
 
             if (mode === 'login') {
-                fetchOptions.headers['Content-Type'] = 'application/json';
-                fetchOptions.body = JSON.stringify({
-                    email: document.getElementById('loginEmail').value,
-                    password: document.getElementById('loginPassword').value,
-                    role: currentRole
-                });
+                const email = document.getElementById('authEmail').value.trim();
+                const password = document.getElementById('authPassword').value;
+                fetchOptions = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                };
             } else {
                 const formData = new FormData();
-                formData.append('name', document.getElementById('regName').value);
-                formData.append('email', document.getElementById('regEmail').value);
-                formData.append('phone', document.getElementById('regPhone').value);
-                formData.append('password', document.getElementById('regPassword').value);
-                formData.append('role', currentRole || 'tenant');
+                formData.append('name', document.getElementById('regName').value.trim());
+                formData.append('email', document.getElementById('authEmail').value.trim());
+                formData.append('phone', document.getElementById('regPhone').value.trim());
+                formData.append('password', document.getElementById('authPassword').value);
+                formData.append('role', 'tenant');
 
                 const ktpInput = document.getElementById('regKtp');
                 if (ktpInput && ktpInput.files && ktpInput.files[0]) {
                     formData.append('ktp_file', ktpInput.files[0]);
                 }
-                fetchOptions.body = formData;
+
+                fetchOptions = {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: formData
+                };
             }
 
             try {
@@ -1619,9 +1654,7 @@
                     let errMsg = data.message || 'Gagal autentikasi.';
                     if (data.errors) {
                         const errorList = Object.values(data.errors).flat();
-                        if (errorList.length > 0) {
-                            errMsg = errorList.join('\n');
-                        }
+                        if (errorList.length > 0) errMsg = errorList.join('\n');
                     }
                     alert(errMsg);
                 }
