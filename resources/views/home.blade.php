@@ -1070,17 +1070,8 @@
     <div id="tenantDashboardModal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl relative border border-slate-200">
             
-            <div class="flex justify-between items-center pb-4 border-b border-slate-200">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-navy-900 text-orange-400 rounded-lg flex items-center justify-center font-bold text-lg">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-extrabold text-navy-900" id="tenantWelcomeName">Portal Penghuni</h3>
-                        <p class="text-xs text-slate-500">Kelola informasi sewa kamar dan pembayaran Anda</p>
-                    </div>
-                </div>
-                <button onclick="closeDashboard('tenant')" class="text-slate-400 hover:text-navy-900 w-8 h-8 rounded bg-slate-100 flex items-center justify-center">
+            <div class="flex justify-end items-center pb-3 border-b border-slate-200">
+                <button onclick="closeDashboard('tenant')" class="text-slate-400 hover:text-navy-900 w-8 h-8 rounded bg-slate-100 flex items-center justify-center transition">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -1700,7 +1691,6 @@
                 });
                 const data = await res.json();
                 if (data.user) {
-                    document.getElementById('tenantWelcomeName').innerText = `Portal Penghuni - ${data.user.name}`;
                     if (data.booking && data.booking.room) {
                         document.getElementById('tenantRoomNumber').innerText = `${data.booking.room.number} - ${data.booking.room.type}`;
                         document.getElementById('tenantRoomPrice').innerText = `Rp ${data.booking.room.price.toLocaleString('id-ID')}`;
