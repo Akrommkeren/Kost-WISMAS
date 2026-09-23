@@ -825,15 +825,6 @@
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
-            <!-- Notice Banner (jika aksi memerlukan login/daftar terlebih dahulu) -->
-            <div id="authNoticeBanner" class="hidden mb-4 p-3.5 rounded-xl bg-orange-50 border border-orange-200 text-xs text-orange-950 flex items-start space-x-2.5">
-                <i class="fa-solid fa-circle-info text-orange-600 mt-0.5 shrink-0 text-sm"></i>
-                <div class="flex-1">
-                    <p id="authNoticeText" class="font-bold leading-relaxed"></p>
-                    <p class="text-[11px] text-orange-700 mt-0.5">Silakan masuk dengan akun Anda atau klik <b>Daftar Akun Baru</b> jika belum memiliki akun.</p>
-                </div>
-            </div>
-
             <!-- Form Switcher Tabs (Login / Register) -->
             <div class="border-b border-slate-200 mb-5 flex space-x-6 text-xs font-bold">
                 <button id="tabLogin" onclick="switchAuthTab('login')" class="pb-2 border-b-2 border-orange-600 text-orange-600">Masuk Akun</button>
@@ -1343,30 +1334,16 @@
         }
 
         // Auth Modal Operations
-        function openAuthModal(tab = 'login', role = 'tenant', noticeMessage = '') {
+        function openAuthModal(tab = 'login', role = 'tenant') {
             const modal = document.getElementById('authModal');
             if (modal) modal.classList.remove('hidden');
             setAuthRole(role);
             switchAuthTab(tab);
-
-            const banner = document.getElementById('authNoticeBanner');
-            const bannerText = document.getElementById('authNoticeText');
-            if (banner && bannerText) {
-                if (noticeMessage) {
-                    bannerText.textContent = noticeMessage;
-                    banner.classList.remove('hidden');
-                } else {
-                    banner.classList.add('hidden');
-                    bannerText.textContent = '';
-                }
-            }
         }
 
         function closeAuthModal() {
             const modal = document.getElementById('authModal');
             if (modal) modal.classList.add('hidden');
-            const banner = document.getElementById('authNoticeBanner');
-            if (banner) banner.classList.add('hidden');
 
             ['loginPassword', 'regPassword'].forEach(id => {
                 const input = document.getElementById(id);
@@ -1733,7 +1710,7 @@
                     sessionStorage.setItem('pendingBookingRoomId', roomId);
                     sessionStorage.setItem('pendingBookingRoomNumber', roomNumber);
                 } catch (e) {}
-                openAuthModal('login', 'tenant', `Untuk booking kamar ${roomNumber}, silakan masuk atau daftar akun terlebih dahulu.`);
+                openAuthModal('login', 'tenant');
                 return;
             @else
                 const res = await fetch('/api/tenant/booking', {
@@ -1757,7 +1734,7 @@
         function handleFooterBooking(e) {
             @guest
                 if (e) e.preventDefault();
-                openAuthModal('login', 'tenant', 'Untuk melakukan booking kamar, silakan masuk atau daftar akun terlebih dahulu.');
+                openAuthModal('login', 'tenant');
             @else
                 const section = document.getElementById('kamar');
                 if (section) section.scrollIntoView({ behavior: 'smooth' });
@@ -1767,7 +1744,7 @@
         function handleFooterPengaduan(e) {
             @guest
                 if (e) e.preventDefault();
-                openAuthModal('login', 'tenant', 'Untuk mengirimkan pengaduan, silakan masuk atau daftar akun terlebih dahulu sebagai penghuni kost.');
+                openAuthModal('login', 'tenant');
             @else
                 const section = document.getElementById('pengaduan');
                 if (section) section.scrollIntoView({ behavior: 'smooth' });
@@ -1874,7 +1851,7 @@
                 try {
                     sessionStorage.setItem('pendingOpenReview', 'true');
                 } catch (e) {}
-                openAuthModal('login', 'tenant', 'Untuk memberikan ulasan, silakan masuk atau daftar akun terlebih dahulu sebagai penghuni kost.');
+                openAuthModal('login', 'tenant');
                 return;
             @else
                 @if(Auth::user()->isOwner())
@@ -2009,7 +1986,7 @@
                     } catch (e) {}
                 }
 
-                openAuthModal('login', 'tenant', 'Untuk mengirimkan pengaduan, silakan masuk atau daftar akun terlebih dahulu sebagai penghuni kost.');
+                openAuthModal('login', 'tenant');
                 return;
             @else
                 @if(Auth::user()->isOwner())
