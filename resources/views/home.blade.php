@@ -1193,9 +1193,11 @@
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
-            <div class="mb-5">
-                <span class="text-xs font-bold uppercase tracking-wider text-orange-600">Ulasan Penghuni</span>
-                <h3 class="text-lg font-bold text-navy-900 mt-0.5">Tulis Pengalaman Kost Anda</h3>
+            <div class="text-center mb-5">
+                <div class="w-12 h-12 bg-white rounded-xl p-1 shadow-sm flex items-center justify-center mx-auto mb-2.5 border border-slate-200">
+                    <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
+                </div>
+                <h3 class="text-lg font-bold text-navy-900">Tulis Pengalaman Anda</h3>
                 <p class="text-xs text-slate-500 mt-1">Bagikan ulasan Anda selama tinggal di Kost Wisma S Purwokerto.</p>
             </div>
 
@@ -1209,7 +1211,6 @@
                         <i class="fa-solid fa-star star-btn cursor-pointer transition transform hover:scale-110" onclick="setRating(3)"></i>
                         <i class="fa-solid fa-star star-btn cursor-pointer transition transform hover:scale-110" onclick="setRating(4)"></i>
                         <i class="fa-solid fa-star star-btn cursor-pointer transition transform hover:scale-110" onclick="setRating(5)"></i>
-                        <span id="ratingValueText" class="text-xs font-bold text-slate-600 ml-2">5 dari 5 Bintang</span>
                     </div>
                     <input type="hidden" id="reviewRating" value="5">
                 </div>
@@ -1966,8 +1967,6 @@
         function setRating(rating) {
             const input = document.getElementById('reviewRating');
             if (input) input.value = rating;
-            const text = document.getElementById('ratingValueText');
-            if (text) text.textContent = `${rating} dari 5 Bintang`;
             
             const stars = document.querySelectorAll('#starRatingContainer .star-btn');
             stars.forEach((star, index) => {
