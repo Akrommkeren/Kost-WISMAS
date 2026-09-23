@@ -849,7 +849,7 @@
                     <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
                 </div>
                 <h3 class="text-xl font-black text-navy-900" id="authModalTitle">Masuk</h3>
-                <p class="text-xs text-slate-500 mt-1" id="authModalSubtitle">Silakan masuk atau daftar untuk melanjutkan booking kamar.</p>
+                <p class="text-xs text-slate-500 mt-1" id="authModalSubtitle">Masuk untuk melanjutkan booking kamar ini.</p>
             </div>
 
             <!-- Tab Switcher (Masuk / Daftar) -->
@@ -1588,7 +1588,7 @@
                 if (regPhone) regPhone.classList.add('hidden');
                 if (regKtp) regKtp.classList.add('hidden');
                 if (title) title.textContent = "Masuk";
-                if (subtitle) subtitle.textContent = "Silakan masuk atau daftar untuk melanjutkan booking kamar.";
+                if (subtitle) subtitle.textContent = "Masuk untuk melanjutkan booking kamar ini.";
                 if (btnSubmit) btnSubmit.innerHTML = '<i class="fa-solid fa-right-to-bracket text-xs mr-1.5"></i><span>Masuk Sekarang</span>';
             } else {
                 if (tabRegister) tabRegister.className = "w-1/2 pb-2.5 text-xs font-bold border-b-2 border-orange-600 text-orange-600 transition";

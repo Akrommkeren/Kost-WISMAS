@@ -764,7 +764,7 @@
                     <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
                 </div>
                 <h3 class="text-xl font-black text-navy-900" id="authModalTitle">Masuk</h3>
-                <p class="text-xs text-slate-500 mt-1" id="authModalSubtitle">Silakan masuk atau daftar untuk melanjutkan booking kamar.</p>
+                <p class="text-xs text-slate-500 mt-1" id="authModalSubtitle">Masuk untuk melanjutkan booking kamar ini.</p>
             </div>
 
             <!-- Tab Switcher (Masuk / Daftar) -->
