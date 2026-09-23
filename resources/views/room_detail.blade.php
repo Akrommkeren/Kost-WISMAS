@@ -492,8 +492,8 @@
                                 'price_formatted' => 'Rp ' . number_format($priceMonthly, 0, ',', '.')
                             ],
                             'semester' => [
-                                'label' => 'Semester (6 Bulan)',
-                                'suffix' => '/ semester (6 bln)',
+                                'label' => 'Semesteran',
+                                'suffix' => '/ semester',
                                 'price' => $priceSemester,
                                 'price_formatted' => 'Rp ' . number_format($priceSemester, 0, ',', '.')
                             ],
@@ -513,48 +513,43 @@
                             <span id="displayedPrice" class="text-2xl sm:text-3xl font-black text-navy-900 transition-all duration-200">
                                 Rp {{ number_format($priceMonthly, 0, ',', '.') }}
                             </span>
-                            <div class="relative inline-block">
-                                <select id="rentalPeriodSelect" 
-                                        onchange="updateRentalOption(this.value)" 
-                                        class="text-xs font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 border border-orange-200 rounded-lg px-2.5 py-1 pr-6 focus:outline-none focus:ring-2 focus:ring-orange-500 cursor-pointer transition appearance-none">
-                                    <option value="mingguan">/ minggu</option>
-                                    <option value="bulanan" selected>/ bulan</option>
-                                    <option value="semester">/ semester (6 bulan)</option>
-                                    <option value="tahunan">/ tahun</option>
-                                </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1.5 text-orange-600">
-                                    <i class="fa-solid fa-chevron-down text-[10px]"></i>
-                                </div>
-                            </div>
+                            <span id="displayedSuffix" class="text-xs text-slate-500 font-semibold transition-all duration-200">
+                                / bulan
+                            </span>
                         </div>
 
-                        <!-- Pill Buttons Pilihan Cepat -->
+                        <!-- Pill Buttons Pilihan Opsi Durasi Sewa -->
                         <div class="grid grid-cols-4 gap-1.5 mt-3">
                             <button type="button" 
                                     onclick="updateRentalOption('mingguan')" 
                                     id="pill_mingguan"
-                                    class="rental-pill py-1.5 px-1 text-center rounded-lg border border-slate-200 bg-slate-50 hover:bg-orange-50 text-[11px] font-bold text-slate-700 transition">
-                                Minggu
+                                    class="rental-pill py-1.5 px-1 text-center rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-[11px] font-bold text-slate-700 transition">
+                                Mingguan
                             </button>
                             <button type="button" 
                                     onclick="updateRentalOption('bulanan')" 
                                     id="pill_bulanan"
-                                    class="rental-pill py-1.5 px-1 text-center rounded-lg border-2 border-orange-500 bg-orange-50 text-[11px] font-bold text-orange-600 transition shadow-xs">
-                                Bulan
+                                    class="rental-pill py-1.5 px-1 text-center rounded-lg border-2 border-navy-900 bg-navy-900 text-[11px] font-bold text-white transition shadow-sm">
+                                Bulanan
                             </button>
                             <button type="button" 
                                     onclick="updateRentalOption('semester')" 
                                     id="pill_semester"
-                                    class="rental-pill py-1.5 px-1 text-center rounded-lg border border-slate-200 bg-slate-50 hover:bg-orange-50 text-[11px] font-bold text-slate-700 transition">
-                                6 Bulan
+                                    class="rental-pill py-1.5 px-1 text-center rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-[11px] font-bold text-slate-700 transition">
+                                Semesteran
                             </button>
                             <button type="button" 
                                     onclick="updateRentalOption('tahunan')" 
                                     id="pill_tahunan"
-                                    class="rental-pill py-1.5 px-1 text-center rounded-lg border border-slate-200 bg-slate-50 hover:bg-orange-50 text-[11px] font-bold text-slate-700 transition">
-                                Tahun
+                                    class="rental-pill py-1.5 px-1 text-center rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-[11px] font-bold text-slate-700 transition">
+                                Tahunan
                             </button>
                         </div>
+
+                        <!-- Teks Kecil Harga Special -->
+                        <p class="text-[11px] text-orange-600 font-medium mt-2 text-center">
+                            Harga special untuk sewa tahunan!
+                        </p>
                     </div>
 
                     <!-- Status Banner -->
@@ -929,25 +924,25 @@
             if (!rentalData || !rentalData[period]) return;
             selectedPeriod = period;
 
-            // Sync select dropdown
-            const select = document.getElementById('rentalPeriodSelect');
-            if (select) select.value = period;
-
-            // Update displayed price
+            // Update displayed price & suffix
             const priceEl = document.getElementById('displayedPrice');
+            const suffixEl = document.getElementById('displayedSuffix');
             if (priceEl) {
                 priceEl.textContent = rentalData[period].price_formatted;
             }
+            if (suffixEl) {
+                suffixEl.textContent = rentalData[period].suffix;
+            }
 
-            // Sync pill buttons
+            // Sync pill buttons (active becomes dark navy / biru tua)
             const pills = ['mingguan', 'bulanan', 'semester', 'tahunan'];
             pills.forEach(p => {
                 const btn = document.getElementById('pill_' + p);
                 if (btn) {
                     if (p === period) {
-                        btn.className = "rental-pill py-1.5 px-1 text-center rounded-lg border-2 border-orange-500 bg-orange-50 text-[11px] font-bold text-orange-600 transition shadow-xs";
+                        btn.className = "rental-pill py-1.5 px-1 text-center rounded-lg border-2 border-navy-900 bg-navy-900 text-[11px] font-bold text-white transition shadow-sm";
                     } else {
-                        btn.className = "rental-pill py-1.5 px-1 text-center rounded-lg border border-slate-200 bg-slate-50 hover:bg-orange-50 text-[11px] font-bold text-slate-700 transition";
+                        btn.className = "rental-pill py-1.5 px-1 text-center rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-[11px] font-bold text-slate-700 transition";
                     }
                 }
             });
