@@ -135,18 +135,14 @@
     </header>
 
     <!-- BACK NAVIGATION -->
-    <div class="bg-white border-b border-slate-200 py-3.5">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center text-xs">
-                <a href="{{ route('home') }}#kamar" class="inline-flex items-center text-xs font-bold text-orange-600 hover:text-orange-700 transition">
-                    <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Daftar Kamar
-                </a>
-            </div>
-        </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5">
+        <a href="{{ route('home') }}#kamar" class="inline-flex items-center text-xs font-bold text-orange-600 hover:text-orange-700 transition">
+            <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Daftar Kamar
+        </a>
     </div>
 
     <!-- MAIN DETAIL CONTENT -->
-    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
 
         <!-- TITLE & BADGE HEADER -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-200 mb-8">
