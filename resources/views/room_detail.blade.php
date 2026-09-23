@@ -284,56 +284,83 @@
                         <table class="w-full text-left text-xs">
                             <tbody class="divide-y divide-slate-100">
                                 <tr class="bg-slate-50">
-                                    <td class="py-3 px-4 font-bold text-navy-900 w-1/3 flex items-center">
-                                        <i class="fa-solid fa-ruler-combined text-orange-500 mr-2"></i> Ukuran / Dimensi
+                                    <td class="py-3 px-4 font-bold text-navy-900 w-2/5 sm:w-[38%] whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-ruler-combined text-orange-500 mr-2.5 shrink-0"></i>
+                                            <span>Ukuran / Dimensi</span>
+                                        </div>
                                     </td>
                                     <td class="py-3 px-4 text-slate-700 font-medium">{{ $dimensi }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="py-3 px-4 font-bold text-navy-900 flex items-center">
-                                        <i class="fa-solid fa-bed text-orange-500 mr-2"></i> Kasur & Ranjang
+                                    <td class="py-3 px-4 font-bold text-navy-900 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-bed text-orange-500 mr-2.5 shrink-0"></i>
+                                            <span>Kasur & Ranjang</span>
+                                        </div>
                                     </td>
                                     <td class="py-3 px-4 text-slate-700">{{ $kasur }}</td>
                                 </tr>
                                 <tr class="bg-slate-50">
-                                    <td class="py-3 px-4 font-bold text-navy-900 flex items-center">
-                                        <i class="fa-solid fa-snowflake text-orange-500 mr-2"></i> Pendingin Ruangan
+                                    <td class="py-3 px-4 font-bold text-navy-900 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-snowflake text-orange-500 mr-2.5 shrink-0"></i>
+                                            <span>Pendingin Ruangan</span>
+                                        </div>
                                     </td>
                                     <td class="py-3 px-4 text-slate-700">{{ $ac }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="py-3 px-4 font-bold text-navy-900 flex items-center">
-                                        <i class="fa-solid fa-bath text-orange-500 mr-2"></i> Kamar Mandi
+                                    <td class="py-3 px-4 font-bold text-navy-900 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-bath text-orange-500 mr-2.5 shrink-0"></i>
+                                            <span>Kamar Mandi</span>
+                                        </div>
                                     </td>
                                     <td class="py-3 px-4 text-slate-700">{{ $km }}</td>
                                 </tr>
                                 <tr class="bg-slate-50">
-                                    <td class="py-3 px-4 font-bold text-navy-900 flex items-center">
-                                        <i class="fa-solid fa-door-closed text-orange-500 mr-2"></i> Lemari Pakaian
+                                    <td class="py-3 px-4 font-bold text-navy-900 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-door-closed text-orange-500 mr-2.5 shrink-0"></i>
+                                            <span>Lemari Pakaian</span>
+                                        </div>
                                     </td>
                                     <td class="py-3 px-4 text-slate-700">{{ $lemari }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="py-3 px-4 font-bold text-navy-900 flex items-center">
-                                        <i class="fa-solid fa-chair text-orange-500 mr-2"></i> Meja & Kursi Kerja
+                                    <td class="py-3 px-4 font-bold text-navy-900 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-chair text-orange-500 mr-2.5 shrink-0"></i>
+                                            <span>Meja & Kursi Kerja</span>
+                                        </div>
                                     </td>
                                     <td class="py-3 px-4 text-slate-700">Meja Belajar Kayu Solid + Kursi Nyaman + Stop Kontak Ganda</td>
                                 </tr>
                                 <tr class="bg-slate-50">
-                                    <td class="py-3 px-4 font-bold text-navy-900 flex items-center">
-                                        <i class="fa-solid fa-wifi text-orange-500 mr-2"></i> Koneksi Internet
+                                    <td class="py-3 px-4 font-bold text-navy-900 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-wifi text-orange-500 mr-2.5 shrink-0"></i>
+                                            <span>Koneksi Internet</span>
+                                        </div>
                                     </td>
                                     <td class="py-3 px-4 text-slate-700">Wi-Fi High-Speed 50 Mbps Gratis Tanpa Batas Kuota</td>
                                 </tr>
                                 <tr>
-                                    <td class="py-3 px-4 font-bold text-navy-900 flex items-center">
-                                        <i class="fa-solid fa-bolt text-orange-500 mr-2"></i> Kelistrikan
+                                    <td class="py-3 px-4 font-bold text-navy-900 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-bolt text-orange-500 mr-2.5 shrink-0"></i>
+                                            <span>Kelistrikan</span>
+                                        </div>
                                     </td>
                                     <td class="py-3 px-4 text-slate-700">Meteran Listrik Token Mandiri 900 VA (Isi sesuai pemakaian sendiri)</td>
                                 </tr>
                                 <tr class="bg-slate-50">
-                                    <td class="py-3 px-4 font-bold text-navy-900 flex items-center">
-                                        <i class="fa-solid fa-wind text-orange-500 mr-2"></i> Sirkulasi & Jendela
+                                    <td class="py-3 px-4 font-bold text-navy-900 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-wind text-orange-500 mr-2.5 shrink-0"></i>
+                                            <span>Sirkulasi & Jendela</span>
+                                        </div>
                                     </td>
                                     <td class="py-3 px-4 text-slate-700">Jendela Luar dengan Teralis Keamanan & Gorden Rapi (Pencahayaan Segar)</td>
                                 </tr>
@@ -353,38 +380,56 @@
                         <table class="w-full text-left text-xs">
                             <tbody class="divide-y divide-slate-100">
                                 <tr class="bg-slate-50">
-                                    <td class="py-3 px-4 font-bold text-navy-900 w-1/3 flex items-center">
-                                        <i class="fa-solid fa-fire-burner text-orange-500 mr-2"></i> Dapur Bersama
+                                    <td class="py-3 px-4 font-bold text-navy-900 w-2/5 sm:w-[38%] whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-fire-burner text-orange-500 mr-2.5 shrink-0"></i>
+                                            <span>Dapur Bersama</span>
+                                        </div>
                                     </td>
                                     <td class="py-3 px-4 text-slate-700">Kompor gas, tabung gas gratis, dan wastafel cuci piring</td>
                                 </tr>
                                 <tr>
-                                    <td class="py-3 px-4 font-bold text-navy-900 flex items-center">
-                                        <i class="fa-solid fa-cubes-stacked text-orange-500 mr-2"></i> Kulkas & Dispenser
+                                    <td class="py-3 px-4 font-bold text-navy-900 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-cubes-stacked text-orange-500 mr-2.5 shrink-0"></i>
+                                            <span>Kulkas & Dispenser</span>
+                                        </div>
                                     </td>
                                     <td class="py-3 px-4 text-slate-700">Kulkas pantry dan air galon minum siap pakai bersama</td>
                                 </tr>
                                 <tr class="bg-slate-50">
-                                    <td class="py-3 px-4 font-bold text-navy-900 flex items-center">
-                                        <i class="fa-solid fa-shirt text-orange-500 mr-2"></i> Area Jemuran Pakaian
+                                    <td class="py-3 px-4 font-bold text-navy-900 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-shirt text-orange-500 mr-2.5 shrink-0"></i>
+                                            <span>Area Jemuran Pakaian</span>
+                                        </div>
                                     </td>
                                     <td class="py-3 px-4 text-slate-700">Area jemuran pakaian luas terlindung hujan & terkena sinar matahari optimal</td>
                                 </tr>
                                 <tr>
-                                    <td class="py-3 px-4 font-bold text-navy-900 flex items-center">
-                                        <i class="fa-solid fa-motorcycle text-orange-500 mr-2"></i> Parkir Motor
+                                    <td class="py-3 px-4 font-bold text-navy-900 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-motorcycle text-orange-500 mr-2.5 shrink-0"></i>
+                                            <span>Parkir Motor</span>
+                                        </div>
                                     </td>
                                     <td class="py-3 px-4 text-slate-700">Parkir motor aman dan tertata rapi di dalam gerbang tertutup dengan kunci mandiri</td>
                                 </tr>
                                 <tr class="bg-slate-50">
-                                    <td class="py-3 px-4 font-bold text-navy-900 flex items-center">
-                                        <i class="fa-solid fa-video text-orange-500 mr-2"></i> Keamanan CCTV 24 Jam
+                                    <td class="py-3 px-4 font-bold text-navy-900 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-video text-orange-500 mr-2.5 shrink-0"></i>
+                                            <span>Keamanan CCTV 24 Jam</span>
+                                        </div>
                                     </td>
                                     <td class="py-3 px-4 text-slate-700">Area koridor, gerbang masuk, dan parkiran termonitor demi rasa aman penghuni</td>
                                 </tr>
                                 <tr>
-                                    <td class="py-3 px-4 font-bold text-navy-900 flex items-center">
-                                        <i class="fa-solid fa-broom text-orange-500 mr-2"></i> Kebersihan Lingkungan
+                                    <td class="py-3 px-4 font-bold text-navy-900 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-broom text-orange-500 mr-2.5 shrink-0"></i>
+                                            <span>Kebersihan Lingkungan</span>
+                                        </div>
                                     </td>
                                     <td class="py-3 px-4 text-slate-700">Area koridor, dapur, dan lingkungan luar dibersihkan secara teratur oleh pengelola</td>
                                 </tr>
