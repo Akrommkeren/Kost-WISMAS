@@ -552,12 +552,16 @@
                         </p>
                     </div>
 
-                    <!-- Status Banner -->
-                    <div class="p-3 rounded-xl {{ $room->status === 'available' ? 'bg-emerald-50 border border-emerald-200 text-emerald-700' : 'bg-slate-100 border border-slate-300 text-slate-700' }} text-xs flex items-center justify-center font-bold text-center">
+                    <!-- Status Badge -->
+                    <div class="flex items-center">
                         @if($room->status === 'available')
-                            <span class="inline-flex items-center"><i class="fa-solid fa-circle-check mr-2 text-emerald-600 text-sm"></i> Kamar Tersedia (Siap Huni)</span>
+                            <span class="inline-flex items-center px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold shadow-xs">
+                                <i class="fa-solid fa-circle-check mr-1.5 text-emerald-600 text-xs"></i> Kamar Tersedia (Siap Huni)
+                            </span>
                         @else
-                            <span class="inline-flex items-center"><i class="fa-solid fa-lock mr-2 text-slate-500 text-sm"></i> Kamar Terisi (Penuh)</span>
+                            <span class="inline-flex items-center px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-300 text-slate-700 text-xs font-bold shadow-xs">
+                                <i class="fa-solid fa-lock mr-1.5 text-slate-500 text-xs"></i> Kamar Terisi (Penuh)
+                            </span>
                         @endif
                     </div>
 
