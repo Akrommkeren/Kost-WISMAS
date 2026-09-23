@@ -48,6 +48,14 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
 
+        User::create([
+            'name' => 'Agung',
+            'email' => 'agung@gmail.com',
+            'phone' => '081234568888',
+            'role' => 'penghuni',
+            'password' => Hash::make('password'),
+        ]);
+
         // Rooms
         $roomsData = [
             [
