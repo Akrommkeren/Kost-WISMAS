@@ -112,7 +112,6 @@
                 <nav class="hidden lg:flex items-center space-x-7 text-xs font-bold text-slate-700 uppercase tracking-wider">
                     <a href="#beranda" class="hover:text-orange-600 transition">Beranda</a>
                     <a href="#kamar" class="hover:text-orange-600 transition">Kamar</a>
-                    <a href="#fasilitas" class="hover:text-orange-600 transition">Fasilitas</a>
                     <a href="#aturan" class="hover:text-orange-600 transition">Ketentuan</a>
                     <a href="#pengaduan" class="hover:text-orange-600 transition">Pengaduan</a>
                     <a href="#lokasi" class="hover:text-orange-600 transition">Lokasi</a>
@@ -801,7 +800,7 @@
                     <ul class="space-y-2 text-xs">
                         <li><a href="#beranda" class="hover:text-orange-400 transition">Beranda</a></li>
                         <li><a href="#kamar" class="hover:text-orange-400 transition">Kamar</a></li>
-                        <li><a href="#aturan" class="hover:text-orange-400 transition">Ketentuan Sewa</a></li>
+                        <li><a href="#aturan" class="hover:text-orange-400 transition">Ketentuan</a></li>
                         <li><a href="#pengaduan" class="hover:text-orange-400 transition">Pengaduan</a></li>
                         <li><a href="#lokasi" class="hover:text-orange-400 transition">Lokasi</a></li>
                     </ul>
@@ -2156,7 +2155,7 @@
             }
         }
 
-        function kirimPengaduan() {
+        async function kirimPengaduan() {
             const hiddenInput = document.getElementById('selectedKategoriFasilitas');
             const opsi = hiddenInput ? hiddenInput.value : 'Fasilitas Kost';
             const pesanEl = document.getElementById('pesanPengaduan');
