@@ -39,6 +39,13 @@ class TenantController extends Controller
 
         $request->validate([
             'room_id' => 'required|exists:rooms,id',
+            'start_date' => 'nullable|date',
+            'duration' => 'nullable|string',
+            'amount' => 'nullable|numeric',
+            'payment_method' => 'nullable|string',
+            'phone' => 'nullable|string|max:25',
+            'proof_image' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
+            'notes' => 'nullable|string|max:500',
         ]);
 
         $room = Room::findOrFail($request->room_id);
@@ -46,26 +53,55 @@ class TenantController extends Controller
             return response()->json(['success' => false, 'message' => 'Kamar ini sudah terisi.'], 400);
         }
 
+        // Update nomor telepon user jika diisi dan belum ada
+        if ($request->filled('phone')) {
+            $user->phone = $request->phone;
+            $user->save();
+        }
+
+        $startDate = $request->start_date ? $request->start_date : now()->toDateString();
         $booking = Booking::create([
             'user_id' => $user->id,
             'room_id' => $room->id,
-            'start_date' => now(),
+            'start_date' => $startDate,
             'status' => 'pending',
         ]);
 
-        // Create initial pending payment
-        Payment::create([
+        $proofPath = null;
+        if ($request->hasFile('proof_image')) {
+            $proofPath = $request->file('proof_image')->store('payment_proofs', 'public');
+        }
+
+        $durationLabel = $request->duration ?: '1 Bulan';
+        $amount = $request->filled('amount') && (int)$request->amount > 0 ? (int)$request->amount : (int)$room->price;
+        $paymentMethod = $request->payment_method ?: 'Transfer Bank BCA';
+
+        // Buat record pembayaran awal transaksi booking
+        $payment = Payment::create([
             'user_id' => $user->id,
             'room_id' => $room->id,
-            'title' => 'Tagihan Awal ' . $room->number,
-            'amount' => $room->price,
+            'title' => 'Tagihan Booking ' . $room->number . ' (' . $durationLabel . ')',
+            'amount' => $amount,
             'due_date' => now()->addDays(3)->format('d M Y'),
+            'payment_method' => $paymentMethod,
+            'proof_image' => $proofPath,
             'status' => 'pending',
         ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'Permintaan booking ' . $room->number . ' berhasil diajukan!',
+            'message' => 'Transaksi booking ' . $room->number . ' berhasil diajukan!',
+            'booking_id' => $booking->id,
+            'payment_id' => $payment->id,
+            'room_number' => $room->number,
+            'room_type' => $room->type,
+            'amount' => $amount,
+            'amount_formatted' => 'Rp ' . number_format($amount, 0, ',', '.'),
+            'duration' => $durationLabel,
+            'start_date' => $startDate,
+            'payment_method' => $paymentMethod,
+            'user_name' => $user->name,
+            'user_phone' => $user->phone ?? $request->phone,
         ]);
     }
 
