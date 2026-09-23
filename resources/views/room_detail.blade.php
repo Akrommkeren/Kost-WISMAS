@@ -870,25 +870,23 @@
 
             <!-- SECTION FORM TRANSAKSI -->
             <div id="bookingTransactionFormSection">
-                <!-- Header Modal: Logo & Judul Ringkas -->
-                <div class="flex items-center space-x-3 pb-2.5 border-b border-slate-100 mb-3">
-                    <div class="w-9 h-9 bg-white rounded-xl p-1 shadow-sm flex items-center justify-center shrink-0 border border-slate-200">
+                <!-- Header Modal: Logo Paling Atas & Center, Judul & Subjudul -->
+                <div class="text-center pb-2 border-b border-slate-100 mb-3">
+                    <div class="w-12 h-12 bg-white rounded-xl p-1 shadow-sm mx-auto mb-1.5 border border-slate-200 flex items-center justify-center">
                         <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
                     </div>
-                    <div>
-                        <h3 class="text-base font-black text-navy-900 leading-tight">Transaksi Booking Kamar</h3>
-                        <p class="text-[11px] text-slate-500 leading-tight">Konfirmasi sewa kamar Kost Wisma S</p>
-                    </div>
+                    <h3 class="text-base sm:text-lg font-black text-navy-900 leading-tight">Booking kamar</h3>
+                    <p class="text-[11px] text-slate-500 leading-tight mt-0.5">Konfirmasi sewa kamar Kost Wisma S</p>
                 </div>
 
                 <!-- Form Transaksi -->
                 <form id="formBookingTransaction" onsubmit="handleBookingTransactionSubmit(event)" class="space-y-2.5">
                     <input type="hidden" id="transRoomId" name="room_id" value="{{ $room->id }}">
-                    <input type="hidden" id="transDuration" name="duration" value="1 Bulan">
+                    <input type="hidden" id="transDuration" name="duration" value="Bulanan">
                     <input type="hidden" id="transAmount" name="amount" value="{{ $room->price }}">
-                    <input type="hidden" id="transPaymentMethod" name="payment_method" value="Transfer Bank BCA">
+                    <input type="hidden" id="transPaymentMethod" name="payment_method" value="Midtrans Payment Gateway">
 
-                    <!-- Kartu Ringkasan Kamar Terpilih (Kompak) -->
+                    <!-- Kartu Ringkasan Kamar Terpilih (Kompak, Tanpa Tarif Sewa) -->
                     <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
                         <div class="flex items-center space-x-2.5 min-w-0">
                             <div class="w-10 h-10 rounded-lg bg-slate-200 overflow-hidden shrink-0 border border-slate-300">
@@ -903,8 +901,7 @@
                             </div>
                         </div>
                         <div class="text-right shrink-0 pl-2">
-                            <span class="text-[10px] text-slate-400 block leading-none mb-0.5">Tarif Sewa</span>
-                            <span id="transRoomPriceBase" class="text-xs sm:text-sm font-black text-navy-900">Rp {{ number_format($room->price, 0, ',', '.') }} / bln</span>
+                            <span id="transPeriodBadge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-orange-100 text-orange-700 border border-orange-200">Bulanan</span>
                         </div>
                     </div>
 
@@ -922,55 +919,38 @@
                             <input type="tel" id="transUserPhone" name="phone" required placeholder="08xxxxxxxxxx" class="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-navy-600 focus:outline-none font-medium">
                         </div>
 
-                        <!-- Tanggal Check-in -->
+                        <!-- Email Penyewa -->
+                        <div>
+                            <label class="block text-[10px] font-bold text-navy-900 uppercase mb-0.5">Email <span class="text-orange-600">*</span></label>
+                            <input type="email" id="transUserEmail" name="email" required placeholder="nama@email.com" class="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-navy-600 focus:outline-none font-medium">
+                        </div>
+
+                        <!-- Tanggal Mulai Masuk -->
                         <div>
                             <label class="block text-[10px] font-bold text-navy-900 uppercase mb-0.5">Tanggal Mulai Masuk <span class="text-orange-600">*</span></label>
                             <input type="date" id="transStartDate" name="start_date" required class="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-navy-600 focus:outline-none font-medium">
                         </div>
-
-                        <!-- Catatan Opsional -->
-                        <div>
-                            <label class="block text-[10px] font-bold text-navy-900 uppercase mb-0.5">Catatan <span class="text-[9px] text-slate-400 font-normal lowercase">(opsional)</span></label>
-                            <input type="text" id="transNotes" name="notes" placeholder="Misal: Bawa motor" class="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-navy-600 focus:outline-none">
-                        </div>
                     </div>
 
-                    <!-- Metode Pembayaran Ringkas -->
+                    <!-- Pilihan Pembayaran Midtrans (Otomatis & Tanpa Tunai) -->
                     <div>
                         <label class="block text-[10px] font-bold text-navy-900 uppercase mb-1">Pilihan Pembayaran</label>
-                        <div class="grid grid-cols-3 gap-1.5 mb-1.5">
-                            <button type="button" onclick="selectPaymentMethod('Transfer Bank BCA')" id="btnMethodBca" class="trans-method-btn py-1.5 px-2 rounded-lg border text-center transition active:scale-95 bg-navy-900 text-white border-navy-900 font-bold text-xs shadow-sm">
-                                <i class="fa-solid fa-building-columns mr-1 text-[10px]"></i>
-                                <span>Transfer BCA</span>
-                            </button>
-                            <button type="button" onclick="selectPaymentMethod('QRIS / E-Wallet')" id="btnMethodQris" class="trans-method-btn py-1.5 px-2 rounded-lg border text-center transition active:scale-95 bg-white text-slate-700 border-slate-200 hover:border-slate-300 font-semibold text-xs shadow-sm">
-                                <i class="fa-solid fa-qrcode mr-1 text-[10px] text-slate-500"></i>
-                                <span>QRIS</span>
-                            </button>
-                            <button type="button" onclick="selectPaymentMethod('Bayar Tunai di Tempat')" id="btnMethodCash" class="trans-method-btn py-1.5 px-2 rounded-lg border text-center transition active:scale-95 bg-white text-slate-700 border-slate-200 hover:border-slate-300 font-semibold text-xs shadow-sm">
-                                <i class="fa-solid fa-hand-holding-dollar mr-1 text-[10px] text-slate-500"></i>
-                                <span>Bayar Tunai</span>
-                            </button>
-                        </div>
-
-                        <!-- Info Rekening BCA Ringkas (1 Baris) -->
-                        <div id="boxMethodBca" class="p-2 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between text-xs">
-                            <div class="flex items-center space-x-1.5">
-                                <span class="px-1.5 py-0.5 bg-blue-600 text-white font-black text-[9px] rounded">BCA</span>
-                                <span class="font-extrabold text-navy-900">8820-1928-334</span>
-                                <span class="text-[11px] text-slate-500 hidden sm:inline">(a.n Pemilik Wisma S)</span>
+                        <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+                            <div class="flex items-center space-x-2.5">
+                                <div class="w-8 h-8 rounded-lg bg-navy-900 text-white flex items-center justify-center text-xs font-bold shrink-0 shadow-sm">
+                                    <i class="fa-solid fa-credit-card"></i>
+                                </div>
+                                <div>
+                                    <div class="flex items-center space-x-1.5">
+                                        <span class="text-xs font-extrabold text-navy-900">Midtrans Payment Gateway</span>
+                                        <span class="px-1.5 py-0.2 bg-emerald-100 text-emerald-700 font-bold text-[9px] rounded">Otomatis</span>
+                                    </div>
+                                    <p class="text-[10px] text-slate-500">Virtual Account (BCA, Mandiri, BNI, BRI), QRIS, & E-Wallet</p>
+                                </div>
                             </div>
-                            <button type="button" onclick="copyRekening('88201928334')" id="btnCopyRek" class="px-2 py-0.5 text-[10px] font-bold text-orange-600 hover:text-orange-700 bg-orange-50 hover:bg-orange-100 rounded border border-orange-200 transition shrink-0">
-                                <i class="fa-regular fa-copy mr-1"></i> <span id="copyRekText">Salin</span>
-                            </button>
-                        </div>
-
-                        <div id="boxMethodQris" class="hidden p-2 bg-slate-50 border border-slate-200 rounded-lg text-center text-[11px] text-slate-600">
-                            Scan kode QRIS saat konfirmasi WhatsApp pengelola kost.
-                        </div>
-
-                        <div id="boxMethodCash" class="hidden p-2 bg-slate-50 border border-slate-200 rounded-lg text-center text-[11px] text-slate-600">
-                            Pembayaran tunai dibayarkan langsung saat serah terima kunci kamar.
+                            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 flex items-center shrink-0">
+                                <i class="fa-solid fa-shield-halved mr-1 text-[9px]"></i> Aman
+                            </span>
                         </div>
                     </div>
 
@@ -978,8 +958,8 @@
                     <div class="p-2.5 bg-orange-50/60 border border-orange-200/80 rounded-xl flex items-center justify-between">
                         <div>
                             <span class="text-[10px] text-slate-500 uppercase font-bold block leading-none mb-0.5">Total Tagihan Booking</span>
-                            <span class="text-[10px] text-emerald-700 font-semibold flex items-center leading-none">
-                                <i class="fa-solid fa-circle-check text-[9px] mr-1"></i> Bebas Biaya Tambahan
+                            <span id="transPeriodText" class="text-[10px] text-emerald-700 font-semibold flex items-center leading-none">
+                                <i class="fa-solid fa-circle-check text-[9px] mr-1"></i> Periode Bulanan
                             </span>
                         </div>
                         <div class="text-right">
@@ -987,14 +967,12 @@
                         </div>
                     </div>
 
-                    <!-- Action Buttons -->
-                    <div class="pt-1 flex items-center space-x-2">
-                        <button type="button" onclick="closeBookingTransactionModal()" class="w-1/3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition text-center">
-                            Batal
-                        </button>
-                        <button type="submit" id="btnSubmitTransaction" class="w-2/3 py-2 bg-orange-600 hover:bg-orange-700 active:scale-95 text-white font-extrabold text-xs rounded-xl shadow transition flex items-center justify-center space-x-1.5">
-                            <i class="fa-solid fa-shield-check text-xs"></i>
+                    <!-- Action Button (Full Width, Tanpa Batal, dengan Icon) -->
+                    <div class="pt-1">
+                        <button type="submit" id="btnSubmitTransaction" class="w-full py-2.5 bg-orange-600 hover:bg-orange-700 active:scale-95 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-shield-check text-sm"></i>
                             <span>Konfirmasi Booking</span>
+                            <i class="fa-solid fa-arrow-right text-xs opacity-80"></i>
                         </button>
                     </div>
                 </form>
@@ -1007,7 +985,7 @@
                 </div>
                 <div>
                     <h3 class="text-base sm:text-lg font-black text-navy-900 leading-tight">Booking Kamar Berhasil!</h3>
-                    <p class="text-[11px] text-slate-500 mt-0.5">Pemesanan telah dicatat. Konfirmasi WhatsApp untuk serah terima kamar.</p>
+                    <p class="text-[11px] text-slate-500 mt-0.5">Pemesanan tercatat & terhubung ke Midtrans Payment Gateway.</p>
                 </div>
 
                 <!-- Struk Ringkasan Digital -->
@@ -1025,12 +1003,16 @@
                         <span id="succUserName" class="font-semibold text-slate-800 text-xs">...</span>
                     </div>
                     <div class="flex justify-between items-center">
+                        <span class="text-slate-500 text-[11px]">Durasi Sewa</span>
+                        <span id="succDuration" class="font-semibold text-slate-800 text-xs">...</span>
+                    </div>
+                    <div class="flex justify-between items-center">
                         <span class="text-slate-500 text-[11px]">Tanggal Masuk</span>
                         <span id="succStartDate" class="font-semibold text-slate-800 text-xs">...</span>
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="text-slate-500 text-[11px]">Metode Bayar</span>
-                        <span id="succPaymentMethod" class="font-semibold text-slate-800 text-xs">Transfer BCA</span>
+                        <span id="succPaymentMethod" class="font-semibold text-slate-800 text-xs">Midtrans Payment Gateway</span>
                     </div>
                     <div class="flex justify-between items-center border-t border-slate-200 pt-1.5">
                         <span class="font-bold text-navy-900 text-xs">Total Pembayaran</span>
@@ -1194,6 +1176,10 @@
                 if (phoneInput && !phoneInput.value) {
                     phoneInput.value = "{{ Auth::user()->phone ?? '' }}";
                 }
+                const emailInput = document.getElementById('transUserEmail');
+                if (emailInput && !emailInput.value) {
+                    emailInput.value = "{{ Auth::user()->email ?? '' }}";
+                }
             @endauth
 
             // Tanggal check-in default hari ini
@@ -1204,17 +1190,33 @@
                 if (!startDateEl.value) startDateEl.value = todayStr;
             }
 
-            // Set durasi & harga sewa langsung default 1 Bulan
+            // Sesuaikan durasi & harga sewa dengan pilihan durasi sewa pada halaman (mingguan, bulanan, semester, tahunan)
+            const periodInfo = (rentalData && rentalData[selectedPeriod]) ? rentalData[selectedPeriod] : {
+                label: 'Bulanan',
+                price: currentBookingPrice,
+                price_formatted: 'Rp ' + Number(currentBookingPrice).toLocaleString('id-ID')
+            };
+
+            const chosenPrice = periodInfo.price;
+            const chosenLabel = periodInfo.label;
+
             const durationInput = document.getElementById('transDuration');
-            if (durationInput) durationInput.value = '1 Bulan';
+            if (durationInput) durationInput.value = chosenLabel;
 
             const amountInput = document.getElementById('transAmount');
-            if (amountInput) amountInput.value = currentBookingPrice;
+            if (amountInput) amountInput.value = chosenPrice;
+
+            const methodInput = document.getElementById('transPaymentMethod');
+            if (methodInput) methodInput.value = 'Midtrans Payment Gateway';
 
             const totalDisplay = document.getElementById('transTotalDisplay');
-            if (totalDisplay) totalDisplay.textContent = 'Rp ' + Number(currentBookingPrice).toLocaleString('id-ID');
+            if (totalDisplay) totalDisplay.textContent = 'Rp ' + Number(chosenPrice).toLocaleString('id-ID');
 
-            selectPaymentMethod('Transfer Bank BCA');
+            const periodBadge = document.getElementById('transPeriodBadge');
+            if (periodBadge) periodBadge.textContent = chosenLabel;
+
+            const periodText = document.getElementById('transPeriodText');
+            if (periodText) periodText.innerHTML = `<i class="fa-solid fa-circle-check text-[9px] mr-1"></i> Periode ${chosenLabel}`;
 
             // Reset tampilan
             document.getElementById('bookingTransactionFormSection').classList.remove('hidden');
@@ -1230,60 +1232,6 @@
             if (modal) modal.classList.add('hidden');
         }
 
-        function selectPaymentMethod(method) {
-            document.getElementById('transPaymentMethod').value = method;
-
-            const btnBca = document.getElementById('btnMethodBca');
-            const btnQris = document.getElementById('btnMethodQris');
-            const btnCash = document.getElementById('btnMethodCash');
-
-            const boxBca = document.getElementById('boxMethodBca');
-            const boxQris = document.getElementById('boxMethodQris');
-            const boxCash = document.getElementById('boxMethodCash');
-
-            const activeClass = "trans-method-btn py-1.5 px-2 rounded-lg border text-center transition active:scale-95 bg-navy-900 text-white border-navy-900 font-bold text-xs shadow-sm";
-            const inactiveClass = "trans-method-btn py-1.5 px-2 rounded-lg border text-center transition active:scale-95 bg-white text-slate-700 border-slate-200 hover:border-slate-300 font-semibold text-xs shadow-sm";
-
-            if (method === 'Transfer Bank BCA') {
-                if (btnBca) btnBca.className = activeClass;
-                if (btnQris) btnQris.className = inactiveClass;
-                if (btnCash) btnCash.className = inactiveClass;
-
-                if (boxBca) boxBca.classList.remove('hidden');
-                if (boxQris) boxQris.classList.add('hidden');
-                if (boxCash) boxCash.classList.add('hidden');
-            } else if (method === 'QRIS / E-Wallet') {
-                if (btnBca) btnBca.className = inactiveClass;
-                if (btnQris) btnQris.className = activeClass;
-                if (btnCash) btnCash.className = inactiveClass;
-
-                if (boxBca) boxBca.classList.add('hidden');
-                if (boxQris) boxQris.classList.remove('hidden');
-                if (boxCash) boxCash.classList.add('hidden');
-            } else {
-                if (btnBca) btnBca.className = inactiveClass;
-                if (btnQris) btnQris.className = inactiveClass;
-                if (btnCash) btnCash.className = activeClass;
-
-                if (boxBca) boxBca.classList.add('hidden');
-                if (boxQris) boxQris.classList.add('hidden');
-                if (boxCash) boxCash.classList.remove('hidden');
-            }
-        }
-
-        function copyRekening(rekNumber) {
-            navigator.clipboard.writeText(rekNumber).then(() => {
-                const label = document.getElementById('copyRekText');
-                if (label) {
-                    const oldText = label.textContent;
-                    label.textContent = "Disalin!";
-                    setTimeout(() => { label.textContent = oldText; }, 2000);
-                }
-            }).catch(err => {
-                console.error(err);
-            });
-        }
-
         async function handleBookingTransactionSubmit(e) {
             e.preventDefault();
             const btnSubmit = document.getElementById('btnSubmitTransaction');
@@ -1291,7 +1239,7 @@
 
             try {
                 btnSubmit.disabled = true;
-                btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i><span>Memproses Transaksi...</span>';
+                btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i><span>Menghubungkan ke Midtrans...</span>';
 
                 const form = document.getElementById('formBookingTransaction');
                 const formData = new FormData(form);

@@ -44,6 +44,7 @@ class TenantController extends Controller
             'amount' => 'nullable|numeric',
             'payment_method' => 'nullable|string',
             'phone' => 'nullable|string|max:25',
+            'email' => 'nullable|email|max:100',
             'proof_image' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
             'notes' => 'nullable|string|max:500',
         ]);
@@ -74,7 +75,7 @@ class TenantController extends Controller
 
         $durationLabel = $request->duration ?: '1 Bulan';
         $amount = $request->filled('amount') && (int)$request->amount > 0 ? (int)$request->amount : (int)$room->price;
-        $paymentMethod = $request->payment_method ?: 'Transfer Bank BCA';
+        $paymentMethod = $request->payment_method ?: 'Midtrans Payment Gateway';
 
         // Buat record pembayaran awal transaksi booking
         $payment = Payment::create([
