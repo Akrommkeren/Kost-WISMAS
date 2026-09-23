@@ -216,54 +216,67 @@
             }
         @endphp
 
-        <!-- HIGHLIGHT FOTO KAMAR (GALLERY INTERAKTIF) -->
+        <!-- HIGHLIGHT FOTO KAMAR SLIDER (UNIFIED CAROUSEL DENGAN SLIDE & TOMBOL NEXT/PREV) -->
         <section class="mb-10">
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-base sm:text-lg font-extrabold text-navy-900 flex items-center">
-                    <i class="fa-solid fa-camera-retro text-orange-600 mr-2"></i> Highlight Foto Kamar & Fasilitas
-                </h2>
-                <span class="text-xs text-slate-500 font-medium hidden sm:inline">
-                    Klik foto kecil di bawah untuk mengganti tampilan foto
-                </span>
-            </div>
+            <!-- Unified Photo Slider Container -->
+            <div id="roomPhotoSliderContainer" class="relative bg-slate-950 rounded-2xl overflow-hidden shadow-xl border border-slate-200 group h-72 sm:h-96 md:h-[480px] select-none cursor-grab active:cursor-grabbing">
+                
+                <!-- Slide Track -->
+                <div id="photoSlideTrack" class="flex h-full w-full transition-transform duration-500 ease-out">
+                    @foreach($highlightPhotos as $index => $photo)
+                    <div class="w-full h-full shrink-0 relative">
+                        <img src="{{ $photo['url'] }}" alt="{{ $photo['label'] }}" class="w-full h-full object-cover pointer-events-none">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-black/30 pointer-events-none"></div>
 
-            <!-- Main Big Photo Viewer -->
-            <div class="relative bg-slate-900 rounded-2xl overflow-hidden shadow-lg border border-slate-200 group h-72 sm:h-96 md:h-[480px]">
-                <img id="mainGalleryImg" src="{{ $highlightPhotos[0]['url'] }}" alt="{{ $room->number }}" class="w-full h-full object-cover transition-all duration-300">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/20 pointer-events-none"></div>
+                        <!-- Badge Foto Aktif -->
+                        <div class="absolute top-4 left-4 z-10 pointer-events-none">
+                            <span class="px-3 py-1.5 bg-black/60 backdrop-blur-md text-white text-xs font-bold rounded-lg border border-white/20 inline-flex items-center">
+                                <i class="fa-solid fa-image text-orange-400 mr-2"></i> Foto {{ $index + 1 }} dari {{ count($highlightPhotos) }}
+                            </span>
+                        </div>
 
-                <!-- Badge Foto Aktif -->
-                <div class="absolute top-4 left-4">
-                    <span class="px-3 py-1.5 bg-black/60 backdrop-blur-md text-white text-xs font-bold rounded-lg border border-white/20 inline-flex items-center">
-                        <i class="fa-solid fa-image text-orange-400 mr-2"></i> <span id="galleryCounter">Foto 1 dari {{ count($highlightPhotos) }}</span>
-                    </span>
-                </div>
-
-                <!-- Overlay Caption -->
-                <div class="absolute bottom-4 left-4 right-4 text-white">
-                    <h3 id="galleryCaptionTitle" class="text-base sm:text-xl font-bold tracking-tight text-white mb-1 drop-shadow-md">
-                        {{ $highlightPhotos[0]['label'] }}
-                    </h3>
-                    <p id="galleryCaptionSub" class="text-xs sm:text-sm text-slate-200 drop-shadow">
-                        {{ $highlightPhotos[0]['sub'] }}
-                    </p>
-                </div>
-            </div>
-
-            <!-- Thumbnail Highlights Row -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mt-3.5">
-                @foreach($highlightPhotos as $index => $photo)
-                <button type="button" 
-                        onclick="switchHighlightPhoto('{{ $photo['url'] }}', '{{ addslashes($photo['label']) }}', '{{ addslashes($photo['sub']) }}', {{ $index + 1 }})" 
-                        class="thumb-btn text-left p-1.5 rounded-xl border-2 transition duration-200 bg-white hover:border-orange-500 group {{ $index === 0 ? 'border-orange-600 ring-2 ring-orange-200' : 'border-slate-200' }}"
-                        data-index="{{ $index + 1 }}">
-                    <div class="relative h-20 sm:h-24 rounded-lg overflow-hidden bg-slate-100 mb-1.5">
-                        <img src="{{ $photo['url'] }}" alt="{{ $photo['label'] }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                        <span class="absolute bottom-1 right-1 px-1.5 py-0.5 bg-black/70 backdrop-blur text-white text-[10px] font-bold rounded">#{{ $index + 1 }}</span>
+                        <!-- Overlay Caption -->
+                        <div class="absolute bottom-5 left-4 right-16 sm:right-28 text-white z-10 pointer-events-none">
+                            <h3 class="text-base sm:text-xl font-bold tracking-tight text-white mb-1 drop-shadow-md">
+                                {{ $photo['label'] }}
+                            </h3>
+                            <p class="text-xs sm:text-sm text-slate-200 drop-shadow">
+                                {{ $photo['sub'] }}
+                            </p>
+                        </div>
                     </div>
-                    <p class="text-[11px] font-bold text-navy-900 truncate leading-tight group-hover:text-orange-600">{{ $photo['label'] }}</p>
+                    @endforeach
+                </div>
+
+                <!-- Tombol Prev -->
+                <button type="button" 
+                        onclick="prevPhotoSlide()" 
+                        class="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/45 hover:bg-orange-600 text-white backdrop-blur-md border border-white/30 flex items-center justify-center shadow-lg transition-all duration-200 active:scale-95 focus:outline-none" 
+                        title="Foto Sebelumnya" 
+                        aria-label="Foto Sebelumnya">
+                    <i class="fa-solid fa-chevron-left text-sm sm:text-base"></i>
                 </button>
-                @endforeach
+
+                <!-- Tombol Next -->
+                <button type="button" 
+                        onclick="nextPhotoSlide()" 
+                        class="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/45 hover:bg-orange-600 text-white backdrop-blur-md border border-white/30 flex items-center justify-center shadow-lg transition-all duration-200 active:scale-95 focus:outline-none" 
+                        title="Foto Selanjutnya" 
+                        aria-label="Foto Selanjutnya">
+                    <i class="fa-solid fa-chevron-right text-sm sm:text-base"></i>
+                </button>
+
+                <!-- Dots Indicator di Bagian Bawah Kanan -->
+                <div class="absolute bottom-5 right-4 z-20 flex items-center space-x-1.5 sm:space-x-2">
+                    @foreach($highlightPhotos as $index => $photo)
+                    <button type="button" 
+                            onclick="goToPhotoSlide({{ $index }})" 
+                            class="slider-dot w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-all duration-300 {{ $index === 0 ? 'bg-orange-500 w-5 sm:w-6' : 'bg-white/50 hover:bg-white' }}" 
+                            aria-label="Ke Slide {{ $index + 1 }}">
+                    </button>
+                    @endforeach
+                </div>
+
             </div>
         </section>
 
@@ -812,28 +825,95 @@
         const currentRoomNumber = "{{ $room->number }}";
         const currentRoomStatus = "{{ $room->status }}";
 
-        // Gallery Image Switcher
-        function switchHighlightPhoto(imgUrl, title, sub, index) {
-            const mainImg = document.getElementById('mainGalleryImg');
-            const capTitle = document.getElementById('galleryCaptionTitle');
-            const capSub = document.getElementById('galleryCaptionSub');
-            const counter = document.getElementById('galleryCounter');
+        // Photo Slider Logic (Slide & Next/Prev)
+        let currentPhotoIndex = 0;
+        const totalPhotos = {{ count($highlightPhotos) }};
 
-            if (mainImg) mainImg.src = imgUrl;
-            if (capTitle) capTitle.textContent = title;
-            if (capSub) capSub.textContent = sub;
-            if (counter) counter.textContent = `Foto ${index} dari 5`;
-
-            // Active button border highlight
-            document.querySelectorAll('.thumb-btn').forEach(btn => {
-                const btnIdx = parseInt(btn.getAttribute('data-index'));
-                if (btnIdx === index) {
-                    btn.className = 'thumb-btn text-left p-1.5 rounded-xl border-2 transition duration-200 bg-white border-orange-600 ring-2 ring-orange-200 group';
+        function updatePhotoSlide() {
+            const track = document.getElementById('photoSlideTrack');
+            if (track) {
+                track.style.transform = `translateX(-${currentPhotoIndex * 100}%)`;
+            }
+            const dots = document.querySelectorAll('.slider-dot');
+            dots.forEach((dot, idx) => {
+                if (idx === currentPhotoIndex) {
+                    dot.className = 'slider-dot w-5 sm:w-6 h-2 sm:h-2.5 rounded-full bg-orange-500 transition-all duration-300';
                 } else {
-                    btn.className = 'thumb-btn text-left p-1.5 rounded-xl border-2 transition duration-200 bg-white border-slate-200 hover:border-orange-500 group';
+                    dot.className = 'slider-dot w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white/50 hover:bg-white transition-all duration-300';
                 }
             });
         }
+
+        function nextPhotoSlide() {
+            currentPhotoIndex = (currentPhotoIndex + 1) % totalPhotos;
+            updatePhotoSlide();
+        }
+
+        function prevPhotoSlide() {
+            currentPhotoIndex = (currentPhotoIndex - 1 + totalPhotos) % totalPhotos;
+            updatePhotoSlide();
+        }
+
+        function goToPhotoSlide(index) {
+            currentPhotoIndex = index;
+            updatePhotoSlide();
+        }
+
+        // Swipe & Drag Gesture Support for Photo Slider
+        (function initPhotoSliderSwipe() {
+            const slider = document.getElementById('roomPhotoSliderContainer');
+            if (!slider) return;
+
+            let startX = 0;
+            let currentX = 0;
+            let isDragging = false;
+
+            // Touch events for mobile/tablet
+            slider.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                currentX = startX;
+            }, { passive: true });
+
+            slider.addEventListener('touchmove', (e) => {
+                currentX = e.touches[0].clientX;
+            }, { passive: true });
+
+            slider.addEventListener('touchend', () => {
+                const diff = startX - currentX;
+                if (Math.abs(diff) > 40) {
+                    if (diff > 0) nextPhotoSlide();
+                    else prevPhotoSlide();
+                }
+            });
+
+            // Mouse drag events for desktop
+            slider.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.clientX;
+                currentX = startX;
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                currentX = e.clientX;
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (!isDragging) return;
+                isDragging = false;
+                const diff = startX - currentX;
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) nextPhotoSlide();
+                    else prevPhotoSlide();
+                }
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') prevPhotoSlide();
+                if (e.key === 'ArrowRight') nextPhotoSlide();
+            });
+        })();
 
         // Trigger Booking Action
         async function triggerBookingAction() {
