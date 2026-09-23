@@ -2072,24 +2072,25 @@
         function handleBuatUlasan() {
             @guest
                 try {
-                    sessionStorage.setItem('pendingOpenReview', 'true');
+                    sessionStorage.setItem('autoOpenTenantDashboard', 'true');
                 } catch (e) {}
                 openAuthModal('login', 'penghuni');
                 return;
             @else
                 @if(Auth::user()->isOwner())
-                    alert('Hanya akun Penghuni yang dapat memberikan ulasan kost.');
+                    alert('Hanya akun Penghuni yang dapat mengakses halaman khusus penghuni.');
                 @else
-                    openReviewModal();
+                    openTenantDashboard();
                 @endif
             @endguest
         }
 
         function openReviewModal() {
-            const modal = document.getElementById('reviewModal');
-            if (modal) {
-                modal.classList.remove('hidden');
-            }
+            @auth
+                openTenantDashboard();
+            @else
+                openAuthModal('login', 'penghuni');
+            @endauth
         }
 
         function closeReviewModal() {
@@ -2208,6 +2209,9 @@
                         sessionStorage.setItem('pendingPengaduanKategori', opsi);
                     } catch (e) {}
                 }
+                try {
+                    sessionStorage.setItem('autoOpenTenantDashboard', 'true');
+                } catch (e) {}
 
                 openAuthModal('login', 'penghuni');
                 return;
@@ -2289,12 +2293,8 @@ _Pesan dikirim dari Formulir Pengaduan Kost Wisma S_`;
                         return;
                     }
 
-                    // Cek jika sebelumnya ingin membuat ulasan
-                    if (sessionStorage.getItem('pendingOpenReview') === 'true') {
-                        sessionStorage.removeItem('pendingOpenReview');
-                        openReviewModal();
-                        return;
-                    }
+                    // Pastikan flag ulasan dibersihkan agar form/modal ulasan tidak pernah terbuka otomatis
+                    sessionStorage.removeItem('pendingOpenReview');
 
                     // Cek jika sebelumnya menulis draf pengaduan fasilitas
                     const savedPesan = sessionStorage.getItem('pendingPengaduanPesan');
