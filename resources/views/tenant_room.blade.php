@@ -90,7 +90,6 @@
                 <nav class="hidden md:flex items-center space-x-6 text-xs font-bold text-slate-700 uppercase tracking-wider">
                     <a href="{{ route('home') }}#beranda" class="hover:text-orange-600 transition">Beranda</a>
                     <a href="{{ route('home') }}#kamar" class="hover:text-orange-600 transition">Daftar Kamar</a>
-                    <a href="{{ route('tenant.room') }}" class="text-orange-600 font-extrabold transition">Kamar Anda</a>
                     <a href="{{ route('home') }}#aturan" class="hover:text-orange-600 transition">Ketentuan</a>
                     <a href="{{ route('home') }}#pengaduan" class="hover:text-orange-600 transition">Pengaduan</a>
                 </nav>

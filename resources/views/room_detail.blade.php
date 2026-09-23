@@ -90,11 +90,6 @@
                 <nav class="hidden lg:flex items-center space-x-7 text-xs font-bold text-slate-700 uppercase tracking-wider">
                     <a href="{{ route('home') }}#beranda" class="hover:text-orange-600 transition">Beranda</a>
                     <a href="{{ route('home') }}#kamar" class="text-orange-600 font-extrabold transition">Kamar</a>
-                    @auth
-                        @if(!Auth::user()->isOwner())
-                            <a href="{{ route('tenant.room') }}" class="hover:text-orange-600 font-bold transition">Kamar Anda</a>
-                        @endif
-                    @endauth
                     <a href="{{ route('home') }}#aturan" class="hover:text-orange-600 transition">Ketentuan</a>
                     <a href="{{ route('home') }}#pengaduan" class="hover:text-orange-600 transition">Pengaduan</a>
                     <a href="{{ route('home') }}#lokasi" class="hover:text-orange-600 transition">Lokasi</a>
@@ -111,7 +106,6 @@
                             <a href="{{ route('tenant.room') }}" title="Lihat Kamar Anda" class="px-3.5 py-2 text-xs font-bold text-navy-950 bg-slate-100 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-300 border border-slate-300 rounded-lg flex items-center shadow-sm transition group">
                                 <i class="fa-solid fa-user text-orange-600 mr-2 group-hover:scale-110 transition-transform"></i>
                                 <span>{{ Auth::user()->name }}</span>
-                                <span class="ml-2 text-[10px] bg-orange-100 text-orange-700 font-extrabold px-1.5 py-0.5 rounded border border-orange-200">Kamar Anda</span>
                             </a>
                         @endif
                         <button onclick="logout()" class="px-3.5 py-2 text-xs font-bold text-slate-600 hover:text-red-600 hover:bg-slate-100 rounded-lg transition">
