@@ -86,28 +86,24 @@
                     </div>
                 </a>
 
-                <!-- Desktop Navigation Menu -->
-                <nav class="hidden md:flex items-center space-x-6 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                <!-- Desktop Navigation Menu (Sama dengan Beranda) -->
+                <nav class="hidden lg:flex items-center space-x-7 text-xs font-bold text-slate-700 uppercase tracking-wider">
                     <a href="{{ route('home') }}#beranda" class="hover:text-orange-600 transition">Beranda</a>
-                    <a href="{{ route('home') }}#kamar" class="hover:text-orange-600 transition">Daftar Kamar</a>
+                    <a href="{{ route('home') }}#kamar" class="hover:text-orange-600 transition">Kamar</a>
                     <a href="{{ route('home') }}#aturan" class="hover:text-orange-600 transition">Ketentuan</a>
                     <a href="{{ route('home') }}#pengaduan" class="hover:text-orange-600 transition">Pengaduan</a>
+                    <a href="{{ route('home') }}#lokasi" class="hover:text-orange-600 transition">Lokasi</a>
                 </nav>
 
-                <!-- User Profile & Action Area -->
+                <!-- User Profile & Action Area (Sama dengan Beranda) -->
                 <div class="flex items-center space-x-3">
                     <!-- Active Tenant Profile Badge -->
-                    <div class="px-3.5 py-2 text-xs font-bold text-navy-950 bg-orange-50/80 border border-orange-200 rounded-lg flex items-center shadow-sm">
-                        <div class="w-6 h-6 rounded-full bg-orange-600 text-white flex items-center justify-center text-[11px] font-black mr-2 shadow-inner">
-                            {{ strtoupper(substr($user->name, 0, 1)) }}
-                        </div>
-                        <div class="flex flex-col text-left">
-                            <span class="leading-tight text-navy-950 font-extrabold">{{ $user->name }}</span>
-                            <span class="text-[10px] text-orange-600 font-bold leading-none">Penghuni Aktif</span>
-                        </div>
+                    <div class="px-3.5 py-2 text-xs font-bold text-navy-950 bg-slate-100 border border-slate-300 rounded-lg flex items-center shadow-sm">
+                        <i class="fa-solid fa-user text-orange-600 mr-2"></i>
+                        <span>{{ $user->name }}</span>
                     </div>
 
-                    <button onclick="logout()" class="px-3.5 py-2 text-xs font-bold text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition border border-transparent hover:border-red-100">
+                    <button onclick="logout()" class="px-3.5 py-2 text-xs font-bold text-slate-600 hover:text-red-600 hover:bg-slate-100 rounded-lg transition">
                         <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Keluar
                     </button>
                 </div>
@@ -532,15 +528,60 @@
 
     </main>
 
-    <!-- FOOTER -->
-    <footer class="bg-navy-950 text-white pt-10 pb-8 border-t border-navy-900 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-400 space-y-2">
-            <div class="flex items-center justify-center space-x-2">
-                <span class="font-black text-orange-500 uppercase tracking-widest text-[11px]">Kost Wisma S</span>
-                <span>&bull;</span>
-                <span>Purwokerto Selatan, Banyumas</span>
+    <!-- FOOTER (DISAMAKAN DENGAN BERANDA) -->
+    <footer class="bg-navy-900 text-slate-300 py-12 border-t border-navy-800 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                
+                <!-- Brand & Tagline (Lebih leluasa di kiri) -->
+                <div class="md:col-span-4 lg:col-span-5 space-y-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-white rounded-lg p-0.5 shadow flex items-center justify-center overflow-hidden shrink-0">
+                            <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
+                        </div>
+                        <div class="flex flex-col justify-center">
+                            <span class="text-[11px] font-extrabold text-orange-400 tracking-widest uppercase">Kost</span>
+                            <span class="text-lg font-extrabold text-white tracking-tight leading-tight">WISMA S</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed max-w-sm">
+                        Kost Nyaman, Bersih & Strategis di Lingkungan Aman.
+                    </p>
+                </div>
+
+                <!-- MENU (Digeser ke kanan) -->
+                <div class="md:col-span-2 lg:col-span-2 md:pl-4 lg:pl-8">
+                    <h4 class="text-xs font-bold text-white uppercase mb-3 tracking-wider">MENU</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="{{ route('home') }}#beranda" class="hover:text-orange-400 transition">Beranda</a></li>
+                        <li><a href="{{ route('home') }}#kamar" class="hover:text-orange-400 transition">Kamar</a></li>
+                        <li><a href="{{ route('home') }}#aturan" class="hover:text-orange-400 transition">Ketentuan</a></li>
+                        <li><a href="{{ route('home') }}#pengaduan" class="hover:text-orange-400 transition">Pengaduan</a></li>
+                        <li><a href="{{ route('home') }}#lokasi" class="hover:text-orange-400 transition">Lokasi</a></li>
+                    </ul>
+                </div>
+
+                <!-- LAYANAN (Digeser ke kanan bersama MENU) -->
+                <div class="md:col-span-2 lg:col-span-2 md:pl-4 lg:pl-8">
+                    <h4 class="text-xs font-bold text-white uppercase mb-3 tracking-wider">Layanan</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="{{ route('home') }}#kamar" class="hover:text-orange-400 transition">Booking</a></li>
+                        <li><a href="{{ route('home') }}#pengaduan" class="hover:text-orange-400 transition">Pengaduan</a></li>
+                        <li><a href="{{ route('tenant.room') }}" class="hover:text-orange-400 transition font-bold text-orange-400">Kamar Anda</a></li>
+                    </ul>
+                </div>
+
+                <!-- INFORMASI -->
+                <div class="md:col-span-4 lg:col-span-3">
+                    <h4 class="text-xs font-bold text-white uppercase mb-3 tracking-wider">INFORMASI</h4>
+                    <div class="space-y-2 text-xs">
+                        <p class="flex items-start"><i class="fa-solid fa-location-dot text-orange-500 mr-2 mt-0.5 shrink-0"></i> <span>Griya Karang Indah Blok S-15, Karangpucung, Purwokerto Selatan 53142</span></p>
+                        <p class="flex items-center"><i class="fa-solid fa-phone text-orange-500 mr-2"></i> 0821-7890-1234</p>
+                        <p class="flex items-center"><i class="fa-regular fa-envelope text-orange-500 mr-2"></i> info@wismas.com</p>
+                    </div>
+                </div>
+
             </div>
-            <p>&copy; {{ date('Y') }} Kost Wisma S. Hak cipta dilindungi undang-undang.</p>
         </div>
     </footer>
 
