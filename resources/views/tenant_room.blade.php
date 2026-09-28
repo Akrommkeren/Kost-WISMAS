@@ -212,61 +212,61 @@
                                     <span class="text-xs font-bold text-navy-950 uppercase tracking-wider block mb-2.5">
                                         Informasi Umum
                                     </span>
-                                    <div class="bg-slate-50/80 p-4 rounded-2xl border border-slate-200">
-                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                                    <div class="bg-slate-50/80 p-4 sm:p-5 rounded-2xl border border-slate-200">
+                                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
                                             <!-- Tarif Sewa -->
-                                            <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs hover:border-orange-300 transition">
-                                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">Tarif Sewa</span>
-                                                <p class="text-lg font-black text-orange-600 mt-1">
+                                            <div class="space-y-0.5">
+                                                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Tarif Sewa</span>
+                                                <p class="text-base font-black text-orange-600">
                                                     Rp {{ number_format($room->price, 0, ',', '.') }}
-                                                    <span class="text-[11px] font-bold text-slate-400">/ bulan</span>
+                                                    <span class="text-[11px] font-medium text-slate-500">/bln</span>
                                                 </p>
-                                                <span class="text-[11px] font-medium text-slate-500 block mt-1">Biaya sewa bulanan reguler</span>
+                                                <p class="text-[11px] text-slate-500">Bulanan (Reguler)</p>
                                             </div>
 
                                             <!-- Mulai Masuk -->
-                                            <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs hover:border-slate-300 transition">
-                                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">Mulai Masuk</span>
-                                                <p class="text-sm sm:text-base font-black text-navy-950 mt-1">
+                                            <div class="space-y-0.5">
+                                                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Mulai Masuk</span>
+                                                <p class="text-sm font-black text-navy-950">
                                                     {{ \Carbon\Carbon::parse($booking->start_date)->translatedFormat('d F Y') }}
                                                 </p>
-                                                <span class="text-[11px] font-semibold text-emerald-600 block mt-1">Status Sewa Aktif</span>
+                                                <p class="text-[11px] text-emerald-600 font-semibold">Aktif Menempati</p>
                                             </div>
 
                                             <!-- Siklus Tagihan -->
-                                            <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs hover:border-slate-300 transition">
-                                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">Siklus Tagihan</span>
-                                                <p class="text-sm sm:text-base font-black text-navy-950 mt-1">
+                                            <div class="space-y-0.5">
+                                                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Siklus Tagihan</span>
+                                                <p class="text-sm font-black text-navy-950">
                                                     Setiap Tanggal 5
                                                 </p>
-                                                <span class="text-[11px] font-medium text-slate-500 block mt-1">Jatuh tempo setiap bulan</span>
+                                                <p class="text-[11px] text-slate-500">Jatuh tempo bulanan</p>
                                             </div>
 
                                             <!-- Nama Penghuni -->
-                                            <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs hover:border-slate-300 transition">
-                                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">Nama Penghuni</span>
-                                                <p class="text-sm sm:text-base font-black text-navy-950 mt-1 truncate">
+                                            <div class="space-y-0.5">
+                                                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Nama Penghuni</span>
+                                                <p class="text-sm font-bold text-navy-950 truncate">
                                                     {{ $user->name }}
                                                 </p>
-                                                <span class="text-[11px] font-medium text-slate-500 block mt-1">Penghuni terdaftar</span>
+                                                <p class="text-[11px] text-slate-500">Penghuni terdaftar</p>
                                             </div>
 
                                             <!-- No. Handphone -->
-                                            <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs hover:border-slate-300 transition">
-                                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">No. Handphone</span>
-                                                <p class="text-sm sm:text-base font-black text-navy-950 mt-1">
+                                            <div class="space-y-0.5">
+                                                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">No. Handphone</span>
+                                                <p class="text-sm font-bold text-navy-950">
                                                     {{ $user->phone ?? '-' }}
                                                 </p>
-                                                <span class="text-[11px] font-medium text-slate-500 block mt-1">Kontak WhatsApp</span>
+                                                <p class="text-[11px] text-slate-500">Kontak WhatsApp</p>
                                             </div>
 
                                             <!-- Email Akun -->
-                                            <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs hover:border-slate-300 transition">
-                                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">Email Akun</span>
-                                                <p class="text-sm sm:text-base font-black text-navy-950 mt-1 truncate" title="{{ $user->email }}">
+                                            <div class="space-y-0.5">
+                                                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Email Akun</span>
+                                                <p class="text-sm font-bold text-navy-950 truncate" title="{{ $user->email }}">
                                                     {{ $user->email }}
                                                 </p>
-                                                <span class="text-[11px] font-medium text-slate-500 block mt-1">Notifikasi sistem</span>
+                                                <p class="text-[11px] text-slate-500">Notifikasi sistem</p>
                                             </div>
                                         </div>
                                     </div>
@@ -303,12 +303,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Quick Actions for Tenant -->
-                                <div class="pt-2 flex justify-end">
-                                    <a href="{{ route('home') }}#pengaduan" class="inline-flex items-center px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-lg transition border border-slate-300 shadow-2xs">
-                                        <i class="fa-solid fa-triangle-exclamation text-orange-600 mr-2"></i> Pengaduan Fasilitas
-                                    </a>
-                                </div>
+
 
                             </div>
                         </div>
