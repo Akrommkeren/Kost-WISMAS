@@ -116,7 +116,7 @@
     <main class="flex-1 pb-20">
         
         <!-- TOP BREADCRUMB & HEADER -->
-        <section class="bg-gradient-to-b from-slate-100 to-slate-50 border-b border-slate-200 pt-8 pb-10">
+        <section class="bg-gradient-to-b from-slate-100 to-slate-50 pt-8 pb-10">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Tombol Kembali Ke Beranda -->
                 <div class="mb-4">
@@ -170,9 +170,8 @@
                 <!-- SECTION 1: DETAIL KAMAR ANDA -->
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                     <div class="border-b border-slate-100 px-6 py-4 flex flex-wrap items-center justify-between gap-3 bg-slate-50/70">
-                        <div class="flex items-center space-x-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-orange-600"></span>
-                            <h2 class="text-base font-extrabold text-navy-950 uppercase tracking-wider">Detail Kamar Hunian</h2>
+                        <div class="flex items-center">
+                            <h2 class="text-base font-extrabold text-navy-950 uppercase tracking-wider">Detail Kamar</h2>
                         </div>
                         <span class="text-xs font-bold text-slate-500">ID Sewa: #BOOK-{{ str_pad($booking->id, 5, '0', STR_PAD_LEFT) }}</span>
                     </div>
@@ -202,66 +201,82 @@
                                             <i class="fa-solid fa-circle-check text-[10px] mr-1 text-emerald-600"></i> Kamar Sedang Ditempati
                                         </span>
                                     </div>
-                                    <p class="text-xs sm:text-sm text-slate-500 mt-1">Tipe: <b class="text-slate-800 font-bold">{{ $room->type }}</b> &bull; Periode Tagihan: <b class="text-slate-800 font-bold">Bulanan</b></p>
-                                </div>
-
-                                <!-- Grid Data Sewa -->
-                                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5 bg-slate-50 p-4 rounded-xl border border-slate-200">
-                                    <div class="space-y-0.5">
-                                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tarif Sewa</span>
-                                        <p class="text-sm font-black text-orange-600">Rp {{ number_format($room->price, 0, ',', '.') }} <span class="text-[10px] font-medium text-slate-500">/bln</span></p>
-                                    </div>
-                                    <div class="space-y-0.5">
-                                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Mulai Masuk</span>
-                                        <p class="text-sm font-black text-navy-950">{{ \Carbon\Carbon::parse($booking->start_date)->translatedFormat('d M Y') }}</p>
-                                    </div>
-                                    <div class="space-y-0.5">
-                                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Siklus Tagihan</span>
-                                        <p class="text-sm font-black text-navy-950">Setiap Tanggal 5</p>
-                                    </div>
-                                    <div class="space-y-0.5">
-                                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Nama Penghuni</span>
-                                        <p class="text-sm font-bold text-navy-950">{{ $user->name }}</p>
-                                    </div>
-                                    <div class="space-y-0.5">
-                                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">No. Handphone</span>
-                                        <p class="text-sm font-bold text-navy-950">{{ $user->phone ?? '-' }}</p>
-                                    </div>
-                                    <div class="space-y-0.5">
-                                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Email Akun</span>
-                                        <p class="text-sm font-bold text-navy-950 truncate">{{ $user->email }}</p>
+                                    <div class="text-xs sm:text-sm text-slate-600 mt-2 space-y-0.5">
+                                        <p>Tipe: <b class="text-slate-800 font-bold">{{ $room->type }}</b></p>
+                                        <p>Periode Tagihan: <b class="text-slate-800 font-bold">Bulanan</b></p>
                                     </div>
                                 </div>
 
-                                <!-- Fasilitas Kamar yang Dinikmati -->
+                                <!-- Informasi Umum -->
                                 <div>
                                     <span class="text-xs font-bold text-navy-950 uppercase tracking-wider block mb-2.5">
-                                        <i class="fa-solid fa-list-check text-orange-600 mr-1.5"></i> Fasilitas Kamar Termasuk:
+                                        Informasi Umum
+                                    </span>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                                        <div class="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200">
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Tarif Sewa</span>
+                                            <p class="text-base font-black text-orange-600 mt-0.5">Rp {{ number_format($room->price, 0, ',', '.') }} <span class="text-[11px] font-semibold text-slate-400">/bln</span></p>
+                                            <span class="text-[11px] text-slate-500 block mt-1">Tarif sewa bulanan reguler</span>
+                                        </div>
+
+                                        <div class="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200">
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Mulai Masuk</span>
+                                            <p class="text-base font-black text-navy-950 mt-0.5">{{ \Carbon\Carbon::parse($booking->start_date)->translatedFormat('d F Y') }}</p>
+                                            <span class="text-[11px] text-slate-500 block mt-1">Tanggal awal menempati kamar</span>
+                                        </div>
+
+                                        <div class="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200">
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Siklus Tagihan</span>
+                                            <p class="text-base font-black text-navy-950 mt-0.5">Setiap Tanggal 5</p>
+                                            <span class="text-[11px] text-slate-500 block mt-1">Jatuh tempo pembayaran per bulan</span>
+                                        </div>
+
+                                        <div class="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200">
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Nama Penghuni</span>
+                                            <p class="text-sm font-bold text-navy-950 mt-0.5 truncate">{{ $user->name }}</p>
+                                            <span class="text-[11px] text-slate-500 block mt-1">Penghuni terdaftar aktif</span>
+                                        </div>
+
+                                        <div class="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200">
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">No. Handphone</span>
+                                            <p class="text-sm font-bold text-navy-950 mt-0.5">{{ $user->phone ?? '-' }}</p>
+                                            <span class="text-[11px] text-slate-500 block mt-1">Nomor kontak terhubung</span>
+                                        </div>
+
+                                        <div class="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200">
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Email Akun</span>
+                                            <p class="text-sm font-bold text-navy-950 mt-0.5 truncate" title="{{ $user->email }}">{{ $user->email }}</p>
+                                            <span class="text-[11px] text-slate-500 block mt-1">Akun notifikasi sistem</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Fasilitas Kamar -->
+                                <div>
+                                    <span class="text-xs font-bold text-navy-950 uppercase tracking-wider block mb-2.5">
+                                        Fasilitas Kamar
                                     </span>
                                     <div class="flex flex-wrap gap-2">
                                         @if(is_array($room->features))
                                             @foreach($room->features as $item)
-                                                <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-200 text-slate-700 shadow-2xs">
-                                                    <i class="fa-solid fa-circle-check text-orange-500 mr-2 text-[11px]"></i> {{ $item }}
+                                                <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-50 border border-slate-200 text-slate-700 shadow-2xs">
+                                                    {{ $item }}
                                                 </span>
                                             @endforeach
                                         @endif
-                                        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-200 text-slate-700 shadow-2xs">
-                                            <i class="fa-solid fa-wifi text-orange-500 mr-2 text-[11px]"></i> Wi-Fi High Speed
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-50 border border-slate-200 text-slate-700 shadow-2xs">
+                                            Wi-Fi High Speed
                                         </span>
-                                        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-200 text-slate-700 shadow-2xs">
-                                            <i class="fa-solid fa-bolt text-orange-500 mr-2 text-[11px]"></i> Listrik & Air Lancar
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-50 border border-slate-200 text-slate-700 shadow-2xs">
+                                            Listrik & Air Lancar
                                         </span>
                                     </div>
                                 </div>
 
                                 <!-- Quick Actions for Tenant -->
-                                <div class="pt-2 flex flex-wrap gap-3">
-                                    <a href="{{ route('home') }}#pengaduan" class="inline-flex items-center px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-lg transition border border-slate-300">
-                                        <i class="fa-solid fa-triangle-exclamation text-orange-600 mr-2"></i> Laporkan Kendala Fasilitas Kamar
-                                    </a>
-                                    <a href="{{ route('rooms.show', $room->id) }}" class="inline-flex items-center px-4 py-2.5 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold rounded-lg transition border border-slate-300">
-                                        <i class="fa-solid fa-up-right-from-square mr-2 text-slate-500"></i> Halaman Publik Kamar
+                                <div class="pt-2 flex justify-end">
+                                    <a href="{{ route('home') }}#pengaduan" class="inline-flex items-center px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-lg transition border border-slate-300 shadow-2xs">
+                                        <i class="fa-solid fa-triangle-exclamation text-orange-600 mr-2"></i> Pengaduan Fasilitas
                                     </a>
                                 </div>
 
