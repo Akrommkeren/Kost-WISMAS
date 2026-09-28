@@ -124,8 +124,8 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Tombol Kembali Ke Beranda -->
                 <div class="mb-4">
-                    <a href="{{ route('home') }}" class="inline-flex items-center px-3.5 py-2 text-xs font-bold text-slate-700 bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 rounded-xl transition shadow-sm group">
-                        <i class="fa-solid fa-arrow-left mr-2 text-slate-400 group-hover:text-orange-600 transition"></i>
+                    <a href="{{ route('home') }}" class="inline-flex items-center text-xs font-bold text-orange-600 hover:text-orange-700 transition group">
+                        <i class="fa-solid fa-arrow-left mr-2 transition transform group-hover:-translate-x-1"></i>
                         <span>Kembali Ke Beranda</span>
                     </a>
                 </div>
