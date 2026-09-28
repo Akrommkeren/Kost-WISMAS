@@ -140,7 +140,7 @@ class DatabaseSeeder extends Seeder
         Payment::create([
             'user_id' => $agung->id,
             'room_id' => $kamar102->id,
-            'title' => 'Sewa Kamar 102 - Bulan Agustus 2026',
+            'title' => 'Kamar 102 - Bulan Agustus 2026',
             'amount' => 1500000,
             'due_date' => '05 Agu 2026',
             'payment_method' => 'Midtrans (BCA Virtual Account)',
@@ -151,7 +151,7 @@ class DatabaseSeeder extends Seeder
         Payment::create([
             'user_id' => $agung->id,
             'room_id' => $kamar102->id,
-            'title' => 'Sewa Kamar 102 - Bulan September 2026',
+            'title' => 'Kamar 102 - Bulan September 2026',
             'amount' => 1500000,
             'due_date' => '05 Sep 2026',
             'payment_method' => 'Midtrans (GoPay / QRIS)',
@@ -162,7 +162,7 @@ class DatabaseSeeder extends Seeder
         Payment::create([
             'user_id' => $agung->id,
             'room_id' => $kamar102->id,
-            'title' => 'Sewa Kamar 102 - Bulan Oktober 2026',
+            'title' => 'Kamar 102 - Bulan Oktober 2026',
             'amount' => 1500000,
             'due_date' => '05 Okt 2026',
             'payment_method' => 'Midtrans Payment Gateway',

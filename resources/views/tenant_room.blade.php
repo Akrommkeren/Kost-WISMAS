@@ -304,14 +304,8 @@
 
                 <!-- SECTION 2: TENGGAT WAKTU PEMBAYARAN (DUE DATE REMINDER) -->
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div class="border-b border-slate-100 px-6 py-4 flex flex-wrap items-center justify-between gap-3 bg-slate-50/70">
-                        <div class="flex items-center space-x-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-orange-600"></span>
-                            <h2 class="text-base font-extrabold text-navy-950 uppercase tracking-wider">Tenggat Waktu Tagihan Berikutnya</h2>
-                        </div>
-                        <span class="text-xs font-semibold text-slate-500">
-                            <i class="fa-solid fa-shield-halved text-emerald-600 mr-1"></i> Pembayaran Aman Terintegrasi Midtrans
-                        </span>
+                    <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/70">
+                        <h2 class="text-base font-extrabold text-navy-950 uppercase tracking-wider">Tenggat Waktu Tagihan</h2>
                     </div>
 
                     <div class="p-6 lg:p-8">
@@ -334,9 +328,6 @@
                                             <span class="flex items-center font-bold text-orange-700">
                                                 <i class="fa-solid fa-calendar-day mr-1.5"></i> Jatuh Tempo: {{ $upcomingPayment->due_date }}
                                             </span>
-                                            <span class="flex items-center">
-                                                <i class="fa-solid fa-credit-card mr-1.5 text-slate-400"></i> Saluran: Midtrans Payment Gateway
-                                            </span>
                                         </div>
                                         <p class="text-xs text-slate-600 pt-1 max-w-xl">
                                             Harap melakukan pembayaran sebelum batas jatuh tempo agar kenyamanan tinggal dan ketersediaan kamar tetap terjaga.
@@ -349,7 +340,7 @@
                                         <span class="text-2xl sm:text-3xl font-black text-orange-600 my-1">
                                             Rp {{ number_format($upcomingPayment->amount, 0, ',', '.') }}
                                         </span>
-                                        <span class="text-[10px] text-slate-400 mb-3">Termasuk seluruh fasilitas kamar</span>
+                                        <span class="text-[10px] text-slate-500 font-medium mb-3">Periode Tagihan: Bulanan</span>
                                         <button onclick="openPayModal({{ $upcomingPayment->id }}, '{{ addslashes($upcomingPayment->title) }}', {{ $upcomingPayment->amount }}, '{{ $upcomingPayment->due_date }}')" class="w-full inline-flex items-center justify-center px-5 py-3 bg-orange-600 hover:bg-orange-700 text-white text-xs sm:text-sm font-extrabold rounded-lg shadow-md hover:shadow-lg transition">
                                             <i class="fa-solid fa-lock mr-2"></i> Bayar Tagihan Sekarang
                                         </button>
