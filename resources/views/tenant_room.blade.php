@@ -177,19 +177,11 @@
                     </div>
 
                     <div class="p-6 lg:p-8">
-                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
                             
                             <!-- Foto Kamar -->
-                            <div class="lg:col-span-5 relative rounded-xl overflow-hidden border border-slate-200 shadow-sm group">
-                                <img src="{{ $room->image }}" alt="{{ $room->number }}" class="w-full h-64 sm:h-72 object-cover transition duration-500 group-hover:scale-105">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                                <div class="absolute bottom-4 left-4 right-4 text-white">
-                                    <div class="inline-flex items-center px-2.5 py-1 rounded bg-orange-600 text-white text-[11px] font-black uppercase tracking-wider mb-1">
-                                        {{ $room->type }}
-                                    </div>
-                                    <h3 class="text-2xl font-black">{{ $room->number }}</h3>
-                                    <p class="text-xs text-slate-200">Kost Wisma S Purwokerto Selatan</p>
-                                </div>
+                            <div class="lg:col-span-5 relative rounded-2xl overflow-hidden border border-slate-200 shadow-sm group h-full min-h-[300px] sm:min-h-[380px]">
+                                <img src="{{ $room->image }}" alt="{{ $room->number }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
                             </div>
 
                             <!-- Informasi Rincian Kamar -->
