@@ -364,11 +364,8 @@
 
                 <!-- SECTION 3: RIWAYAT PEMBAYARAN (PAYMENT HISTORY) -->
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div class="border-b border-slate-100 px-6 py-4 flex flex-wrap items-center justify-between gap-3 bg-slate-50/70">
-                        <div class="flex items-center">
-                            <h2 class="text-base font-extrabold text-navy-950 uppercase tracking-wider">Riwayat Pembayaran</h2>
-                        </div>
-                        <span class="text-xs font-bold text-slate-500">{{ $payments->count() }} Total Catatan Tagihan</span>
+                    <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/70">
+                        <h2 class="text-base font-extrabold text-navy-950 uppercase tracking-wider">Riwayat Pembayaran</h2>
                     </div>
 
                     <div class="p-6 lg:p-8">
