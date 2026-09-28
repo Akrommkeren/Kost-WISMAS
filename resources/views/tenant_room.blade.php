@@ -126,22 +126,13 @@
                     </a>
                 </div>
 
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                    <div>
-                        <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-navy-950 tracking-tight">
-                            Kamar Anda
-                        </h1>
-                        <p class="text-xs sm:text-sm text-slate-600 mt-1">
-                            Pantau status sewa kamar, tenggat waktu jatuh tempo pembayaran, dan riwayat transaksi Anda secara praktis.
-                        </p>
-                    </div>
-
-                    <!-- Hubungi Pemilik / Pengelola Quick Contact -->
-                    <div class="flex items-center space-x-2">
-                        <a href="https://wa.me/6281234567890?text={{ urlencode('Halo Pengelola Kost Wisma S, saya ' . $user->name . ' penghuni ' . ($room ? $room->number : 'kamar') . ', ingin bertanya sesuatu.') }}" target="_blank" class="inline-flex items-center px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg shadow-sm transition">
-                            <i class="fa-brands fa-whatsapp text-sm mr-2"></i> Bantuan Pengelola Kost
-                        </a>
-                    </div>
+                <div>
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-navy-950 tracking-tight">
+                        Kamar Anda
+                    </h1>
+                    <p class="text-xs sm:text-sm text-slate-600 mt-1">
+                        Pantau status sewa kamar, tenggat waktu jatuh tempo pembayaran, dan riwayat transaksi Anda secara praktis.
+                    </p>
                 </div>
 
             </div>
@@ -340,7 +331,20 @@
                                         <span class="text-2xl sm:text-3xl font-black text-orange-600 my-1">
                                             Rp {{ number_format($upcomingPayment->amount, 0, ',', '.') }}
                                         </span>
-                                        <span class="text-[10px] text-slate-500 font-medium mb-3">Periode Tagihan: Bulanan</span>
+                                        @php
+                                            $periodSuffix = '/bulan';
+                                            $payTitle = strtolower($upcomingPayment->title ?? '');
+                                            if (str_contains($payTitle, 'minggu')) {
+                                                $periodSuffix = '/minggu';
+                                            } elseif (str_contains($payTitle, 'semester')) {
+                                                $periodSuffix = '/semester';
+                                            } elseif (str_contains($payTitle, 'tahun')) {
+                                                $periodSuffix = '/tahun';
+                                            } elseif (str_contains($payTitle, 'hari')) {
+                                                $periodSuffix = '/hari';
+                                            }
+                                        @endphp
+                                        <span class="text-xs text-slate-500 font-semibold mb-3">{{ $periodSuffix }}</span>
                                         <button onclick="openPayModal({{ $upcomingPayment->id }}, '{{ addslashes($upcomingPayment->title) }}', {{ $upcomingPayment->amount }}, '{{ $upcomingPayment->due_date }}')" class="w-full inline-flex items-center justify-center px-5 py-3 bg-orange-600 hover:bg-orange-700 text-white text-xs sm:text-sm font-extrabold rounded-lg shadow-md hover:shadow-lg transition">
                                             <i class="fa-solid fa-lock mr-2"></i> Bayar Tagihan Sekarang
                                         </button>
