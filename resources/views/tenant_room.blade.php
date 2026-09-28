@@ -145,83 +145,153 @@
                 </div>
 
                 <!-- OVERVIEW METRICS CARDS -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
                     
-                    <!-- Card 1: Kamar Anda -->
-                    <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-start space-x-4">
-                        <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100">
-                            <i class="fa-solid fa-bed text-xl"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Kamar Hunian</span>
-                            <h3 class="text-lg font-black text-navy-950 truncate mt-0.5">
-                                {{ $room ? $room->number : 'Belum Ada Kamar' }}
-                            </h3>
-                            <p class="text-xs text-slate-500 truncate">{{ $room ? $room->type : 'Pilih kamar terlebih dahulu' }}</p>
-                            <div class="mt-2.5">
+                    <!-- Card 1: Kamar Hunian -->
+                    <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                        <div>
+                            <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-100">
+                                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Kamar Hunian</span>
                                 @if($booking && in_array($booking->status, ['confirmed', 'approved', 'active']))
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                        <i class="fa-solid fa-circle-check text-[9px] mr-1.5 text-emerald-600"></i> Aktif Menempati
+                                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                        Aktif Menempati
                                     </span>
                                 @elseif($booking && $booking->status === 'pending')
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-extrabold bg-amber-50 text-amber-700 border border-amber-200">
-                                        <i class="fa-solid fa-clock text-[9px] mr-1.5 text-amber-600"></i> Menunggu Konfirmasi
+                                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-50 text-amber-700 border border-amber-200">
+                                        Menunggu Konfirmasi
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-extrabold bg-slate-100 text-slate-600 border border-slate-200">
+                                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-slate-100 text-slate-600 border border-slate-200">
                                         Belum Menyewa
                                     </span>
                                 @endif
                             </div>
+                            <div class="py-3">
+                                <h3 class="text-2xl font-black text-navy-950">
+                                    {{ $room ? $room->number : 'Belum Ada Kamar' }}
+                                </h3>
+                                <p class="text-xs font-semibold text-slate-500 mt-0.5">
+                                    {{ $room ? $room->type : 'Silakan booking kamar terlebih dahulu' }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-100 space-y-2 text-xs">
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-500">Tarif Sewa</span>
+                                <span class="font-extrabold text-navy-950">
+                                    {{ $room ? 'Rp ' . number_format($room->price, 0, ',', '.') . ' / bln' : '-' }}
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-500">Mulai Menghuni</span>
+                                <span class="font-semibold text-navy-950">
+                                    {{ $booking && $booking->start_date ? \Carbon\Carbon::parse($booking->start_date)->translatedFormat('d M Y') : '-' }}
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-500">Periode Sewa</span>
+                                <span class="font-semibold text-navy-950">Bulanan (Reguler)</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-500">ID Sewa Kamar</span>
+                                <span class="font-mono font-bold text-slate-700">
+                                    {{ $booking ? '#BOOK-' . str_pad($booking->id, 5, '0', STR_PAD_LEFT) : '-' }}
+                                </span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Card 2: Tenggat Waktu Pembayaran Berikutnya -->
-                    <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-start space-x-4">
-                        <div class="w-12 h-12 rounded-xl {{ $upcomingPayment ? 'bg-orange-50 text-orange-600 border-orange-100' : 'bg-emerald-50 text-emerald-600 border-emerald-100' }} flex items-center justify-center shrink-0 border">
-                            <i class="fa-solid fa-calendar-check text-xl"></i>
+                    <!-- Card 2: Tenggat Waktu Berikutnya -->
+                    <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                        <div>
+                            <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-100">
+                                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Tenggat Waktu Berikutnya</span>
+                                @if($upcomingPayment)
+                                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-50 text-amber-800 border border-amber-200">
+                                        Menunggu Pembayaran
+                                    </span>
+                                @else
+                                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                        Bebas Tagihan
+                                    </span>
+                                @endif
+                            </div>
+                            <div class="py-3">
+                                <h3 class="text-2xl font-black text-navy-950">
+                                    {{ $upcomingPayment ? $upcomingPayment->due_date : 'Semua Lunas' }}
+                                </h3>
+                                <p class="text-xs font-semibold text-slate-500 mt-0.5">
+                                    {{ $upcomingPayment ? 'Batas akhir pembayaran periode ini' : 'Tidak ada tagihan tertunggak' }}
+                                </p>
+                            </div>
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Tenggat Waktu Berikutnya</span>
-                            <h3 class="text-lg font-black text-navy-950 truncate mt-0.5">
-                                {{ $upcomingPayment ? $upcomingPayment->due_date : 'Semua Lunas' }}
-                            </h3>
-                            <p class="text-xs text-slate-500 truncate">
-                                @if($upcomingPayment)
-                                    Rp {{ number_format($upcomingPayment->amount, 0, ',', '.') }}
-                                @else
-                                    Tidak ada tagihan tertunggak
-                                @endif
-                            </p>
-                            <div class="mt-2.5">
-                                @if($upcomingPayment)
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-extrabold bg-amber-100 text-amber-800 border border-amber-200">
-                                        <i class="fa-solid fa-circle-exclamation text-[9px] mr-1.5 text-amber-600"></i> Menunggu Pembayaran
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                        <i class="fa-solid fa-check text-[9px] mr-1.5 text-emerald-600"></i> Bebas Tagihan
-                                    </span>
-                                @endif
+
+                        <div class="pt-3 border-t border-slate-100 space-y-2 text-xs">
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-500">Jumlah Tagihan</span>
+                                <span class="font-extrabold {{ $upcomingPayment ? 'text-orange-600' : 'text-navy-950' }}">
+                                    {{ $upcomingPayment ? 'Rp ' . number_format($upcomingPayment->amount, 0, ',', '.') : 'Rp 0' }}
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-500">Rincian Tagihan</span>
+                                <span class="font-semibold text-navy-950 truncate max-w-[150px] text-right" title="{{ $upcomingPayment ? $upcomingPayment->title : 'Tagihan sewa selesai' }}">
+                                    {{ $upcomingPayment ? $upcomingPayment->title : 'Tagihan sewa selesai' }}
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-500">Metode Bayar</span>
+                                <span class="font-semibold text-navy-950">
+                                    {{ $upcomingPayment ? ($upcomingPayment->payment_method ?: 'Midtrans / Transfer Bank') : 'Terverifikasi' }}
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-500">Status Tagihan</span>
+                                <span class="font-semibold {{ $upcomingPayment ? 'text-amber-700' : 'text-emerald-700' }}">
+                                    {{ $upcomingPayment ? 'Belum Terbayar' : 'Lunas Terverifikasi' }}
+                                </span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Card 3: Total Pembayaran Lunas -->
-                    <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-start space-x-4 sm:col-span-2 lg:col-span-1">
-                        <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0 border border-purple-100">
-                            <i class="fa-solid fa-receipt text-xl"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Pembayaran Lunas</span>
-                            <h3 class="text-lg font-black text-navy-950 truncate mt-0.5">
-                                Rp {{ number_format($totalPaid, 0, ',', '.') }}
-                            </h3>
-                            <p class="text-xs text-slate-500 truncate">{{ $paidPayments->count() }} transaksi berhasil diselesaikan</p>
-                            <div class="mt-2.5">
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-extrabold bg-purple-50 text-purple-700 border border-purple-200">
-                                    <i class="fa-solid fa-shield-check text-[9px] mr-1.5 text-purple-600"></i> Terverifikasi Sistem
+                    <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                        <div>
+                            <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-100">
+                                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Pembayaran Lunas</span>
+                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-purple-50 text-purple-700 border border-purple-200">
+                                    Terverifikasi Sistem
                                 </span>
+                            </div>
+                            <div class="py-3">
+                                <h3 class="text-2xl font-black text-navy-950">
+                                    Rp {{ number_format($totalPaid, 0, ',', '.') }}
+                                </h3>
+                                <p class="text-xs font-semibold text-slate-500 mt-0.5">
+                                    {{ $paidPayments->count() }} transaksi berhasil diselesaikan
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-100 space-y-2 text-xs">
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-500">Frekuensi Bayar</span>
+                                <span class="font-extrabold text-navy-950">{{ $paidPayments->count() }} Transaksi</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-500">Pembayaran Terakhir</span>
+                                <span class="font-semibold text-navy-950">
+                                    {{ $paidPayments->first() ? ($paidPayments->first()->created_at ? $paidPayments->first()->created_at->translatedFormat('d M Y') : $paidPayments->first()->due_date) : '-' }}
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-500">Status Rekening</span>
+                                <span class="font-semibold text-emerald-700">Penyewa Aktif</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-500">Bukti Transaksi</span>
+                                <span class="font-semibold text-navy-950">Tersimpan Digital</span>
                             </div>
                         </div>
                     </div>
