@@ -937,10 +937,9 @@
                 </div>
 
                 <!-- Tombol Konfirmasi Booking -->
-                <button type="submit" id="btnProceedToPayment" class="w-full py-3 bg-orange-600 hover:bg-orange-700 active:scale-95 text-white text-xs sm:text-sm font-black rounded-xl shadow-md transition flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-check-circle"></i>
+                <button type="submit" id="btnProceedToPayment" class="w-full py-3 bg-orange-600 hover:bg-orange-700 active:scale-95 text-white text-xs sm:text-sm font-black rounded-xl shadow-md transition flex items-center justify-center">
+                    <i class="fa-solid fa-circle-check mr-2"></i>
                     <span>Konfirmasi Booking</span>
-                    <i class="fa-solid fa-arrow-right text-xs opacity-80"></i>
                 </button>
             </form>
         </div>
@@ -1046,7 +1045,8 @@
 
                     <!-- Tombol Lanjutkan Pembayaran -->
                     <button type="submit" id="btnFinalPaymentSubmit" class="w-full py-3 bg-orange-600 hover:bg-orange-700 active:scale-95 text-white text-xs sm:text-sm font-black rounded-xl shadow-md transition flex items-center justify-center">
-                        <i class="fa-solid fa-shield-check mr-2"></i> Lanjutkan Pembayaran
+                        <i class="fa-solid fa-credit-card mr-2"></i>
+                        <span>Lanjutkan Pembayaran</span>
                     </button>
                 </form>
             </div>

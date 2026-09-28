@@ -633,7 +633,7 @@
 
             <!-- Tombol Konfirmasi Bayar -->
             <button id="btnConfirmPay" onclick="submitPayPendingBill()" class="w-full py-3 bg-orange-600 hover:bg-orange-700 text-white text-xs sm:text-sm font-black rounded-xl shadow-md transition flex items-center justify-center">
-                <i class="fa-solid fa-shield-check mr-2"></i> Lanjutkan Pembayaran Midtrans
+                <i class="fa-solid fa-credit-card mr-2"></i> Lanjutkan Pembayaran Midtrans
             </button>
         </div>
     </div>
