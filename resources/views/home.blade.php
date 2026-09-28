@@ -1246,175 +1246,171 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- MODAL TRANSAKSI BOOKING KAMAR -->
+    <!-- MODAL TRANSAKSI BOOKING KAMAR (IDENTIK DENGAN PORTAL KAMAR ANDA) -->
     <!-- ========================================================================= -->
-    <div id="bookingTransactionModal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center hidden p-3 sm:p-4">
-        <div class="bg-white rounded-2xl max-w-lg w-full p-4 sm:p-5 shadow-2xl relative border border-slate-200">
+    <div id="bookingTransactionModal" class="hidden fixed inset-0 z-50 overflow-y-auto modal-overlay flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 relative text-left">
             
             <!-- Tombol Tutup (X) -->
-            <button type="button" onclick="closeBookingTransactionModal()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-navy-900 w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition focus:outline-none z-10" title="Tutup Modal">
-                <i class="fa-solid fa-xmark text-xs"></i>
+            <button type="button" onclick="closeBookingTransactionModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center transition focus:outline-none" title="Tutup Modal">
+                <i class="fa-solid fa-xmark text-lg"></i>
             </button>
 
             <!-- SECTION FORM TRANSAKSI -->
             <div id="bookingTransactionFormSection">
-                <!-- Header Modal: Logo Paling Atas & Center, Judul & Subjudul -->
-                <div class="text-center pb-2 border-b border-slate-100 mb-3">
-                    <div class="w-12 h-12 bg-white rounded-xl p-1 shadow-sm mx-auto mb-1.5 border border-slate-200 flex items-center justify-center">
+                <!-- Header Modal: Logo Center di Atas, Judul & Subjudul -->
+                <div class="text-center mb-4">
+                    <div class="w-14 h-14 bg-white rounded-xl p-1 shadow-sm flex items-center justify-center overflow-hidden border border-slate-200 mx-auto mb-2">
                         <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
                     </div>
-                    <h3 class="text-base sm:text-lg font-black text-navy-900 leading-tight">Booking kamar</h3>
-                    <p class="text-[11px] text-slate-500 leading-tight mt-0.5">Konfirmasi sewa kamar Kost Wisma S</p>
+                    <h3 class="text-lg font-black text-navy-950">Pembayaran Booking Kamar</h3>
+                    <p class="text-xs text-slate-500">Kost Wisma S &bull; Terintegrasi Midtrans</p>
                 </div>
 
                 <!-- Form Transaksi -->
-                <form id="formBookingTransaction" onsubmit="handleBookingTransactionSubmit(event)" class="space-y-2.5">
+                <form id="formBookingTransaction" onsubmit="handleBookingTransactionSubmit(event)">
                     <input type="hidden" id="transRoomId" name="room_id">
                     <input type="hidden" id="transDuration" name="duration" value="Bulanan">
                     <input type="hidden" id="transAmount" name="amount" value="0">
-                    <input type="hidden" id="transPaymentMethod" name="payment_method" value="Midtrans Payment Gateway">
+                    <input type="hidden" id="transUserName" name="user_name">
 
-                    <!-- Kartu Ringkasan Kamar Terpilih (Kompak, Tanpa Tarif Sewa) -->
-                    <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
-                        <div class="flex items-center space-x-2.5 min-w-0">
-                            <div class="w-10 h-10 rounded-lg bg-slate-200 overflow-hidden shrink-0 border border-slate-300">
-                                <img id="transRoomImage" src="" alt="Foto Kamar" class="w-full h-full object-cover">
-                            </div>
-                            <div class="min-w-0">
-                                <div class="flex items-center space-x-1.5">
-                                    <span id="transRoomNumber" class="text-xs sm:text-sm font-extrabold text-navy-900 truncate">Kamar ...</span>
-                                    <span class="px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Tersedia</span>
-                                </div>
-                                <p id="transRoomType" class="text-[11px] font-semibold text-orange-600 truncate">Tipe Kamar</p>
-                            </div>
+                    <!-- Rincian Tagihan Box (Sama Persis dengan Portal Kamar Anda) -->
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-2.5 mb-5 text-xs">
+                        <div class="flex justify-between items-center text-slate-500">
+                            <span>Penghuni:</span>
+                            <span id="transUserNameDisplay" class="font-bold text-slate-800"></span>
                         </div>
-                        <div class="text-right shrink-0 pl-2">
-                            <span id="transPeriodBadge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-orange-100 text-orange-700 border border-orange-200">Bulanan</span>
+                        <div class="flex justify-between items-center text-slate-500">
+                            <span>Kamar:</span>
+                            <span id="transRoomNumber" class="font-bold text-slate-800"></span>
                         </div>
-                    </div>
-
-                    <!-- Informasi Penyewa & Tanggal Masuk (Grid 2 Kolom Kompak) -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <!-- Nama Penyewa -->
-                        <div>
-                            <label class="block text-[10px] font-bold text-navy-900 uppercase mb-0.5">Nama Penyewa</label>
-                            <input type="text" id="transUserName" required readonly class="w-full px-2.5 py-1.5 text-xs bg-slate-100 border border-slate-200 rounded-lg text-slate-700 font-medium cursor-not-allowed">
-                        </div>
-
-                        <!-- Nomor WhatsApp -->
-                        <div>
-                            <label class="block text-[10px] font-bold text-navy-900 uppercase mb-0.5">No. WhatsApp Aktif <span class="text-orange-600">*</span></label>
-                            <input type="tel" id="transUserPhone" name="phone" required placeholder="08xxxxxxxxxx" class="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-navy-600 focus:outline-none font-medium">
-                        </div>
-
-                        <!-- Email Penyewa -->
-                        <div>
-                            <label class="block text-[10px] font-bold text-navy-900 uppercase mb-0.5">Email <span class="text-orange-600">*</span></label>
-                            <input type="email" id="transUserEmail" name="email" required placeholder="nama@email.com" class="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-navy-600 focus:outline-none font-medium">
-                        </div>
-
-                        <!-- Tanggal Mulai Masuk -->
-                        <div>
-                            <label class="block text-[10px] font-bold text-navy-900 uppercase mb-0.5">Tanggal Mulai Masuk <span class="text-orange-600">*</span></label>
-                            <input type="date" id="transStartDate" name="start_date" required class="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-navy-600 focus:outline-none font-medium">
-                        </div>
-                    </div>
-
-                    <!-- Pilihan Pembayaran Midtrans (Otomatis & Tanpa Tunai) -->
-                    <div>
-                        <label class="block text-[10px] font-bold text-navy-900 uppercase mb-1">Pilihan Pembayaran</label>
-                        <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
-                            <div class="flex items-center space-x-2.5">
-                                <div class="w-8 h-8 rounded-lg bg-navy-900 text-white flex items-center justify-center text-xs font-bold shrink-0 shadow-sm">
-                                    <i class="fa-solid fa-credit-card"></i>
-                                </div>
-                                <div>
-                                    <div class="flex items-center space-x-1.5">
-                                        <span class="text-xs font-extrabold text-navy-900">Midtrans Payment Gateway</span>
-                                        <span class="px-1.5 py-0.2 bg-emerald-100 text-emerald-700 font-bold text-[9px] rounded">Otomatis</span>
-                                    </div>
-                                    <p class="text-[10px] text-slate-500">Virtual Account (BCA, Mandiri, BNI, BRI), QRIS, & E-Wallet</p>
-                                </div>
-                            </div>
-                            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 flex items-center shrink-0">
-                                <i class="fa-solid fa-shield-halved mr-1 text-[9px]"></i> Aman
+                        <div class="flex justify-between items-center text-slate-500">
+                            <span>Uraian Tagihan:</span>
+                            <span class="font-bold text-navy-950 text-right">
+                                <span id="transRoomType"></span> &bull; <span id="transPeriodBadge" class="text-orange-600 font-extrabold">Bulanan</span>
                             </span>
                         </div>
+
+                        <!-- Data Kontak & Tanggal Masuk (Kompak & Rapi) -->
+                        <div class="border-t border-slate-200 pt-2.5 space-y-2">
+                            <div class="flex items-center justify-between gap-2">
+                                <label class="text-slate-500 shrink-0">Email <span class="text-orange-600">*</span>:</label>
+                                <input type="email" id="transUserEmail" name="email" required placeholder="nama@email.com" class="w-52 text-right px-2.5 py-1 text-xs border border-slate-300 rounded-lg focus:ring-1 focus:ring-orange-500 focus:outline-none font-medium text-slate-800 bg-white">
+                            </div>
+                            <div class="flex items-center justify-between gap-2">
+                                <label class="text-slate-500 shrink-0">No. WhatsApp <span class="text-orange-600">*</span>:</label>
+                                <input type="tel" id="transUserPhone" name="phone" required placeholder="08xxxxxxxxxx" class="w-52 text-right px-2.5 py-1 text-xs border border-slate-300 rounded-lg focus:ring-1 focus:ring-orange-500 focus:outline-none font-medium text-slate-800 bg-white">
+                            </div>
+                            <div class="flex items-center justify-between gap-2">
+                                <label class="text-slate-500 shrink-0">Mulai Masuk <span class="text-orange-600">*</span>:</label>
+                                <input type="date" id="transStartDate" name="start_date" required class="w-52 text-right px-2.5 py-1 text-xs border border-slate-300 rounded-lg focus:ring-1 focus:ring-orange-500 focus:outline-none font-medium text-slate-800 bg-white">
+                            </div>
+                        </div>
+
+                        <div class="border-t border-slate-200 pt-2.5 flex justify-between items-center">
+                            <span class="font-extrabold text-navy-950 text-sm">Total Bayar:</span>
+                            <span id="transTotalDisplay" class="font-black text-orange-600 text-lg">Rp 0</span>
+                        </div>
                     </div>
 
-                    <!-- Total Tagihan -->
-                    <div class="p-2.5 bg-orange-50/60 border border-orange-200/80 rounded-xl flex items-center justify-between">
-                        <div>
-                            <span class="text-[10px] text-slate-500 uppercase font-bold block leading-none mb-0.5">Total Tagihan Booking</span>
-                            <span id="transPeriodText" class="text-[10px] text-emerald-700 font-semibold flex items-center leading-none">
-                                <i class="fa-solid fa-circle-check text-[9px] mr-1"></i> Periode Bulanan
-                            </span>
-                        </div>
-                        <div class="text-right">
-                            <span id="transTotalDisplay" class="text-base sm:text-lg font-black text-orange-600">Rp 0</span>
+                    <!-- Pilihan Metode Midtrans (Sama Persis dengan Portal Kamar Anda) -->
+                    <div class="space-y-3 mb-6">
+                        <label class="block text-xs font-extrabold text-navy-950 uppercase tracking-wider">
+                            Pilih Metode Pembayaran Online:
+                        </label>
+                        
+                        <div class="space-y-2 text-xs">
+                            <!-- Midtrans BCA VA -->
+                            <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-white hover:bg-orange-50/50 hover:border-orange-300 cursor-pointer transition">
+                                <input type="radio" name="payment_method" value="Midtrans (BCA Virtual Account)" checked class="text-orange-600 focus:ring-orange-500">
+                                <div class="ml-3 flex-1">
+                                    <span class="font-extrabold text-navy-950 block">BCA Virtual Account (Otomatis)</span>
+                                    <span class="text-[10px] text-slate-500">Verifikasi instan 24 jam via Midtrans</span>
+                                </div>
+                                <i class="fa-solid fa-bolt text-orange-500"></i>
+                            </label>
+
+                            <!-- Midtrans Mandiri / BNI VA -->
+                            <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-white hover:bg-orange-50/50 hover:border-orange-300 cursor-pointer transition">
+                                <input type="radio" name="payment_method" value="Midtrans (Mandiri / BNI Virtual Account)" class="text-orange-600 focus:ring-orange-500">
+                                <div class="ml-3 flex-1">
+                                    <span class="font-extrabold text-navy-950 block">Mandiri / BNI Virtual Account</span>
+                                    <span class="text-[10px] text-slate-500">Pembayaran melalui ATM / Mobile Banking</span>
+                                </div>
+                            </label>
+
+                            <!-- Midtrans QRIS & E-Wallet -->
+                            <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-white hover:bg-orange-50/50 hover:border-orange-300 cursor-pointer transition">
+                                <input type="radio" name="payment_method" value="Midtrans (QRIS / GoPay / ShopeePay)" class="text-orange-600 focus:ring-orange-500">
+                                <div class="ml-3 flex-1">
+                                    <span class="font-extrabold text-navy-950 block">QRIS / GoPay / ShopeePay / Dana</span>
+                                    <span class="text-[10px] text-slate-500">Scan QRIS dari aplikasi e-wallet mana saja</span>
+                                </div>
+                                <i class="fa-solid fa-qrcode text-slate-600"></i>
+                            </label>
                         </div>
                     </div>
 
-                    <!-- Action Button (Full Width, Tanpa Batal, dengan Icon) -->
-                    <div class="pt-1">
-                        <button type="submit" id="btnSubmitTransaction" class="w-full py-2.5 bg-orange-600 hover:bg-orange-700 active:scale-95 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md transition flex items-center justify-center space-x-2">
-                            <i class="fa-solid fa-shield-check text-sm"></i>
-                            <span>Konfirmasi Booking</span>
-                            <i class="fa-solid fa-arrow-right text-xs opacity-80"></i>
-                        </button>
-                    </div>
+                    <!-- Tombol Konfirmasi Bayar Midtrans -->
+                    <button type="submit" id="btnSubmitTransaction" class="w-full py-3 bg-orange-600 hover:bg-orange-700 active:scale-95 text-white text-xs sm:text-sm font-black rounded-xl shadow-md transition flex items-center justify-center">
+                        <i class="fa-solid fa-shield-check mr-2"></i> Lanjutkan Pembayaran Midtrans
+                    </button>
                 </form>
             </div>
 
-            <!-- SECTION STRUK SUKSES TRANSAKSI (KOMPAK) -->
-            <div id="bookingTransactionSuccessSection" class="hidden text-center py-1 space-y-3">
-                <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
-                    <i class="fa-solid fa-circle-check text-2xl"></i>
-                </div>
-                <div>
-                    <h3 class="text-base sm:text-lg font-black text-navy-900 leading-tight">Booking Kamar Berhasil!</h3>
-                    <p class="text-[11px] text-slate-500 mt-0.5">Pemesanan tercatat & terhubung ke Midtrans Payment Gateway.</p>
-                </div>
-
-                <!-- Struk Ringkasan Digital -->
-                <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-left text-xs space-y-1.5">
-                    <div class="flex justify-between items-center border-b border-slate-200 pb-1.5">
-                        <span class="text-slate-500 text-[11px]">ID Booking</span>
-                        <span id="succBookingId" class="font-extrabold text-navy-900 text-xs">#WS-BK01</span>
+            <!-- SECTION STRUK SUKSES TRANSAKSI (IDENTIK DENGAN KUITANSI PORTAL KAMAR ANDA) -->
+            <div id="bookingTransactionSuccessSection" class="hidden text-left">
+                <!-- Kuitansi Header -->
+                <div class="text-center pb-4 border-b border-dashed border-slate-300 mb-3">
+                    <div class="w-12 h-12 bg-white rounded-xl p-1 shadow-sm flex items-center justify-center overflow-hidden border border-slate-200 mx-auto mb-2">
+                        <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
                     </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-slate-500 text-[11px]">Kamar</span>
-                        <span id="succRoomNumber" class="font-bold text-navy-900 text-xs">Kamar ...</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-slate-500 text-[11px]">Nama Penyewa</span>
-                        <span id="succUserName" class="font-semibold text-slate-800 text-xs">...</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-slate-500 text-[11px]">Durasi Sewa</span>
-                        <span id="succDuration" class="font-semibold text-slate-800 text-xs">...</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-slate-500 text-[11px]">Tanggal Masuk</span>
-                        <span id="succStartDate" class="font-semibold text-slate-800 text-xs">...</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-slate-500 text-[11px]">Metode Bayar</span>
-                        <span id="succPaymentMethod" class="font-semibold text-slate-800 text-xs">Midtrans Payment Gateway</span>
-                    </div>
-                    <div class="flex justify-between items-center border-t border-slate-200 pt-1.5">
-                        <span class="font-bold text-navy-900 text-xs">Total Pembayaran</span>
-                        <span id="succTotalAmount" class="font-black text-sm text-orange-600">Rp 0</span>
+                    <h3 class="text-base font-black text-navy-950 uppercase tracking-wider">Kuitansi Pemesanan Kamar</h3>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Kost Wisma S Purwokerto</span>
+                    <div class="mt-2 inline-flex items-center px-3 py-1 rounded-full text-[11px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300">
+                        <i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> BOOKING BERHASIL TERHUBUNG MIDTRANS
                     </div>
                 </div>
 
-                <!-- Tombol Konfirmasi WhatsApp -->
-                <div class="space-y-1.5">
-                    <a id="btnSuccessWhatsApp" href="#" target="_blank" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-extrabold text-xs rounded-xl shadow transition flex items-center justify-center space-x-2">
-                        <i class="fa-brands fa-whatsapp text-base"></i>
+                <!-- Kuitansi Body -->
+                <div class="py-2 space-y-2.5 text-xs border-b border-dashed border-slate-300 pb-3 mb-4">
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">Nomor Transaksi:</span>
+                        <span id="succBookingId" class="font-mono font-bold text-navy-900">#WS-BK01</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">Nama Penghuni:</span>
+                        <span id="succUserName" class="font-bold text-slate-800"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">Kamar Hunian:</span>
+                        <span id="succRoomNumber" class="font-bold text-slate-800"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">Periode Sewa:</span>
+                        <span id="succDuration" class="font-semibold text-slate-700"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">Tanggal Masuk:</span>
+                        <span id="succStartDate" class="font-semibold text-slate-700"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">Metode Bayar:</span>
+                        <span id="succPaymentMethod" class="font-semibold text-slate-700"></span>
+                    </div>
+                    <div class="border-t border-dashed border-slate-300 pt-2 flex justify-between items-center">
+                        <span class="text-sm font-extrabold text-navy-950">Jumlah Tagihan:</span>
+                        <span id="succTotalAmount" class="text-base font-black text-orange-600"></span>
+                    </div>
+                </div>
+
+                <!-- Footer / Action Buttons -->
+                <div class="space-y-2">
+                    <a id="btnSuccessWhatsApp" href="#" target="_blank" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-extrabold text-xs rounded-xl shadow transition flex items-center justify-center space-x-1.5">
+                        <i class="fa-brands fa-whatsapp text-sm"></i>
                         <span>Konfirmasi via WhatsApp Sekarang</span>
                     </a>
-                    <button type="button" onclick="closeBookingTransactionModal()" class="w-full py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
+                    <button type="button" onclick="closeBookingTransactionModal()" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
                         Tutup
                     </button>
                 </div>
@@ -2064,6 +2060,8 @@
             @auth
                 const nameEl = document.getElementById('transUserName');
                 if (nameEl) nameEl.value = "{{ Auth::user()->name }}";
+                const nameDisplayEl = document.getElementById('transUserNameDisplay');
+                if (nameDisplayEl) nameDisplayEl.textContent = "{{ Auth::user()->name }}";
                 const phoneInput = document.getElementById('transUserPhone');
                 if (phoneInput && !phoneInput.value) {
                     phoneInput.value = "{{ Auth::user()->phone ?? '' }}";
@@ -2072,6 +2070,9 @@
                 if (emailInput && !emailInput.value) {
                     emailInput.value = "{{ Auth::user()->email ?? '' }}";
                 }
+            @else
+                const nameDisplayEl = document.getElementById('transUserNameDisplay');
+                if (nameDisplayEl) nameDisplayEl.textContent = "Penghuni";
             @endauth
 
             // Tanggal check-in default hari ini
