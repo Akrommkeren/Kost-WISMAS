@@ -96,10 +96,6 @@
 
                 <!-- User Profile & Action Area -->
                 <div class="flex items-center space-x-3">
-                    <a href="{{ route('home') }}" class="hidden sm:inline-flex items-center px-3.5 py-2 text-xs font-bold text-slate-700 bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 rounded-lg transition shadow-sm">
-                        <i class="fa-solid fa-arrow-left mr-1.5 text-slate-500"></i> Beranda Kost
-                    </a>
-
                     <!-- Active Tenant Profile Badge -->
                     <div class="px-3.5 py-2 text-xs font-bold text-navy-950 bg-orange-50/80 border border-orange-200 rounded-lg flex items-center shadow-sm">
                         <div class="w-6 h-6 rounded-full bg-orange-600 text-white flex items-center justify-center text-[11px] font-black mr-2 shadow-inner">
@@ -126,21 +122,18 @@
         <!-- TOP BREADCRUMB & HEADER -->
         <section class="bg-gradient-to-b from-slate-100 to-slate-50 border-b border-slate-200 pt-8 pb-10">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <!-- Breadcrumbs -->
-                <div class="flex items-center space-x-2 text-xs font-bold text-slate-500 mb-4">
-                    <a href="{{ route('home') }}" class="hover:text-orange-600 transition">Beranda</a>
-                    <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
-                    <span class="text-orange-600">Kamar Anda</span>
+                <!-- Tombol Kembali Ke Beranda -->
+                <div class="mb-4">
+                    <a href="{{ route('home') }}" class="inline-flex items-center px-3.5 py-2 text-xs font-bold text-slate-700 bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 rounded-xl transition shadow-sm group">
+                        <i class="fa-solid fa-arrow-left mr-2 text-slate-400 group-hover:text-orange-600 transition"></i>
+                        <span>Kembali Ke Beranda</span>
+                    </a>
                 </div>
 
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div>
-                        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded bg-orange-100 text-orange-800 text-xs font-extrabold mb-2 border border-orange-200">
-                            <i class="fa-solid fa-house-user text-orange-600"></i>
-                            <span>Portal Hunian Penghuni Kost Wisma S</span>
-                        </div>
                         <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-navy-950 tracking-tight">
-                            Informasi Kamar & Tagihan Anda
+                            Kamar Anda
                         </h1>
                         <p class="text-xs sm:text-sm text-slate-600 mt-1">
                             Pantau status sewa kamar, tenggat waktu jatuh tempo pembayaran, dan riwayat transaksi Anda secara praktis.

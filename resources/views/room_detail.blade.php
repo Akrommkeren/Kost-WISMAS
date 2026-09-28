@@ -1675,7 +1675,7 @@
         });
 
         function handleTenantNoBookingClick() {
-            alert('Halo, akun Anda belum melakukan pemesanan sewa kamar di Kost Wisma S.\n\nHalaman Informasi Kamar & Tagihan hanya dapat diakses setelah Anda resmi memiliki kamar sewa aktif.');
+            alert('Halo, akun Anda belum melakukan pemesanan sewa kamar di Kost Wisma S.\n\nHalaman Kamar Anda hanya dapat diakses setelah Anda resmi memiliki kamar sewa aktif.');
             window.location.href = "{{ route('home') }}#kamar";
         }
     </script>

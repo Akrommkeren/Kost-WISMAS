@@ -2713,7 +2713,7 @@ _Pesan dikirim dari Formulir Pengaduan Kost Wisma S_`;
         });
 
         function handleTenantNoBookingClick() {
-            alert('Halo, akun Anda belum melakukan pemesanan sewa kamar di Kost Wisma S.\n\nHalaman Informasi Kamar & Tagihan hanya dapat diakses setelah Anda resmi memiliki kamar sewa aktif.');
+            alert('Halo, akun Anda belum melakukan pemesanan sewa kamar di Kost Wisma S.\n\nHalaman Kamar Anda hanya dapat diakses setelah Anda resmi memiliki kamar sewa aktif.');
             const kamarSection = document.getElementById('kamar');
             if (kamarSection) {
                 kamarSection.scrollIntoView({ behavior: 'smooth' });
