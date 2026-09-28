@@ -212,41 +212,62 @@
                                     <span class="text-xs font-bold text-navy-950 uppercase tracking-wider block mb-2.5">
                                         Informasi Umum
                                     </span>
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                                        <div class="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200">
-                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Tarif Sewa</span>
-                                            <p class="text-base font-black text-orange-600 mt-0.5">Rp {{ number_format($room->price, 0, ',', '.') }} <span class="text-[11px] font-semibold text-slate-400">/bln</span></p>
-                                            <span class="text-[11px] text-slate-500 block mt-1">Tarif sewa bulanan reguler</span>
-                                        </div>
+                                    <div class="bg-slate-50/80 p-4 rounded-2xl border border-slate-200">
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                                            <!-- Tarif Sewa -->
+                                            <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs hover:border-orange-300 transition">
+                                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">Tarif Sewa</span>
+                                                <p class="text-lg font-black text-orange-600 mt-1">
+                                                    Rp {{ number_format($room->price, 0, ',', '.') }}
+                                                    <span class="text-[11px] font-bold text-slate-400">/ bulan</span>
+                                                </p>
+                                                <span class="text-[11px] font-medium text-slate-500 block mt-1">Biaya sewa bulanan reguler</span>
+                                            </div>
 
-                                        <div class="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200">
-                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Mulai Masuk</span>
-                                            <p class="text-base font-black text-navy-950 mt-0.5">{{ \Carbon\Carbon::parse($booking->start_date)->translatedFormat('d F Y') }}</p>
-                                            <span class="text-[11px] text-slate-500 block mt-1">Tanggal awal menempati kamar</span>
-                                        </div>
+                                            <!-- Mulai Masuk -->
+                                            <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs hover:border-slate-300 transition">
+                                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">Mulai Masuk</span>
+                                                <p class="text-sm sm:text-base font-black text-navy-950 mt-1">
+                                                    {{ \Carbon\Carbon::parse($booking->start_date)->translatedFormat('d F Y') }}
+                                                </p>
+                                                <span class="text-[11px] font-semibold text-emerald-600 block mt-1">Status Sewa Aktif</span>
+                                            </div>
 
-                                        <div class="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200">
-                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Siklus Tagihan</span>
-                                            <p class="text-base font-black text-navy-950 mt-0.5">Setiap Tanggal 5</p>
-                                            <span class="text-[11px] text-slate-500 block mt-1">Jatuh tempo pembayaran per bulan</span>
-                                        </div>
+                                            <!-- Siklus Tagihan -->
+                                            <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs hover:border-slate-300 transition">
+                                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">Siklus Tagihan</span>
+                                                <p class="text-sm sm:text-base font-black text-navy-950 mt-1">
+                                                    Setiap Tanggal 5
+                                                </p>
+                                                <span class="text-[11px] font-medium text-slate-500 block mt-1">Jatuh tempo setiap bulan</span>
+                                            </div>
 
-                                        <div class="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200">
-                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Nama Penghuni</span>
-                                            <p class="text-sm font-bold text-navy-950 mt-0.5 truncate">{{ $user->name }}</p>
-                                            <span class="text-[11px] text-slate-500 block mt-1">Penghuni terdaftar aktif</span>
-                                        </div>
+                                            <!-- Nama Penghuni -->
+                                            <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs hover:border-slate-300 transition">
+                                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">Nama Penghuni</span>
+                                                <p class="text-sm sm:text-base font-black text-navy-950 mt-1 truncate">
+                                                    {{ $user->name }}
+                                                </p>
+                                                <span class="text-[11px] font-medium text-slate-500 block mt-1">Penghuni terdaftar</span>
+                                            </div>
 
-                                        <div class="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200">
-                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">No. Handphone</span>
-                                            <p class="text-sm font-bold text-navy-950 mt-0.5">{{ $user->phone ?? '-' }}</p>
-                                            <span class="text-[11px] text-slate-500 block mt-1">Nomor kontak terhubung</span>
-                                        </div>
+                                            <!-- No. Handphone -->
+                                            <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs hover:border-slate-300 transition">
+                                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">No. Handphone</span>
+                                                <p class="text-sm sm:text-base font-black text-navy-950 mt-1">
+                                                    {{ $user->phone ?? '-' }}
+                                                </p>
+                                                <span class="text-[11px] font-medium text-slate-500 block mt-1">Kontak WhatsApp</span>
+                                            </div>
 
-                                        <div class="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200">
-                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Email Akun</span>
-                                            <p class="text-sm font-bold text-navy-950 mt-0.5 truncate" title="{{ $user->email }}">{{ $user->email }}</p>
-                                            <span class="text-[11px] text-slate-500 block mt-1">Akun notifikasi sistem</span>
+                                            <!-- Email Akun -->
+                                            <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs hover:border-slate-300 transition">
+                                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">Email Akun</span>
+                                                <p class="text-sm sm:text-base font-black text-navy-950 mt-1 truncate" title="{{ $user->email }}">
+                                                    {{ $user->email }}
+                                                </p>
+                                                <span class="text-[11px] font-medium text-slate-500 block mt-1">Notifikasi sistem</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -256,20 +277,29 @@
                                     <span class="text-xs font-bold text-navy-950 uppercase tracking-wider block mb-2.5">
                                         Fasilitas Kamar
                                     </span>
-                                    <div class="flex flex-wrap gap-2">
-                                        @if(is_array($room->features))
-                                            @foreach($room->features as $item)
-                                                <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-50 border border-slate-200 text-slate-700 shadow-2xs">
-                                                    {{ $item }}
-                                                </span>
-                                            @endforeach
-                                        @endif
-                                        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-50 border border-slate-200 text-slate-700 shadow-2xs">
-                                            Wi-Fi High Speed
-                                        </span>
-                                        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-50 border border-slate-200 text-slate-700 shadow-2xs">
-                                            Listrik & Air Lancar
-                                        </span>
+                                    <div class="bg-slate-50/80 p-4 rounded-2xl border border-slate-200">
+                                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+                                            @if(is_array($room->features))
+                                                @foreach($room->features as $item)
+                                                    <div class="flex items-center space-x-2">
+                                                        <i class="fa-solid fa-check text-orange-500 text-xs shrink-0"></i>
+                                                        <span class="font-semibold text-slate-800">{{ $item }}</span>
+                                                    </div>
+                                                @endforeach
+                                            @endif
+                                            <div class="flex items-center space-x-2">
+                                                <i class="fa-solid fa-check text-orange-500 text-xs shrink-0"></i>
+                                                <span class="font-semibold text-slate-800">Wi-Fi High Speed</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2">
+                                                <i class="fa-solid fa-check text-orange-500 text-xs shrink-0"></i>
+                                                <span class="font-semibold text-slate-800">Listrik & Air Lancar</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2">
+                                                <i class="fa-solid fa-check text-orange-500 text-xs shrink-0"></i>
+                                                <span class="font-semibold text-slate-800">Ventilasi Udara Segar</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
