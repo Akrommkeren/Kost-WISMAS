@@ -872,77 +872,144 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- MODAL TRANSAKSI BOOKING KAMAR (IDENTIK DENGAN PORTAL KAMAR ANDA) -->
+    <!-- TAHAP 1: MODAL BOOKING KAMAR (DATA PEMESANAN & KONTAK PENGHUNI) -->
     <!-- ========================================================================= -->
-    <div id="bookingTransactionModal" class="hidden fixed inset-0 z-50 overflow-y-auto modal-overlay flex items-center justify-center p-4">
+    <div id="bookingModal" class="hidden fixed inset-0 z-50 overflow-y-auto modal-overlay flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 relative text-left">
             
             <!-- Tombol Tutup (X) -->
-            <button type="button" onclick="closeBookingTransactionModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center transition focus:outline-none" title="Tutup Modal">
+            <button type="button" onclick="closeBookingModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center transition focus:outline-none" title="Tutup Modal">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Header Modal: Logo Center di Atas, Judul & Subjudul -->
+            <div class="text-center mb-4">
+                <div class="w-14 h-14 bg-white rounded-xl p-1 shadow-sm flex items-center justify-center overflow-hidden border border-slate-200 mx-auto mb-2">
+                    <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
+                </div>
+                <h3 class="text-lg font-black text-navy-950">Booking Kamar</h3>
+                <p class="text-xs text-slate-500">Kost Wisma S Purwokerto</p>
+            </div>
+
+            <!-- Form Pemesanan Kamar -->
+            <form id="formBookingStep1" onsubmit="handleProceedToPayment(event)">
+                <!-- Rincian Kamar Terpilih -->
+                <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-2.5 mb-5 text-xs">
+                    <div class="flex justify-between items-center text-slate-500">
+                        <span>Nama Akun:</span>
+                        <span id="bookingStep1UserName" class="font-bold text-slate-800"></span>
+                    </div>
+                    <div class="flex justify-between items-center text-slate-500">
+                        <span>Nomor Kamar:</span>
+                        <span id="bookingStep1RoomNumber" class="font-bold text-slate-800">Kamar {{ $room->number }}</span>
+                    </div>
+                    <div class="flex justify-between items-center text-slate-500">
+                        <span>Tipe Kamar:</span>
+                        <span id="bookingStep1RoomType" class="font-bold text-navy-950">{{ $room->type }}</span>
+                    </div>
+
+                    <!-- Informasi Tambahan (Email, Nomor HP, Tanggal Masuk) -->
+                    <div class="border-t border-slate-200 pt-2.5 space-y-2">
+                        <p class="font-extrabold text-[11px] text-navy-900 uppercase tracking-wider mb-1">Informasi Tambahan:</p>
+                        
+                        <div class="flex items-center justify-between gap-2">
+                            <label class="text-slate-500 shrink-0">Email <span class="text-orange-600">*</span>:</label>
+                            <input type="email" id="bookingStep1UserEmail" required placeholder="nama@email.com" class="w-52 text-right px-2.5 py-1 text-xs border border-slate-300 rounded-lg focus:ring-1 focus:ring-orange-500 focus:outline-none font-medium text-slate-800 bg-white">
+                        </div>
+                        <div class="flex items-center justify-between gap-2">
+                            <label class="text-slate-500 shrink-0">Nomor HP <span class="text-orange-600">*</span>:</label>
+                            <input type="tel" id="bookingStep1UserPhone" required placeholder="08xxxxxxxxxx" class="w-52 text-right px-2.5 py-1 text-xs border border-slate-300 rounded-lg focus:ring-1 focus:ring-orange-500 focus:outline-none font-medium text-slate-800 bg-white">
+                        </div>
+                        <div class="flex items-center justify-between gap-2">
+                            <label class="text-slate-500 shrink-0">Tanggal Masuk <span class="text-orange-600">*</span>:</label>
+                            <input type="date" id="bookingStep1StartDate" required class="w-52 text-right px-2.5 py-1 text-xs border border-slate-300 rounded-lg focus:ring-1 focus:ring-orange-500 focus:outline-none font-medium text-slate-800 bg-white">
+                        </div>
+                    </div>
+
+                    <!-- Total Tagihan -->
+                    <div class="border-t border-slate-200 pt-2.5 flex justify-between items-center">
+                        <div>
+                            <span class="font-extrabold text-navy-950 text-sm block">Total Tagihan:</span>
+                            <span id="bookingStep1PeriodBadge" class="text-[10px] text-emerald-700 font-bold">Periode Bulanan</span>
+                        </div>
+                        <span id="bookingStep1TotalDisplay" class="font-black text-orange-600 text-lg">Rp {{ number_format($room->price, 0, ',', '.') }}</span>
+                    </div>
+                </div>
+
+                <!-- Tombol Konfirmasi Booking -->
+                <button type="submit" id="btnProceedToPayment" class="w-full py-3 bg-orange-600 hover:bg-orange-700 active:scale-95 text-white text-xs sm:text-sm font-black rounded-xl shadow-md transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-check-circle"></i>
+                    <span>Konfirmasi Booking</span>
+                    <i class="fa-solid fa-arrow-right text-xs opacity-80"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- TAHAP 2: MODAL TRANSAKSI / PEMBAYARAN (PORTAL STYLE) -->
+    <!-- ========================================================================= -->
+    <div id="paymentTransactionModal" class="hidden fixed inset-0 z-50 overflow-y-auto modal-overlay flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 relative text-left">
+            
+            <!-- Tombol Kembali ke Step 1 & Tombol Tutup (X) -->
+            <button type="button" onclick="backToBookingStep1()" class="absolute top-4 left-4 text-slate-400 hover:text-navy-900 w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center transition focus:outline-none" title="Kembali ke Data Booking">
+                <i class="fa-solid fa-arrow-left text-sm"></i>
+            </button>
+            <button type="button" onclick="closePaymentTransactionModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center transition focus:outline-none" title="Tutup Modal">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
 
             <!-- SECTION FORM TRANSAKSI -->
-            <div id="bookingTransactionFormSection">
+            <div id="paymentTransactionFormSection">
                 <!-- Header Modal: Logo Center di Atas, Judul & Subjudul -->
                 <div class="text-center mb-4">
                     <div class="w-14 h-14 bg-white rounded-xl p-1 shadow-sm flex items-center justify-center overflow-hidden border border-slate-200 mx-auto mb-2">
                         <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
                     </div>
-                    <h3 class="text-lg font-black text-navy-950">Pembayaran Booking Kamar</h3>
+                    <h3 class="text-lg font-black text-navy-950">Transaksi Pembayaran</h3>
                     <p class="text-xs text-slate-500">Kost Wisma S &bull; Terintegrasi Midtrans</p>
                 </div>
 
-                <!-- Form Transaksi -->
-                <form id="formBookingTransaction" onsubmit="handleBookingTransactionSubmit(event)">
-                    <input type="hidden" id="transRoomId" name="room_id" value="{{ $room->id }}">
-                    <input type="hidden" id="transDuration" name="duration" value="Bulanan">
-                    <input type="hidden" id="transAmount" name="amount" value="{{ $room->price }}">
-                    <input type="hidden" id="transUserName" name="user_name">
+                <!-- Form Transaksi Pembayaran -->
+                <form id="formPaymentTransaction" onsubmit="handleFinalPaymentSubmit(event)">
+                    <input type="hidden" id="finalTransRoomId" name="room_id" value="{{ $room->id }}">
+                    <input type="hidden" id="finalTransDuration" name="duration" value="Bulanan">
+                    <input type="hidden" id="finalTransAmount" name="amount" value="{{ $room->price }}">
+                    <input type="hidden" id="finalTransUserName" name="user_name">
+                    <input type="hidden" id="finalTransUserEmail" name="email">
+                    <input type="hidden" id="finalTransUserPhone" name="phone">
+                    <input type="hidden" id="finalTransStartDate" name="start_date">
 
-                    <!-- Rincian Tagihan Box (Sama Persis dengan Portal Kamar Anda) -->
+                    <!-- Rincian Tagihan Box (Persis Permintaan: Nama Pengguna, Kamar, Uraian (Tanggal Masuk), Jatuh Tempo, Total Tagihan) -->
                     <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-2.5 mb-5 text-xs">
                         <div class="flex justify-between items-center text-slate-500">
-                            <span>Penghuni:</span>
-                            <span id="transUserNameDisplay" class="font-bold text-slate-800"></span>
+                            <span>Nama Pengguna:</span>
+                            <span id="payTransUserNameDisplay" class="font-bold text-slate-800"></span>
                         </div>
                         <div class="flex justify-between items-center text-slate-500">
                             <span>Kamar:</span>
-                            <span id="transRoomNumber" class="font-bold text-slate-800">{{ $room->number }}</span>
+                            <span id="payTransRoomNumber" class="font-bold text-slate-800">Kamar {{ $room->number }}</span>
                         </div>
                         <div class="flex justify-between items-center text-slate-500">
-                            <span>Uraian Tagihan:</span>
-                            <span class="font-bold text-navy-950 text-right">
-                                <span id="transRoomType">{{ $room->type }}</span> &bull; <span id="transPeriodBadge" class="text-orange-600 font-extrabold">Bulanan</span>
-                            </span>
+                            <span>Uraian:</span>
+                            <span id="payTransUraian" class="font-bold text-navy-950 text-right"></span>
                         </div>
-
-                        <!-- Data Kontak & Tanggal Masuk (Kompak & Rapi) -->
-                        <div class="border-t border-slate-200 pt-2.5 space-y-2">
-                            <div class="flex items-center justify-between gap-2">
-                                <label class="text-slate-500 shrink-0">Email <span class="text-orange-600">*</span>:</label>
-                                <input type="email" id="transUserEmail" name="email" required placeholder="nama@email.com" class="w-52 text-right px-2.5 py-1 text-xs border border-slate-300 rounded-lg focus:ring-1 focus:ring-orange-500 focus:outline-none font-medium text-slate-800 bg-white">
-                            </div>
-                            <div class="flex items-center justify-between gap-2">
-                                <label class="text-slate-500 shrink-0">No. WhatsApp <span class="text-orange-600">*</span>:</label>
-                                <input type="tel" id="transUserPhone" name="phone" required placeholder="08xxxxxxxxxx" class="w-52 text-right px-2.5 py-1 text-xs border border-slate-300 rounded-lg focus:ring-1 focus:ring-orange-500 focus:outline-none font-medium text-slate-800 bg-white">
-                            </div>
-                            <div class="flex items-center justify-between gap-2">
-                                <label class="text-slate-500 shrink-0">Mulai Masuk <span class="text-orange-600">*</span>:</label>
-                                <input type="date" id="transStartDate" name="start_date" required class="w-52 text-right px-2.5 py-1 text-xs border border-slate-300 rounded-lg focus:ring-1 focus:ring-orange-500 focus:outline-none font-medium text-slate-800 bg-white">
-                            </div>
+                        <div class="flex justify-between items-center text-slate-500">
+                            <span>Jatuh Tempo:</span>
+                            <span id="payTransDueDate" class="font-bold text-rose-600"></span>
                         </div>
 
                         <div class="border-t border-slate-200 pt-2.5 flex justify-between items-center">
-                            <span class="font-extrabold text-navy-950 text-sm">Total Bayar:</span>
-                            <span id="transTotalDisplay" class="font-black text-orange-600 text-lg">Rp {{ number_format($room->price, 0, ',', '.') }}</span>
+                            <span class="font-extrabold text-navy-950 text-sm">Total Tagihan:</span>
+                            <span id="payTransTotalDisplay" class="font-black text-orange-600 text-lg">Rp {{ number_format($room->price, 0, ',', '.') }}</span>
                         </div>
                     </div>
 
-                    <!-- Pilihan Metode Midtrans (Sama Persis dengan Portal Kamar Anda) -->
+                    <!-- Metode Pembayaran -->
                     <div class="space-y-3 mb-6">
                         <label class="block text-xs font-extrabold text-navy-950 uppercase tracking-wider">
-                            Pilih Metode Pembayaran Online:
+                            Metode Pembayaran:
                         </label>
                         
                         <div class="space-y-2 text-xs">
@@ -977,15 +1044,15 @@
                         </div>
                     </div>
 
-                    <!-- Tombol Konfirmasi Bayar Midtrans -->
-                    <button type="submit" id="btnSubmitTransaction" class="w-full py-3 bg-orange-600 hover:bg-orange-700 active:scale-95 text-white text-xs sm:text-sm font-black rounded-xl shadow-md transition flex items-center justify-center">
-                        <i class="fa-solid fa-shield-check mr-2"></i> Lanjutkan Pembayaran Midtrans
+                    <!-- Tombol Lanjutkan Pembayaran -->
+                    <button type="submit" id="btnFinalPaymentSubmit" class="w-full py-3 bg-orange-600 hover:bg-orange-700 active:scale-95 text-white text-xs sm:text-sm font-black rounded-xl shadow-md transition flex items-center justify-center">
+                        <i class="fa-solid fa-shield-check mr-2"></i> Lanjutkan Pembayaran
                     </button>
                 </form>
             </div>
 
             <!-- SECTION STRUK SUKSES TRANSAKSI (IDENTIK DENGAN KUITANSI PORTAL KAMAR ANDA) -->
-            <div id="bookingTransactionSuccessSection" class="hidden text-left">
+            <div id="paymentTransactionSuccessSection" class="hidden text-left">
                 <!-- Kuitansi Header -->
                 <div class="text-center pb-4 border-b border-dashed border-slate-300 mb-3">
                     <div class="w-12 h-12 bg-white rounded-xl p-1 shadow-sm flex items-center justify-center overflow-hidden border border-slate-200 mx-auto mb-2">
@@ -1010,7 +1077,7 @@
                     </div>
                     <div class="flex justify-between">
                         <span class="text-slate-500">Kamar Hunian:</span>
-                        <span id="succRoomNumber" class="font-bold text-slate-800">{{ $room->number }}</span>
+                        <span id="succRoomNumber" class="font-bold text-slate-800">Kamar {{ $room->number }}</span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-slate-500">Periode Sewa:</span>
@@ -1036,7 +1103,7 @@
                         <i class="fa-brands fa-whatsapp text-sm"></i>
                         <span>Konfirmasi via WhatsApp Sekarang</span>
                     </a>
-                    <button type="button" onclick="closeBookingTransactionModal()" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
+                    <button type="button" onclick="closePaymentTransactionModal()" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
                         Tutup
                     </button>
                 </div>
@@ -1178,32 +1245,46 @@
         let currentDurationMonths = 1;
         let currentDurationMultiplier = 1;
 
-        function openBookingTransactionModal() {
+        let bookingState = {
+            roomId: currentRoomId,
+            roomNumber: currentRoomNumber,
+            roomType: "{{ $room->type }}",
+            duration: 'Bulanan',
+            amount: {{ (int)$room->price }},
+            amountFormatted: 'Rp {{ number_format($room->price, 0, ',', '.') }}',
+            userName: '',
+            userEmail: '',
+            userPhone: '',
+            startDate: ''
+        };
+
+        function getDueDateString() {
+            const now = new Date();
+            const options = { day: 'numeric', month: 'short', year: 'numeric' };
+            const dateFormatted = now.toLocaleDateString('id-ID', options);
+            return `${dateFormatted}, 23:59 WIB`;
+        }
+
+        function formatTanggalIndo(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length === 3) {
+                return `${parts[2]}/${parts[1]}/${parts[0]}`;
+            }
+            return dateStr;
+        }
+
+        function openBookingModal() {
             // Data user (jika login)
             @auth
-                const userName = "{{ Auth::user()->name }}";
-                const userEl = document.getElementById('transUserName');
-                if (userEl) userEl.value = userName;
-                const userDisplayEl = document.getElementById('transUserNameDisplay');
-                if (userDisplayEl) userDisplayEl.textContent = userName;
-
-                const phoneInput = document.getElementById('transUserPhone');
-                if (phoneInput && !phoneInput.value) {
-                    phoneInput.value = "{{ Auth::user()->phone ?? '' }}";
-                }
-                const emailInput = document.getElementById('transUserEmail');
-                if (emailInput && !emailInput.value) {
-                    emailInput.value = "{{ Auth::user()->email ?? '' }}";
-                }
+                bookingState.userName = "{{ Auth::user()->name }}";
+                bookingState.userEmail = "{{ Auth::user()->email ?? '' }}";
+                bookingState.userPhone = "{{ Auth::user()->phone ?? '' }}";
+            @else
+                bookingState.userName = "Penghuni";
+                bookingState.userEmail = "";
+                bookingState.userPhone = "";
             @endauth
-
-            // Tanggal check-in default hari ini
-            const todayStr = new Date().toISOString().split('T')[0];
-            const startDateEl = document.getElementById('transStartDate');
-            if (startDateEl) {
-                startDateEl.min = todayStr;
-                if (!startDateEl.value) startDateEl.value = todayStr;
-            }
 
             // Sesuaikan durasi & harga sewa dengan pilihan durasi sewa pada halaman (mingguan, bulanan, semester, tahunan)
             const periodInfo = (rentalData && rentalData[selectedPeriod]) ? rentalData[selectedPeriod] : {
@@ -1212,45 +1293,149 @@
                 price_formatted: 'Rp ' + Number(currentBookingPrice).toLocaleString('id-ID')
             };
 
-            const chosenPrice = periodInfo.price;
-            const chosenLabel = periodInfo.label;
+            bookingState.duration = periodInfo.label;
+            bookingState.amount = periodInfo.price;
+            bookingState.amountFormatted = 'Rp ' + Number(periodInfo.price).toLocaleString('id-ID');
 
-            const durationInput = document.getElementById('transDuration');
-            if (durationInput) durationInput.value = chosenLabel;
+            // Isi tampilan Modal Tahap 1: Booking Kamar
+            const nameEl = document.getElementById('bookingStep1UserName');
+            if (nameEl) nameEl.textContent = bookingState.userName;
 
-            const amountInput = document.getElementById('transAmount');
-            if (amountInput) amountInput.value = chosenPrice;
+            const roomNumberEl = document.getElementById('bookingStep1RoomNumber');
+            if (roomNumberEl) roomNumberEl.textContent = 'Kamar ' + currentRoomNumber;
 
-            const totalDisplay = document.getElementById('transTotalDisplay');
-            if (totalDisplay) totalDisplay.textContent = 'Rp ' + Number(chosenPrice).toLocaleString('id-ID');
+            const emailInput = document.getElementById('bookingStep1UserEmail');
+            if (emailInput && (!emailInput.value || emailInput.value === '')) {
+                emailInput.value = bookingState.userEmail;
+            }
 
-            const periodBadge = document.getElementById('transPeriodBadge');
-            if (periodBadge) periodBadge.textContent = chosenLabel;
+            const phoneInput = document.getElementById('bookingStep1UserPhone');
+            if (phoneInput && (!phoneInput.value || phoneInput.value === '')) {
+                phoneInput.value = bookingState.userPhone;
+            }
 
-            // Reset tampilan
-            document.getElementById('bookingTransactionFormSection').classList.remove('hidden');
-            document.getElementById('bookingTransactionSuccessSection').classList.add('hidden');
+            // Tanggal check-in default hari ini
+            const todayStr = new Date().toISOString().split('T')[0];
+            const startDateEl = document.getElementById('bookingStep1StartDate');
+            if (startDateEl) {
+                startDateEl.min = todayStr;
+                if (!startDateEl.value) startDateEl.value = todayStr;
+            }
 
-            // Tampilkan modal
-            const modal = document.getElementById('bookingTransactionModal');
+            const totalDisplay = document.getElementById('bookingStep1TotalDisplay');
+            if (totalDisplay) totalDisplay.textContent = bookingState.amountFormatted;
+
+            const periodBadge = document.getElementById('bookingStep1PeriodBadge');
+            if (periodBadge) periodBadge.textContent = 'Periode ' + bookingState.duration;
+
+            // Tampilkan modal 1
+            const modal = document.getElementById('bookingModal');
             if (modal) modal.classList.remove('hidden');
         }
 
-        function closeBookingTransactionModal() {
-            const modal = document.getElementById('bookingTransactionModal');
+        // Alias fungsi agar kompatibel
+        function openBookingTransactionModal() {
+            openBookingModal();
+        }
+
+        function closeBookingModal() {
+            const modal = document.getElementById('bookingModal');
             if (modal) modal.classList.add('hidden');
         }
 
-        async function handleBookingTransactionSubmit(e) {
+        function handleProceedToPayment(e) {
             e.preventDefault();
-            const btnSubmit = document.getElementById('btnSubmitTransaction');
+
+            const email = document.getElementById('bookingStep1UserEmail').value.trim();
+            const phone = document.getElementById('bookingStep1UserPhone').value.trim();
+            const startDate = document.getElementById('bookingStep1StartDate').value;
+
+            if (!email || !phone || !startDate) {
+                alert('Silakan lengkapi Email, Nomor HP, dan Tanggal Masuk.');
+                return;
+            }
+
+            bookingState.userEmail = email;
+            bookingState.userPhone = phone;
+            bookingState.startDate = startDate;
+
+            // Tutup Modal 1 dan buka Modal 2 (Transaksi/Pembayaran)
+            closeBookingModal();
+            openPaymentTransactionModal();
+        }
+
+        function backToBookingStep1() {
+            closePaymentTransactionModal();
+            const modal = document.getElementById('bookingModal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function openPaymentTransactionModal() {
+            // Isi hidden inputs untuk form pembayaran
+            const hiddenRoomId = document.getElementById('finalTransRoomId');
+            if (hiddenRoomId) hiddenRoomId.value = bookingState.roomId;
+
+            const hiddenDuration = document.getElementById('finalTransDuration');
+            if (hiddenDuration) hiddenDuration.value = bookingState.duration;
+
+            const hiddenAmount = document.getElementById('finalTransAmount');
+            if (hiddenAmount) hiddenAmount.value = bookingState.amount;
+
+            const hiddenUserName = document.getElementById('finalTransUserName');
+            if (hiddenUserName) hiddenUserName.value = bookingState.userName;
+
+            const hiddenUserEmail = document.getElementById('finalTransUserEmail');
+            if (hiddenUserEmail) hiddenUserEmail.value = bookingState.userEmail;
+
+            const hiddenUserPhone = document.getElementById('finalTransUserPhone');
+            if (hiddenUserPhone) hiddenUserPhone.value = bookingState.userPhone;
+
+            const hiddenStartDate = document.getElementById('finalTransStartDate');
+            if (hiddenStartDate) hiddenStartDate.value = bookingState.startDate;
+
+            // Isi rincian tampilan di Modal 2 (Nama Pengguna, Kamar, Uraian (Tanggal Masuk), Jatuh Tempo, Total Tagihan)
+            const elUserNameDisplay = document.getElementById('payTransUserNameDisplay');
+            if (elUserNameDisplay) elUserNameDisplay.textContent = bookingState.userName;
+
+            const elRoomNumber = document.getElementById('payTransRoomNumber');
+            if (elRoomNumber) elRoomNumber.textContent = 'Kamar ' + bookingState.roomNumber;
+
+            const elUraian = document.getElementById('payTransUraian');
+            if (elUraian) elUraian.textContent = `Mulai Masuk ${formatTanggalIndo(bookingState.startDate)} (${bookingState.duration})`;
+
+            const elDueDate = document.getElementById('payTransDueDate');
+            if (elDueDate) elDueDate.textContent = getDueDateString();
+
+            const elTotalDisplay = document.getElementById('payTransTotalDisplay');
+            if (elTotalDisplay) elTotalDisplay.textContent = bookingState.amountFormatted;
+
+            // Reset tampilan form & struk modal 2
+            const formSection = document.getElementById('paymentTransactionFormSection');
+            if (formSection) formSection.classList.remove('hidden');
+
+            const successSection = document.getElementById('paymentTransactionSuccessSection');
+            if (successSection) successSection.classList.add('hidden');
+
+            // Tampilkan Modal 2
+            const modal = document.getElementById('paymentTransactionModal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closePaymentTransactionModal() {
+            const modal = document.getElementById('paymentTransactionModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        async function handleFinalPaymentSubmit(e) {
+            e.preventDefault();
+            const btnSubmit = document.getElementById('btnFinalPaymentSubmit');
             const oldSubmitHTML = btnSubmit.innerHTML;
 
             try {
                 btnSubmit.disabled = true;
                 btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i><span>Menghubungkan ke Midtrans...</span>';
 
-                const form = document.getElementById('formBookingTransaction');
+                const form = document.getElementById('formPaymentTransaction');
                 const formData = new FormData(form);
 
                 const res = await fetch('/api/tenant/booking', {
@@ -1266,8 +1451,8 @@
 
                 if (data.success) {
                     // Update tampilan ke section sukses
-                    document.getElementById('bookingTransactionFormSection').classList.add('hidden');
-                    document.getElementById('bookingTransactionSuccessSection').classList.remove('hidden');
+                    document.getElementById('paymentTransactionFormSection').classList.add('hidden');
+                    document.getElementById('paymentTransactionSuccessSection').classList.remove('hidden');
 
                     const formattedBookingId = '#WS-BK' + String(data.booking_id).padStart(4, '0');
                     const elBookingId = document.getElementById('succBookingId');
@@ -1276,14 +1461,11 @@
                     const elRoomNumber = document.getElementById('succRoomNumber');
                     if (elRoomNumber) elRoomNumber.textContent = 'Kamar ' + data.room_number;
 
-                    const elRoomType = document.getElementById('succRoomType');
-                    if (elRoomType) elRoomType.textContent = data.room_type;
+                    const elDuration = document.getElementById('succDuration');
+                    if (elDuration) elDuration.textContent = data.duration;
 
                     const elUserName = document.getElementById('succUserName');
                     if (elUserName) elUserName.textContent = data.user_name || 'Penghuni';
-
-                    const elDuration = document.getElementById('succDuration');
-                    if (elDuration) elDuration.textContent = data.duration;
 
                     const elStartDate = document.getElementById('succStartDate');
                     if (elStartDate) elStartDate.textContent = data.start_date;
@@ -1335,7 +1517,7 @@
                     return;
                 @endif
 
-                openBookingTransactionModal();
+                openBookingModal();
             @endguest
         }
 
