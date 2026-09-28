@@ -365,8 +365,7 @@
                 <!-- SECTION 3: RIWAYAT PEMBAYARAN (PAYMENT HISTORY) -->
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                     <div class="border-b border-slate-100 px-6 py-4 flex flex-wrap items-center justify-between gap-3 bg-slate-50/70">
-                        <div class="flex items-center space-x-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-orange-600"></span>
+                        <div class="flex items-center">
                             <h2 class="text-base font-extrabold text-navy-950 uppercase tracking-wider">Riwayat Pembayaran</h2>
                         </div>
                         <span class="text-xs font-bold text-slate-500">{{ $payments->count() }} Total Catatan Tagihan</span>
@@ -404,7 +403,6 @@
                                                 <!-- Description -->
                                                 <td class="py-4 px-4">
                                                     <span class="font-bold text-slate-800 block text-sm">{{ $pay->title }}</span>
-                                                    <span class="text-[11px] text-slate-400">Kamar: {{ $room->number }}</span>
                                                 </td>
 
                                                 <!-- Due Date -->
@@ -414,10 +412,24 @@
 
                                                 <!-- Payment Method -->
                                                 <td class="py-4 px-4">
-                                                    <div class="flex items-center space-x-1.5 text-slate-700 font-medium">
-                                                        <i class="fa-solid fa-shield-check text-emerald-600 text-xs"></i>
-                                                        <span>{{ $pay->payment_method ?: 'Midtrans Gateway' }}</span>
-                                                    </div>
+                                                    @php
+                                                        $cleanMethod = $pay->payment_method;
+                                                        if ($cleanMethod) {
+                                                            $cleanMethod = preg_replace('/^Midtrans\s*\((.*?)\)$/i', '$1', $cleanMethod);
+                                                            $cleanMethod = preg_replace('/^Midtrans\s*/i', '', $cleanMethod);
+                                                            if (in_array(trim(strtolower($cleanMethod)), ['payment gateway', 'gateway', '-'])) {
+                                                                $cleanMethod = null;
+                                                            }
+                                                        }
+                                                    @endphp
+                                                    @if($cleanMethod)
+                                                        <div class="flex items-center space-x-1.5 text-slate-700 font-medium">
+                                                            <i class="fa-solid fa-credit-card text-emerald-600 text-xs"></i>
+                                                            <span>{{ $cleanMethod }}</span>
+                                                        </div>
+                                                    @else
+                                                        <span class="text-slate-400 font-medium">-</span>
+                                                    @endif
                                                 </td>
 
                                                 <!-- Amount -->
@@ -445,7 +457,7 @@
                                                 <!-- Action Buttons -->
                                                 <td class="py-4 px-4 text-center">
                                                     @if($pay->status === 'approved')
-                                                        <button onclick="openReceiptModal({{ $pay->id }}, '{{ addslashes($pay->title) }}', {{ $pay->amount }}, '{{ $pay->due_date }}', '{{ addslashes($pay->payment_method ?: 'Midtrans Payment Gateway') }}', '{{ $pay->created_at ? $pay->created_at->translatedFormat('d M Y H:i') : $pay->due_date }}')" class="inline-flex items-center px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-navy-950 font-bold text-[11px] rounded-lg transition border border-slate-300 shadow-2xs">
+                                                        <button onclick="openReceiptModal({{ $pay->id }}, '{{ addslashes($pay->title) }}', {{ $pay->amount }}, '{{ $pay->due_date }}', '{{ addslashes($cleanMethod ?: 'BCA Virtual Account') }}', '{{ $pay->created_at ? $pay->created_at->translatedFormat('d M Y H:i') : $pay->due_date }}')" class="inline-flex items-center px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-navy-950 font-bold text-[11px] rounded-lg transition border border-slate-300 shadow-2xs">
                                                             <i class="fa-solid fa-receipt mr-1.5 text-orange-600"></i> Struk
                                                         </button>
                                                     @else
@@ -565,26 +577,26 @@
                 </div>
             </div>
 
-            <!-- Pilihan Metode Midtrans -->
+            <!-- Pilihan Metode Pembayaran -->
             <div class="space-y-3 mb-6">
                 <label class="block text-xs font-extrabold text-navy-950 uppercase tracking-wider">
                     Pilih Metode Pembayaran Online:
                 </label>
                 
                 <div class="space-y-2 text-xs">
-                    <!-- Midtrans VA -->
+                    <!-- BCA VA -->
                     <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-white hover:bg-orange-50/50 hover:border-orange-300 cursor-pointer transition">
-                        <input type="radio" name="payment_channel" value="Midtrans (BCA Virtual Account)" checked class="text-orange-600 focus:ring-orange-500">
+                        <input type="radio" name="payment_channel" value="BCA Virtual Account" checked class="text-orange-600 focus:ring-orange-500">
                         <div class="ml-3 flex-1">
                             <span class="font-extrabold text-navy-950 block">BCA Virtual Account (Otomatis)</span>
-                            <span class="text-[10px] text-slate-500">Verifikasi instan 24 jam via Midtrans</span>
+                            <span class="text-[10px] text-slate-500">Verifikasi instan otomatis 24 jam</span>
                         </div>
                         <i class="fa-solid fa-bolt text-orange-500"></i>
                     </label>
 
                     <!-- Mandiri / BNI VA -->
                     <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-white hover:bg-orange-50/50 hover:border-orange-300 cursor-pointer transition">
-                        <input type="radio" name="payment_channel" value="Midtrans (Mandiri / BNI Virtual Account)" class="text-orange-600 focus:ring-orange-500">
+                        <input type="radio" name="payment_channel" value="Mandiri / BNI Virtual Account" class="text-orange-600 focus:ring-orange-500">
                         <div class="ml-3 flex-1">
                             <span class="font-extrabold text-navy-950 block">Mandiri / BNI Virtual Account</span>
                             <span class="text-[10px] text-slate-500">Pembayaran melalui ATM / Mobile Banking</span>
@@ -593,10 +605,10 @@
 
                     <!-- QRIS & E-Wallet -->
                     <label class="flex items-center p-3 rounded-xl border border-slate-200 bg-white hover:bg-orange-50/50 hover:border-orange-300 cursor-pointer transition">
-                        <input type="radio" name="payment_channel" value="Midtrans (QRIS / GoPay / ShopeePay)" class="text-orange-600 focus:ring-orange-500">
+                        <input type="radio" name="payment_channel" value="GoPay / QRIS" class="text-orange-600 focus:ring-orange-500">
                         <div class="ml-3 flex-1">
-                            <span class="font-extrabold text-navy-950 block">QRIS / GoPay / ShopeePay / Dana</span>
-                            <span class="text-[10px] text-slate-500">Scan QRIS dari aplikasi e-wallet mana saja</span>
+                            <span class="font-extrabold text-navy-950 block">GoPay / QRIS</span>
+                            <span class="text-[10px] text-slate-500">Scan QRIS dari aplikasi GoPay atau e-wallet lainnya</span>
                         </div>
                         <i class="fa-solid fa-qrcode text-slate-600"></i>
                     </label>
@@ -607,7 +619,7 @@
 
             <!-- Tombol Konfirmasi Bayar -->
             <button id="btnConfirmPay" onclick="submitPayPendingBill()" class="w-full py-3 bg-orange-600 hover:bg-orange-700 text-white text-xs sm:text-sm font-black rounded-xl shadow-md transition flex items-center justify-center">
-                <i class="fa-solid fa-credit-card mr-2"></i> Lanjutkan Pembayaran Midtrans
+                <i class="fa-solid fa-credit-card mr-2"></i> Lanjutkan Pembayaran
             </button>
         </div>
     </div>
@@ -712,14 +724,14 @@
             document.getElementById('payModal').classList.add('hidden');
         }
 
-        // Submit Pay Pending Bill via Midtrans
+        // Submit Pay Pending Bill
         async function submitPayPendingBill() {
             const btn = document.getElementById('btnConfirmPay');
             const paymentId = document.getElementById('payModalPaymentId').value;
-            const channel = document.querySelector('input[name="payment_channel"]:checked')?.value || 'Midtrans Payment Gateway';
+            const channel = document.querySelector('input[name="payment_channel"]:checked')?.value || 'BCA Virtual Account';
 
             btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i><span>Memproses Midtrans...</span>';
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i><span>Memproses...</span>';
 
             try {
                 const res = await fetch("{{ route('tenant.payBill') }}", {
@@ -742,13 +754,13 @@
                 } else {
                     alert(data.message || 'Gagal memproses pembayaran.');
                     btn.disabled = false;
-                    btn.innerHTML = '<i class="fa-solid fa-shield-check mr-2"></i> Lanjutkan Pembayaran Midtrans';
+                    btn.innerHTML = '<i class="fa-solid fa-credit-card mr-2"></i> Lanjutkan Pembayaran';
                 }
             } catch (err) {
                 console.error(err);
                 alert('Terjadi kesalahan koneksi.');
                 btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-shield-check mr-2"></i> Lanjutkan Pembayaran Midtrans';
+                btn.innerHTML = '<i class="fa-solid fa-credit-card mr-2"></i> Lanjutkan Pembayaran';
             }
         }
 

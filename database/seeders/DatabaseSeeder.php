@@ -143,7 +143,7 @@ class DatabaseSeeder extends Seeder
             'title' => 'Kamar 102 - Bulan Agustus 2026',
             'amount' => 1500000,
             'due_date' => '05 Agu 2026',
-            'payment_method' => 'Midtrans (BCA Virtual Account)',
+            'payment_method' => 'BCA Virtual Account',
             'status' => 'approved',
             'created_at' => '2026-08-01 08:30:00',
         ]);
@@ -154,7 +154,7 @@ class DatabaseSeeder extends Seeder
             'title' => 'Kamar 102 - Bulan September 2026',
             'amount' => 1500000,
             'due_date' => '05 Sep 2026',
-            'payment_method' => 'Midtrans (GoPay / QRIS)',
+            'payment_method' => 'GoPay / QRIS',
             'status' => 'approved',
             'created_at' => '2026-09-01 09:15:00',
         ]);
@@ -165,7 +165,7 @@ class DatabaseSeeder extends Seeder
             'title' => 'Kamar 102 - Bulan Oktober 2026',
             'amount' => 1500000,
             'due_date' => '05 Okt 2026',
-            'payment_method' => 'Midtrans Payment Gateway',
+            'payment_method' => null,
             'status' => 'pending',
             'created_at' => '2026-09-20 10:00:00',
         ]);

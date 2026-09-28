@@ -225,7 +225,14 @@ class TenantController extends Controller
 
         $payment = Payment::where('user_id', $user->id)->findOrFail($request->payment_id);
         
-        $paymentMethod = $request->input('payment_method', 'Midtrans Payment Gateway');
+        $paymentMethod = $request->input('payment_method', 'BCA Virtual Account');
+        if ($paymentMethod) {
+            $paymentMethod = preg_replace('/^Midtrans\s*\((.*?)\)$/i', '$1', $paymentMethod);
+            $paymentMethod = preg_replace('/^Midtrans\s*/i', '', $paymentMethod);
+            if (in_array(trim(strtolower($paymentMethod)), ['payment gateway', 'gateway'])) {
+                $paymentMethod = 'BCA Virtual Account';
+            }
+        }
         $payment->payment_method = $paymentMethod;
         $payment->status = 'approved';
         $payment->save();
