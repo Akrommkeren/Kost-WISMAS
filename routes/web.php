@@ -34,4 +34,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/api/owner/complaints/{complaint}/status', [OwnerController::class, 'updateComplaintStatus']);
     Route::post('/api/owner/facilities', [OwnerController::class, 'storeFacility']);
     Route::delete('/api/owner/facilities/{facility}', [OwnerController::class, 'deleteFacility']);
+    Route::post('/api/owner/expenses', [OwnerController::class, 'storeExpense']);
+    Route::delete('/api/owner/expenses/{expense}', [OwnerController::class, 'deleteExpense']);
 });

@@ -7,6 +7,7 @@ use App\Models\Room;
 use App\Models\Facility;
 use App\Models\Payment;
 use App\Models\Booking;
+use App\Models\Expense;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -168,6 +169,39 @@ class DatabaseSeeder extends Seeder
             'payment_method' => null,
             'status' => 'pending',
             'created_at' => '2026-09-20 10:00:00',
+        ]);
+
+        // Operational Expenses (Kas Keluar)
+        Expense::create([
+            'title' => 'Tagihan Listrik PLN Gedung Kost',
+            'category' => 'Listrik & Air',
+            'amount' => 650000,
+            'date' => '02 Sep 2026',
+            'note' => 'Pembayaran tagihan listrik pascabayar gedung utama',
+        ]);
+
+        Expense::create([
+            'title' => 'Langganan Internet WiFi Indihome 100 Mbps',
+            'category' => 'Internet & WiFi',
+            'amount' => 450000,
+            'date' => '05 Sep 2026',
+            'note' => 'Paket internet untuk seluruh penghuni',
+        ]);
+
+        Expense::create([
+            'title' => 'Iuran Kebersihan Lingkungan & Sampah RT',
+            'category' => 'Kebersihan & Keamanan',
+            'amount' => 150000,
+            'date' => '10 Sep 2026',
+            'note' => 'Iuran bulanan pengangkutan sampah lingkungan',
+        ]);
+
+        Expense::create([
+            'title' => 'Servis Rutin & Cuci Filter AC Kamar 102',
+            'category' => 'Pemeliharaan Fasilitas',
+            'amount' => 120000,
+            'date' => '15 Sep 2026',
+            'note' => 'Pembersihan AC berkala untuk kenyamanan penghuni',
         ]);
     }
 }

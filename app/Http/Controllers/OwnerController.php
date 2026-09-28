@@ -7,6 +7,7 @@ use App\Models\Facility;
 use App\Models\Payment;
 use App\Models\Booking;
 use App\Models\Complaint;
+use App\Models\Expense;
 use Illuminate\Http\Request;
 
 class OwnerController extends Controller
@@ -31,17 +32,24 @@ class OwnerController extends Controller
         $totalRevenue = $approvedPayments->sum('amount');
         $pendingAmount = $pendingPayments->sum('amount');
 
+        $expenses = Expense::latest()->get();
+        $totalExpenses = $expenses->sum('amount');
+        $netBalance = $totalRevenue - $totalExpenses;
+
         return response()->json([
             'rooms' => $rooms,
             'facilities' => $facilities,
             'payments' => $payments,
             'pendingPayments' => $pendingPayments,
+            'expenses' => $expenses,
             'complaints' => $complaints,
             'stats' => [
                 'totalRooms' => $totalRooms,
                 'occupiedCount' => $occupiedCount,
                 'availableCount' => $availableCount,
                 'totalRevenue' => $totalRevenue,
+                'totalExpenses' => $totalExpenses,
+                'netBalance' => $netBalance,
                 'pendingAmount' => $pendingAmount,
                 'unresolvedComplaintsCount' => $unresolvedComplaintsCount,
             ]
@@ -146,6 +154,42 @@ class OwnerController extends Controller
             'success' => true,
             'message' => 'Status pengaduan #' . $complaint->id . ' diubah menjadi ' . ($statusLabels[$complaint->status] ?? $complaint->status),
             'complaint' => $complaint->load('user'),
+        ]);
+    }
+
+    public function storeExpense(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'category' => 'required|string|max:100',
+            'amount' => 'required|numeric|min:0',
+            'date' => 'required|string',
+            'note' => 'nullable|string',
+        ]);
+
+        $expense = Expense::create([
+            'title' => $request->title,
+            'category' => $request->category,
+            'amount' => (int) $request->amount,
+            'date' => $request->date,
+            'note' => $request->note,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Catatan pengeluaran ' . $expense->title . ' berhasil ditambahkan.',
+            'expense' => $expense,
+        ]);
+    }
+
+    public function deleteExpense(Expense $expense)
+    {
+        $title = $expense->title;
+        $expense->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Catatan pengeluaran "' . $title . '" berhasil dihapus.',
         ]);
     }
 }

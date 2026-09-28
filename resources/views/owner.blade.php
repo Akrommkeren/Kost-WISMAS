@@ -47,273 +47,447 @@
             }
         }
     </script>
+
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-navbar {
+            background-color: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.85);
+        }
+        .modal-overlay {
+            background-color: rgba(8, 20, 44, 0.75);
+            backdrop-filter: blur(5px);
+        }
+    </style>
 </head>
-<body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col font-sans">
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-orange-500 selection:text-white flex flex-col min-h-screen">
 
-    <!-- TOP NAVIGATION BAR (OWNER) -->
-    <header class="bg-navy-900 text-white shadow-md sticky top-0 z-40 border-b border-navy-800">
+    <!-- TOP NAVBAR (DISESUAIKAN DENGAN HALAMAN PENGHUNI) -->
+    <header class="sticky top-0 z-40 glass-navbar shadow-sm transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
+            <div class="flex items-center justify-between h-20">
                 
-                <!-- Logo & Brand -->
-                <div class="flex items-center space-x-3">
-                    <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-9 h-9 rounded-lg object-cover ring-2 ring-orange-500">
-                    <div>
-                        <div class="flex items-center space-x-2">
-                            <span class="font-extrabold text-base tracking-tight text-white">Kost Wisma S</span>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-orange-600 text-white uppercase tracking-wider">Owner Portal</span>
-                        </div>
-                        <p class="text-[11px] text-slate-400">Sistem Manajemen Kamar, Keuangan & Pengaduan</p>
+                <!-- Brand Logo -->
+                <a href="{{ route('home') }}" class="flex items-center space-x-3 group">
+                    <div class="w-12 h-12 bg-white rounded-xl p-1 shadow-sm flex items-center justify-center overflow-hidden border border-slate-200 transition transform group-hover:scale-105 shrink-0">
+                        <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
                     </div>
-                </div>
+                    <div class="flex flex-col justify-center">
+                        <div class="flex items-center space-x-1.5">
+                            <span class="text-xs font-black text-orange-600 tracking-widest uppercase leading-none">Kost</span>
+                            <span class="px-1.5 py-0.5 rounded text-[9px] font-black bg-orange-100 text-orange-700 border border-orange-200 uppercase tracking-wider">Owner</span>
+                        </div>
+                        <span class="text-lg sm:text-xl font-black text-navy-950 tracking-tight leading-tight">WISMA S</span>
+                    </div>
+                </a>
 
-                <!-- Owner Account & Action Buttons -->
+                <!-- Desktop Navigation Menu (Kamar & Penghuni, Tenggat Waktu Bayar, Keuangan, Daftar Pengaduan) -->
+                <nav class="hidden lg:flex items-center space-x-6 text-xs font-bold uppercase tracking-wider">
+                    <button type="button" onclick="switchSection('rooms')" id="navLinkRooms" class="nav-link-btn pb-1 border-b-2 border-orange-600 text-orange-600 hover:text-orange-600 transition flex items-center">
+                        <i class="fa-solid fa-bed mr-2 text-sm"></i> Kamar & Penghuni
+                    </button>
+                    <button type="button" onclick="switchSection('dueDate')" id="navLinkDueDate" class="nav-link-btn pb-1 border-b-2 border-transparent text-slate-700 hover:text-orange-600 transition flex items-center">
+                        <i class="fa-solid fa-calendar-check mr-2 text-sm"></i> Tenggat Waktu Bayar
+                    </button>
+                    <button type="button" onclick="switchSection('finances')" id="navLinkFinances" class="nav-link-btn pb-1 border-b-2 border-transparent text-slate-700 hover:text-orange-600 transition flex items-center">
+                        <i class="fa-solid fa-wallet mr-2 text-sm"></i> Keuangan
+                    </button>
+                    <button type="button" onclick="switchSection('complaints')" id="navLinkComplaints" class="nav-link-btn pb-1 border-b-2 border-transparent text-slate-700 hover:text-orange-600 transition flex items-center relative">
+                        <i class="fa-solid fa-clipboard-list mr-2 text-sm"></i>
+                        <span>Daftar Pengaduan</span>
+                        <span id="navBadgeComplaint" class="ml-1.5 px-1.5 py-0.5 rounded-full text-[10px] bg-amber-500 text-white font-extrabold hidden">0</span>
+                    </button>
+                </nav>
+
+                <!-- Action Buttons & Owner Profile (Sama dengan Halaman Penghuni) -->
                 <div class="flex items-center space-x-3">
-                    <a href="{{ route('home') }}?view=preview" class="hidden sm:inline-flex items-center px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white bg-navy-800 hover:bg-navy-700 border border-slate-700 transition">
-                        <i class="fa-solid fa-desktop mr-1.5 text-orange-400"></i> Pratinjau Web Kost
+                    <a href="{{ route('home') }}?view=preview" class="hidden sm:inline-flex items-center px-3 py-2 rounded-lg text-xs font-bold text-slate-600 hover:text-orange-600 bg-slate-100 hover:bg-orange-50 border border-slate-300 transition" title="Lihat tampilan website publik">
+                        <i class="fa-solid fa-desktop mr-1.5 text-orange-600"></i> Pratinjau Web
                     </a>
 
-                    <div class="hidden md:flex items-center space-x-2 px-3 py-1 bg-navy-800/80 rounded-lg border border-slate-700/60">
-                        <div class="w-6 h-6 rounded-full bg-orange-500 text-white flex items-center justify-center font-bold text-xs">
-                            <i class="fa-solid fa-user-shield text-[10px]"></i>
-                        </div>
-                        <div class="text-left">
-                            <p class="text-xs font-bold leading-tight text-white">{{ Auth::user()->name }}</p>
-                            <p class="text-[10px] text-slate-400 leading-tight">{{ Auth::user()->email }}</p>
-                        </div>
+                    <!-- Owner Profile Badge -->
+                    <div class="hidden sm:flex px-3.5 py-2 text-xs font-bold text-navy-950 bg-slate-100 border border-slate-300 rounded-lg items-center shadow-sm">
+                        <i class="fa-solid fa-user-shield text-orange-600 mr-2"></i>
+                        <span>{{ Auth::user()->name }}</span>
                     </div>
 
-                    <button onclick="logout()" class="inline-flex items-center px-3.5 py-1.5 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg transition shadow-sm">
-                        <i class="fa-solid fa-arrow-right-from-bracket mr-1.5"></i> Keluar
+                    <!-- Logout Button -->
+                    <button onclick="logout()" class="px-3.5 py-2 text-xs font-bold text-slate-600 hover:text-red-600 hover:bg-slate-100 rounded-lg transition flex items-center">
+                        <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Keluar
+                    </button>
+
+                    <!-- Mobile Menu Hamburger -->
+                    <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 focus:outline-none">
+                        <i class="fa-solid fa-bars text-lg"></i>
                     </button>
                 </div>
 
             </div>
         </div>
+
+        <!-- Mobile Drawer Navigation -->
+        <div id="mobileMenu" class="lg:hidden hidden border-t border-slate-200 bg-white/95 px-4 pt-3 pb-4 space-y-1.5 text-xs font-bold uppercase tracking-wider">
+            <button type="button" onclick="switchSection('rooms'); toggleMobileMenu();" class="w-full text-left py-2.5 px-3 rounded-lg text-slate-700 hover:bg-orange-50 hover:text-orange-600 flex items-center">
+                <i class="fa-solid fa-bed mr-2.5 text-orange-600 w-5"></i> Kamar & Penghuni
+            </button>
+            <button type="button" onclick="switchSection('dueDate'); toggleMobileMenu();" class="w-full text-left py-2.5 px-3 rounded-lg text-slate-700 hover:bg-orange-50 hover:text-orange-600 flex items-center">
+                <i class="fa-solid fa-calendar-check mr-2.5 text-orange-600 w-5"></i> Tenggat Waktu Bayar
+            </button>
+            <button type="button" onclick="switchSection('finances'); toggleMobileMenu();" class="w-full text-left py-2.5 px-3 rounded-lg text-slate-700 hover:bg-orange-50 hover:text-orange-600 flex items-center">
+                <i class="fa-solid fa-wallet mr-2.5 text-orange-600 w-5"></i> Keuangan
+            </button>
+            <button type="button" onclick="switchSection('complaints'); toggleMobileMenu();" class="w-full text-left py-2.5 px-3 rounded-lg text-slate-700 hover:bg-orange-50 hover:text-orange-600 flex items-center">
+                <i class="fa-solid fa-clipboard-list mr-2.5 text-orange-600 w-5"></i> Daftar Pengaduan
+            </button>
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+                <a href="{{ route('home') }}?view=preview" class="py-2 px-3 text-slate-600 hover:text-orange-600 flex items-center">
+                    <i class="fa-solid fa-desktop mr-2 text-slate-500"></i> Pratinjau Web Kost
+                </a>
+            </div>
+        </div>
     </header>
 
-    <!-- MAIN DASHBOARD CONTENT -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        
-        <!-- Welcome Banner & Quick Info -->
-        <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-            <div>
-                <h1 class="text-xl sm:text-2xl font-extrabold text-navy-900">Selamat Datang, {{ Auth::user()->name }}!</h1>
-                <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Kelola seluruh kamar kost, pantau tenggat waktu bayar penghuni, dan tindak lanjuti pengaduan fasilitas.</p>
-            </div>
-            <div class="flex items-center space-x-2">
-                <button onclick="loadDashboardData()" class="px-3.5 py-2 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition flex items-center">
-                    <i class="fa-solid fa-rotate mr-1.5 text-slate-500"></i> Muat Ulang Data
-                </button>
-            </div>
-        </div>
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 pb-20">
 
-        <!-- STATS CARDS -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            
-            <!-- Card 1: Okupansi Kamar -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                <div class="flex items-center justify-between text-slate-500 mb-2">
-                    <span class="text-xs font-bold uppercase tracking-wider">Okupansi Kamar</span>
-                    <div class="w-8 h-8 rounded-lg bg-navy-50 text-navy-800 flex items-center justify-center">
-                        <i class="fa-solid fa-door-open"></i>
-                    </div>
-                </div>
-                <div class="flex items-baseline space-x-2">
-                    <span id="statOccupied" class="text-2xl font-black text-navy-900">-</span>
-                    <span class="text-xs text-slate-400">terisi dari</span>
-                    <span id="statTotalRooms" class="text-base font-bold text-slate-600">-</span>
-                    <span class="text-xs text-slate-400">kamar</span>
-                </div>
-                <div class="mt-3 flex items-center text-xs">
-                    <span id="statAvailableBadge" class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        <i class="fa-solid fa-circle-check mr-1 text-[9px]"></i> <span id="statAvailableCount">-</span> Tersedia
-                    </span>
-                </div>
-            </div>
-
-            <!-- Card 2: Pemasukan Lunas -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                <div class="flex items-center justify-between text-slate-500 mb-2">
-                    <span class="text-xs font-bold uppercase tracking-wider">Pemasukan Lunas</span>
-                    <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
-                        <i class="fa-solid fa-wallet"></i>
-                    </div>
-                </div>
-                <div class="text-2xl font-black text-emerald-600" id="statRevenue">Rp 0</div>
-                <p class="mt-3 text-[11px] text-slate-500 flex items-center">
-                    <i class="fa-solid fa-check mr-1 text-emerald-500"></i> Pembayaran sewa yang terverifikasi
-                </p>
-            </div>
-
-            <!-- Card 3: Tagihan Menunggu / Jatuh Tempo -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                <div class="flex items-center justify-between text-slate-500 mb-2">
-                    <span class="text-xs font-bold uppercase tracking-wider">Menunggu Verifikasi</span>
-                    <div class="w-8 h-8 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center">
-                        <i class="fa-solid fa-clock-rotate-left"></i>
-                    </div>
-                </div>
-                <div class="text-2xl font-black text-orange-600" id="statPendingAmount">Rp 0</div>
-                <p class="mt-3 text-[11px] text-slate-500 flex items-center">
-                    <i class="fa-solid fa-bell mr-1 text-orange-500"></i> Perlu verifikasi bukti transfer
-                </p>
-            </div>
-
-            <!-- Card 4: Pengaduan Belum Diperbaiki -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                <div class="flex items-center justify-between text-slate-500 mb-2">
-                    <span class="text-xs font-bold uppercase tracking-wider">Pengaduan Aktif</span>
-                    <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                    </div>
-                </div>
-                <div class="flex items-baseline space-x-2">
-                    <span id="statUnresolvedComplaints" class="text-2xl font-black text-amber-600">-</span>
-                    <span class="text-xs text-slate-400">laporan kendala</span>
-                </div>
-                <div class="mt-3">
-                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
-                        <i class="fa-solid fa-wrench mr-1 text-[9px]"></i> Belum selesai diperbaiki
-                    </span>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- MAIN TABS CONTAINER -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-8">
-            
-            <!-- Tabs Navigation -->
-            <div class="border-b border-slate-200 px-6 pt-4 flex space-x-6 overflow-x-auto text-xs font-bold">
-                <button id="tabBtnRooms" onclick="switchSection('rooms')" class="pb-3 border-b-2 border-orange-600 text-orange-600 flex items-center whitespace-nowrap">
-                    <i class="fa-solid fa-bed mr-2 text-sm"></i> Manajemen Kamar & Penghuni
-                </button>
-                <button id="tabBtnFinances" onclick="switchSection('finances')" class="pb-3 text-slate-500 hover:text-navy-900 flex items-center whitespace-nowrap">
-                    <i class="fa-solid fa-receipt mr-2 text-sm"></i> Keuangan & Tenggat Waktu Bayar
-                </button>
-                <button id="tabBtnComplaints" onclick="switchSection('complaints')" class="pb-3 text-slate-500 hover:text-navy-900 flex items-center whitespace-nowrap">
-                    <i class="fa-solid fa-clipboard-list mr-2 text-sm"></i> Daftar Pengaduan Penghuni
-                    <span id="badgeComplaintCount" class="ml-2 px-1.5 py-0.5 rounded-full text-[10px] bg-amber-500 text-white font-extrabold hidden">0</span>
-                </button>
-            </div>
-
-            <!-- SECTION 1: MANAJEMEN KAMAR & PENGHUNI -->
-            <div id="sectionRooms" class="p-6">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
+        <!-- HEADER BANNER AREA (DISAMAKAN DENGAN HALAMAN PENGHUNI) -->
+        <section class="bg-gradient-to-b from-slate-100 to-slate-50 pt-8 pb-8 border-b border-slate-200/80 mb-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div>
-                        <h2 class="text-base font-extrabold text-navy-900">Daftar Kamar Kost & Penghuni</h2>
-                        <p class="text-xs text-slate-500">Kelola status ketersediaan kamar (tersedia / terisi), tarif sewa, serta rincian data penghuni dan KTP.</p>
+                        <div class="flex items-center space-x-2 mb-1.5">
+                            <span class="text-xs font-extrabold text-orange-600 uppercase tracking-widest">Portal Manajemen Pemilik</span>
+                            <span class="text-slate-300">•</span>
+                            <span class="text-xs font-semibold text-slate-500">Kost Wisma S Purwokerto</span>
+                        </div>
+                        <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-navy-950 tracking-tight">
+                            Selamat Datang, {{ Auth::user()->name }}!
+                        </h1>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1 max-w-3xl">
+                            Kelola ketersediaan kamar dan data penghuni, pantau tenggat waktu jatuh tempo sewa, kelola arus kas keuangan keluar dan masuk, serta tindak lanjuti laporan pengaduan fasilitas.
+                        </p>
                     </div>
-                    <div class="flex items-center space-x-2">
-                        <select id="filterRoomStatus" onchange="filterRoomsTable()" class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-navy-600 focus:outline-none bg-white">
-                            <option value="all">Semua Status Kamar</option>
-                            <option value="available">Hanya Kamar Tersedia</option>
-                            <option value="occupied">Hanya Kamar Terisi (Tidak Tersedia)</option>
-                        </select>
+                    <div class="flex items-center space-x-2 shrink-0">
+                        <button onclick="loadDashboardData()" class="px-4 py-2.5 text-xs font-bold text-slate-700 bg-white hover:bg-slate-100 border border-slate-300 rounded-xl transition shadow-2xs flex items-center">
+                            <i class="fa-solid fa-rotate mr-2 text-orange-600"></i> Muat Ulang Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- 4 STATS OVERVIEW CARDS -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                
+                <!-- Card 1: Okupansi Kamar -->
+                <div onclick="switchSection('rooms')" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm cursor-pointer hover:border-orange-300 transition group">
+                    <div class="flex items-center justify-between text-slate-500 mb-2">
+                        <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Okupansi Kamar</span>
+                        <div class="w-9 h-9 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center transition group-hover:scale-105">
+                            <i class="fa-solid fa-door-open"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline space-x-1.5">
+                        <span id="statOccupied" class="text-2xl font-black text-navy-950">-</span>
+                        <span class="text-xs text-slate-400">terisi dari</span>
+                        <span id="statTotalRooms" class="text-base font-bold text-slate-700">-</span>
+                        <span class="text-xs text-slate-400">kamar</span>
+                    </div>
+                    <div class="mt-3 flex items-center text-xs">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                            <i class="fa-solid fa-circle-check mr-1 text-[9px] text-emerald-600"></i> <span id="statAvailableCount">-</span> Tersedia
+                        </span>
                     </div>
                 </div>
 
-                <div class="mt-4 overflow-x-auto border border-slate-200 rounded-xl">
-                    <table class="w-full text-left border-collapse text-xs">
-                        <thead>
-                            <tr class="bg-navy-900 text-white uppercase text-[10px] tracking-wider">
-                                <th class="p-3.5">Kamar</th>
-                                <th class="p-3.5">Tipe & Fasilitas</th>
-                                <th class="p-3.5">Tarif Sewa / Bulan</th>
-                                <th class="p-3.5">Status Ketersediaan</th>
-                                <th class="p-3.5">Penghuni Saat Ini</th>
-                                <th class="p-3.5">Foto KTP Penghuni</th>
-                                <th class="p-3.5 text-center">Aksi Pengelola</th>
-                            </tr>
-                        </thead>
-                        <tbody id="roomsTableBody" class="divide-y divide-slate-200">
-                            <!-- Populated by JavaScript -->
-                            <tr>
-                                <td colspan="7" class="p-6 text-center text-slate-400">Memuat data kamar...</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <!-- Card 2: Tenggat Waktu Bayar (Menunggu Verifikasi) -->
+                <div onclick="switchSection('dueDate')" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm cursor-pointer hover:border-orange-300 transition group">
+                    <div class="flex items-center justify-between text-slate-500 mb-2">
+                        <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Tenggat Waktu Bayar</span>
+                        <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center transition group-hover:scale-105">
+                            <i class="fa-solid fa-calendar-check"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-orange-600" id="statPendingAmount">Rp 0</div>
+                    <p class="mt-3 text-[11px] text-slate-500 flex items-center font-medium">
+                        <i class="fa-solid fa-clock mr-1.5 text-amber-500"></i> <span id="statPendingCount">0</span> tagihan menunggu verifikasi
+                    </p>
+                </div>
+
+                <!-- Card 3: Keuangan (Saldo Arus Kas Bersih) -->
+                <div onclick="switchSection('finances')" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm cursor-pointer hover:border-orange-300 transition group">
+                    <div class="flex items-center justify-between text-slate-500 mb-2">
+                        <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Saldo Kas Bersih</span>
+                        <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center transition group-hover:scale-105">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-emerald-600" id="statNetBalance">Rp 0</div>
+                    <p class="mt-3 text-[11px] text-slate-500 flex items-center font-medium truncate">
+                        <i class="fa-solid fa-arrow-trend-up mr-1.5 text-emerald-500"></i> Pemasukan sewa dikurangi biaya operasional
+                    </p>
+                </div>
+
+                <!-- Card 4: Pengaduan Aktif -->
+                <div onclick="switchSection('complaints')" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm cursor-pointer hover:border-orange-300 transition group">
+                    <div class="flex items-center justify-between text-slate-500 mb-2">
+                        <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Pengaduan Aktif</span>
+                        <div class="w-9 h-9 rounded-xl bg-red-50 text-red-600 flex items-center justify-center transition group-hover:scale-105">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline space-x-2">
+                        <span id="statUnresolvedComplaints" class="text-2xl font-black text-red-600">-</span>
+                        <span class="text-xs text-slate-400">laporan kendala</span>
+                    </div>
+                    <div class="mt-3">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-900 border border-amber-300">
+                            <i class="fa-solid fa-wrench mr-1 text-[9px] text-amber-700"></i> Perlu tindak lanjut owner
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- TAB PILL SWITCHER (Sinkron dengan Navbar) -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-1.5 flex flex-wrap gap-1.5 mb-8 text-xs font-extrabold">
+                <button id="pillRooms" onclick="switchSection('rooms')" class="pill-btn flex-1 py-3 px-4 rounded-xl transition flex items-center justify-center space-x-2 bg-orange-600 text-white shadow-sm">
+                    <i class="fa-solid fa-bed"></i>
+                    <span>Kamar & Penghuni</span>
+                </button>
+                <button id="pillDueDate" onclick="switchSection('dueDate')" class="pill-btn flex-1 py-3 px-4 rounded-xl transition flex items-center justify-center space-x-2 bg-slate-50 text-slate-600 hover:text-navy-950 hover:bg-slate-100">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>Tenggat Waktu Bayar</span>
+                </button>
+                <button id="pillFinances" onclick="switchSection('finances')" class="pill-btn flex-1 py-3 px-4 rounded-xl transition flex items-center justify-center space-x-2 bg-slate-50 text-slate-600 hover:text-navy-950 hover:bg-slate-100">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>Keuangan</span>
+                </button>
+                <button id="pillComplaints" onclick="switchSection('complaints')" class="pill-btn flex-1 py-3 px-4 rounded-xl transition flex items-center justify-center space-x-2 bg-slate-50 text-slate-600 hover:text-navy-950 hover:bg-slate-100 relative">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                    <span>Daftar Pengaduan</span>
+                    <span id="pillBadgeComplaint" class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-amber-500 text-white font-extrabold hidden">0</span>
+                </button>
+            </div>
+
+            <!-- ========================================================================= -->
+            <!-- 1. HALAMAN: KAMAR & PENGHUNI (UNTUK MANAJEMEN) -->
+            <!-- ========================================================================= -->
+            <div id="sectionRooms" class="page-section">
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/70 flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                            <h2 class="text-base font-extrabold text-navy-950 uppercase tracking-wider">Manajemen Kamar & Penghuni</h2>
+                            <p class="text-xs text-slate-500 mt-0.5">Kelola status ketersediaan kamar, tarif sewa bulanan, data penghuni aktif, dan dokumen KTP.</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <select id="filterRoomStatus" onchange="filterRoomsTable()" class="px-3.5 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 focus:ring-2 focus:ring-orange-500 focus:outline-none bg-white shadow-2xs">
+                                <option value="all">Semua Status Kamar</option>
+                                <option value="available">Hanya Kamar Tersedia</option>
+                                <option value="occupied">Hanya Kamar Terisi</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="p-6">
+                        <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="border-b border-slate-200 text-[11px] font-extrabold uppercase text-slate-500 tracking-wider bg-slate-50/80">
+                                        <th class="py-3 px-4">Kamar</th>
+                                        <th class="py-3 px-4">Tipe & Fasilitas</th>
+                                        <th class="py-3 px-4">Tarif Sewa / Bulan</th>
+                                        <th class="py-3 px-4">Status Ketersediaan</th>
+                                        <th class="py-3 px-4">Penghuni Saat Ini</th>
+                                        <th class="py-3 px-4">Foto KTP Penghuni</th>
+                                        <th class="py-3 px-4 text-center">Aksi Pengelola</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="roomsTableBody" class="divide-y divide-slate-100">
+                                    <tr>
+                                        <td colspan="7" class="py-8 text-center text-slate-400">Memuat data kamar & penghuni...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- SECTION 2: KEUANGAN & WAKTU TENGGAT BAYAR -->
-            <div id="sectionFinances" class="p-6 hidden">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
-                    <div>
-                        <h2 class="text-base font-extrabold text-navy-900">Keuangan & Waktu Tenggat Bayar Penghuni</h2>
-                        <p class="text-xs text-slate-500">Pantau jatuh tempo sewa, riwayat tagihan, dan verifikasi bukti transfer pembayaran dari penghuni.</p>
+            <!-- ========================================================================= -->
+            <!-- 2. HALAMAN: TENGGAT WAKTU BAYAR (MELIHAT & MANAJEMEN PEMBAYARAN PENGHUNI) -->
+            <!-- ========================================================================= -->
+            <div id="sectionDueDate" class="page-section hidden">
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/70 flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                            <h2 class="text-base font-extrabold text-navy-950 uppercase tracking-wider">Tenggat Waktu Bayar & Tagihan Penghuni</h2>
+                            <p class="text-xs text-slate-500 mt-0.5">Pantau waktu jatuh tempo sewa, verifikasi bukti transfer masuk, serta konfirmasi status pelunasan penghuni.</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <select id="filterPaymentStatus" onchange="filterDueDateTable()" class="px-3.5 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 focus:ring-2 focus:ring-orange-500 focus:outline-none bg-white shadow-2xs">
+                                <option value="all">Semua Status Tagihan</option>
+                                <option value="pending">Menunggu Verifikasi (Pending)</option>
+                                <option value="approved">Lunas (Disetujui)</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="flex items-center space-x-2">
-                        <select id="filterPaymentStatus" onchange="filterPaymentsTable()" class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-navy-600 focus:outline-none bg-white">
-                            <option value="all">Semua Status Pembayaran</option>
-                            <option value="pending">Menunggu Verifikasi (Pending)</option>
-                            <option value="approved">Lunas (Disetujui)</option>
-                        </select>
-                    </div>
-                </div>
 
-                <div class="mt-4 overflow-x-auto border border-slate-200 rounded-xl">
-                    <table class="w-full text-left border-collapse text-xs">
-                        <thead>
-                            <tr class="bg-navy-900 text-white uppercase text-[10px] tracking-wider">
-                                <th class="p-3.5">Tagihan & Kamar</th>
-                                <th class="p-3.5">Nama Penghuni</th>
-                                <th class="p-3.5">Nominal</th>
-                                <th class="p-3.5">Waktu Tenggat Bayar</th>
-                                <th class="p-3.5">Bukti Transfer</th>
-                                <th class="p-3.5">Status Pembayaran</th>
-                                <th class="p-3.5 text-center">Tindakan Owner</th>
-                            </tr>
-                        </thead>
-                        <tbody id="paymentsTableBody" class="divide-y divide-slate-200">
-                            <!-- Populated by JavaScript -->
-                            <tr>
-                                <td colspan="7" class="p-6 text-center text-slate-400">Memuat data keuangan...</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="p-6">
+                        <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="border-b border-slate-200 text-[11px] font-extrabold uppercase text-slate-500 tracking-wider bg-slate-50/80">
+                                        <th class="py-3 px-4">No. Invoice & Kamar</th>
+                                        <th class="py-3 px-4">Nama Penghuni</th>
+                                        <th class="py-3 px-4">Nominal</th>
+                                        <th class="py-3 px-4">Tenggat Waktu Bayar</th>
+                                        <th class="py-3 px-4">Metode Bayar & Bukti</th>
+                                        <th class="py-3 px-4 text-center">Status</th>
+                                        <th class="py-3 px-4 text-center">Tindakan Owner</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dueDateTableBody" class="divide-y divide-slate-100">
+                                    <tr>
+                                        <td colspan="7" class="py-8 text-center text-slate-400">Memuat data tagihan & tenggat waktu...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- SECTION 3: DAFTAR PENGADUAN PENGHUNI -->
-            <div id="sectionComplaints" class="p-6 hidden">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
-                    <div>
-                        <h2 class="text-base font-extrabold text-navy-900">Daftar Pengaduan Kendala dari Penghuni</h2>
-                        <p class="text-xs text-slate-500">Tinjau keluhan fasilitas penghuni yang belum diperbaiki atau belum dilaksanakan agar segera ditindaklanjuti.</p>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <select id="filterComplaintStatus" onchange="filterComplaintsTable()" class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-navy-600 focus:outline-none bg-white">
-                            <option value="all">Semua Status Pengaduan</option>
-                            <option value="pending">Belum Diperbaiki (Perlu Tindakan)</option>
-                            <option value="in_progress">Sedang Dikerjakan</option>
-                            <option value="resolved">Selesai Diperbaiki</option>
-                        </select>
-                    </div>
-                </div>
+            <!-- ========================================================================= -->
+            <!-- 3. HALAMAN: KEUANGAN (MENGELOLA KEUANGAN KELUAR DAN MASUK) -->
+            <!-- ========================================================================= -->
+            <div id="sectionFinances" class="page-section hidden">
+                <div class="space-y-6">
+                    
+                    <!-- Ringkasan Arus Kas Keuangan -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1">Total Pemasukan (Kas Masuk)</span>
+                            <p class="text-2xl font-black text-emerald-600" id="finTotalIncome">Rp 0</p>
+                            <p class="text-[11px] text-slate-500 mt-2 font-medium">
+                                <i class="fa-solid fa-circle-arrow-down text-emerald-500 mr-1"></i> Dari seluruh pembayaran sewa lunas
+                            </p>
+                        </div>
 
-                <div class="mt-4 overflow-x-auto border border-slate-200 rounded-xl">
-                    <table class="w-full text-left border-collapse text-xs">
-                        <thead>
-                            <tr class="bg-navy-900 text-white uppercase text-[10px] tracking-wider">
-                                <th class="p-3.5">Waktu Masuk</th>
-                                <th class="p-3.5">Penghuni & Kamar</th>
-                                <th class="p-3.5">Kategori</th>
-                                <th class="p-3.5" style="width: 38%;">Pesan Pengaduan Kendala</th>
-                                <th class="p-3.5">Status Perbaikan</th>
-                                <th class="p-3.5 text-center">Tindakan Owner</th>
-                            </tr>
-                        </thead>
-                        <tbody id="complaintsTableBody" class="divide-y divide-slate-200">
-                            <!-- Populated by JavaScript -->
-                            <tr>
-                                <td colspan="6" class="p-6 text-center text-slate-400">Memuat data pengaduan...</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1">Total Pengeluaran (Kas Keluar)</span>
+                            <p class="text-2xl font-black text-rose-600" id="finTotalExpense">Rp 0</p>
+                            <p class="text-[11px] text-slate-500 mt-2 font-medium">
+                                <i class="fa-solid fa-circle-arrow-up text-rose-500 mr-1"></i> Biaya operasional kost terverifikasi
+                            </p>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1">Saldo Bersih Saat Ini</span>
+                            <p class="text-2xl font-black text-navy-950" id="finNetBalance">Rp 0</p>
+                            <p class="text-[11px] text-slate-500 mt-2 font-medium">
+                                <i class="fa-solid fa-scale-balanced text-orange-500 mr-1"></i> Total Kas Masuk - Total Kas Keluar
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Tabel Arus Kas Keluar & Masuk -->
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/70 flex flex-wrap items-center justify-between gap-3">
+                            <div>
+                                <h2 class="text-base font-extrabold text-navy-950 uppercase tracking-wider">Kelola Keuangan Keluar & Masuk Kost</h2>
+                                <p class="text-xs text-slate-500 mt-0.5">Catatan seluruh arus kas pemasukan sewa kamar dan biaya operasional kost.</p>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <select id="filterFinanceType" onchange="filterFinancesTable()" class="px-3.5 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 focus:ring-2 focus:ring-orange-500 focus:outline-none bg-white shadow-2xs">
+                                    <option value="all">Semua Transaksi (Keluar & Masuk)</option>
+                                    <option value="in">Hanya Uang Masuk (Pemasukan)</option>
+                                    <option value="out">Hanya Uang Keluar (Pengeluaran)</option>
+                                </select>
+                                <button onclick="openAddExpenseModal()" class="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white font-extrabold text-xs rounded-xl shadow-md transition flex items-center shrink-0">
+                                    <i class="fa-solid fa-plus mr-1.5"></i> Catat Pengeluaran Baru
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="p-6">
+                            <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                                <table class="w-full text-left border-collapse text-xs">
+                                    <thead>
+                                        <tr class="border-b border-slate-200 text-[11px] font-extrabold uppercase text-slate-500 tracking-wider bg-slate-50/80">
+                                            <th class="py-3 px-4">Tanggal</th>
+                                            <th class="py-3 px-4">Deskripsi Transaksi</th>
+                                            <th class="py-3 px-4">Kategori</th>
+                                            <th class="py-3 px-4 text-center">Arus Kas</th>
+                                            <th class="py-3 px-4 text-right">Nominal</th>
+                                            <th class="py-3 px-4">Catatan</th>
+                                            <th class="py-3 px-4 text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="financesTableBody" class="divide-y divide-slate-100">
+                                        <tr>
+                                            <td colspan="7" class="py-8 text-center text-slate-400">Memuat catatan transaksi keuangan...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ========================================================================= -->
+            <!-- 4. HALAMAN: DAFTAR PENGADUAN PENGHUNI -->
+            <!-- ========================================================================= -->
+            <div id="sectionComplaints" class="page-section hidden">
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/70 flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                            <h2 class="text-base font-extrabold text-navy-950 uppercase tracking-wider">Daftar Pengaduan Kendala Fasilitas</h2>
+                            <p class="text-xs text-slate-500 mt-0.5">Tinjau laporan kendala fasilitas penghuni yang belum diperbaiki agar segera ditindaklanjuti.</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <select id="filterComplaintStatus" onchange="filterComplaintsTable()" class="px-3.5 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 focus:ring-2 focus:ring-orange-500 focus:outline-none bg-white shadow-2xs">
+                                <option value="all">Semua Status Pengaduan</option>
+                                <option value="pending">Belum Diperbaiki (Perlu Tindakan)</option>
+                                <option value="in_progress">Sedang Dikerjakan</option>
+                                <option value="resolved">Selesai Diperbaiki</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="p-6">
+                        <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="border-b border-slate-200 text-[11px] font-extrabold uppercase text-slate-500 tracking-wider bg-slate-50/80">
+                                        <th class="py-3 px-4">Waktu Masuk</th>
+                                        <th class="py-3 px-4">Penghuni & Kamar</th>
+                                        <th class="py-3 px-4">Kategori</th>
+                                        <th class="py-3 px-4" style="width: 36%;">Pesan Pengaduan Kendala</th>
+                                        <th class="py-3 px-4 text-center">Status Perbaikan</th>
+                                        <th class="py-3 px-4 text-center">Tindakan Owner</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="complaintsTableBody" class="divide-y divide-slate-100">
+                                    <tr>
+                                        <td colspan="6" class="py-8 text-center text-slate-400">Memuat data pengaduan...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -321,17 +495,72 @@
 
     </main>
 
+    <!-- FOOTER (DISESUAIKAN PERSIS DENGAN HALAMAN PENGHUNI) -->
+    <footer class="bg-navy-900 text-slate-300 py-12 border-t border-navy-800 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                
+                <!-- Brand & Tagline -->
+                <div class="md:col-span-4 lg:col-span-5 space-y-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-white rounded-lg p-0.5 shadow flex items-center justify-center overflow-hidden shrink-0">
+                            <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
+                        </div>
+                        <div class="flex flex-col justify-center">
+                            <span class="text-[11px] font-extrabold text-orange-400 tracking-widest uppercase">Kost</span>
+                            <span class="text-lg font-extrabold text-white tracking-tight leading-tight">WISMA S</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed max-w-sm">
+                        Kost Nyaman, Bersih & Strategis di Lingkungan Aman. Portal Manajemen Pengelola & Pemilik Kost.
+                    </p>
+                </div>
+
+                <!-- MENU PORTAL OWNER -->
+                <div class="md:col-span-2 lg:col-span-2 md:pl-4 lg:pl-8">
+                    <h4 class="text-xs font-bold text-white uppercase mb-3 tracking-wider">MENU</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><button onclick="switchSection('rooms')" class="hover:text-orange-400 transition text-left">Kamar & Penghuni</button></li>
+                        <li><button onclick="switchSection('dueDate')" class="hover:text-orange-400 transition text-left">Tenggat Waktu Bayar</button></li>
+                        <li><button onclick="switchSection('finances')" class="hover:text-orange-400 transition text-left">Keuangan</button></li>
+                        <li><button onclick="switchSection('complaints')" class="hover:text-orange-400 transition text-left">Daftar Pengaduan</button></li>
+                    </ul>
+                </div>
+
+                <!-- LAYANAN -->
+                <div class="md:col-span-2 lg:col-span-2 md:pl-4 lg:pl-8">
+                    <h4 class="text-xs font-bold text-white uppercase mb-3 tracking-wider">Layanan</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="{{ route('home') }}?view=preview" class="hover:text-orange-400 transition">Pratinjau Web Kost</a></li>
+                        <li><a href="{{ route('home') }}" class="hover:text-orange-400 transition font-bold text-orange-400">Portal Owner</a></li>
+                    </ul>
+                </div>
+
+                <!-- INFORMASI -->
+                <div class="md:col-span-4 lg:col-span-3">
+                    <h4 class="text-xs font-bold text-white uppercase mb-3 tracking-wider">INFORMASI</h4>
+                    <div class="space-y-2 text-xs">
+                        <p class="flex items-start"><i class="fa-solid fa-location-dot text-orange-500 mr-2 mt-0.5 shrink-0"></i> <span>Griya Karang Indah Blok S-15, Karangpucung, Purwokerto Selatan 53142</span></p>
+                        <p class="flex items-center"><i class="fa-solid fa-phone text-orange-500 mr-2"></i> 0821-7890-1234</p>
+                        <p class="flex items-center"><i class="fa-regular fa-envelope text-orange-500 mr-2"></i> info@wismas.com</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
     <!-- ========================================================================= -->
     <!-- MODAL PREVIEW FOTO KTP PENGHUNI -->
     <!-- ========================================================================= -->
-    <div id="ktpModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center hidden p-4">
+    <div id="ktpModal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative border border-slate-200 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center pb-3 border-b border-slate-200 mb-4">
                 <div>
-                    <h3 class="font-bold text-base text-navy-900" id="ktpModalTitle">Dokumen KTP Penghuni</h3>
+                    <h3 class="font-extrabold text-base text-navy-950" id="ktpModalTitle">Dokumen KTP Penghuni</h3>
                     <p class="text-xs text-slate-500" id="ktpModalSubtitle">Identitas terdaftar penghuni kost</p>
                 </div>
-                <button onclick="closeKtpModal()" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition">
+                <button onclick="closeKtpModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -344,18 +573,142 @@
     <!-- ========================================================================= -->
     <!-- MODAL EDIT HARGA KAMAR -->
     <!-- ========================================================================= -->
-    <div id="editPriceModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center hidden p-4">
+    <div id="editPriceModal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative border border-slate-200">
-            <h3 class="font-bold text-base text-navy-900 mb-1" id="editPriceTitle">Perbarui Tarif Kamar</h3>
-            <p class="text-xs text-slate-500 mb-4">Masukkan harga sewa per bulan terbaru.</p>
+            <h3 class="font-extrabold text-base text-navy-950 mb-1" id="editPriceTitle">Perbarui Tarif Kamar</h3>
+            <p class="text-xs text-slate-500 mb-4">Masukkan tarif sewa per bulan terbaru untuk kamar ini.</p>
             <input type="hidden" id="editPriceRoomId">
-            <div class="mb-4">
-                <label class="block text-xs font-bold text-navy-900 uppercase mb-1">Harga Baru (Rp)</label>
-                <input type="number" id="editPriceInput" step="50000" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-navy-600 focus:outline-none text-sm font-semibold">
+            <div class="mb-5">
+                <label class="block text-xs font-bold text-navy-950 uppercase mb-1">Tarif Baru (Rp)</label>
+                <input type="number" id="editPriceInput" step="50000" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm font-black text-navy-950">
             </div>
             <div class="flex justify-end space-x-2">
-                <button type="button" onclick="closeEditPriceModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg text-xs transition">Batal</button>
-                <button type="button" onclick="submitEditPrice()" class="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-lg text-xs transition">Simpan Tarif</button>
+                <button type="button" onclick="closeEditPriceModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition">Batal</button>
+                <button type="button" onclick="submitEditPrice()" class="px-4 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl text-xs transition shadow-sm">Simpan Tarif</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MODAL CATAT PENGELUARAN BARU (KAS KELUAR) -->
+    <!-- ========================================================================= -->
+    <div id="addExpenseModal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative border border-slate-200">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-200 mb-4">
+                <div>
+                    <h3 class="font-extrabold text-base text-navy-950">Catat Pengeluaran Operasional</h3>
+                    <p class="text-xs text-slate-500">Pencatatan arus kas keluar gedung kost</p>
+                </div>
+                <button onclick="closeAddExpenseModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form onsubmit="submitAddExpense(event)" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Deskripsi Pengeluaran</label>
+                    <input type="text" id="expTitle" required placeholder="Contoh: Tagihan Listrik PLN Gedung Kost" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:outline-none text-xs font-semibold">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Kategori</label>
+                        <select id="expCategory" required class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:outline-none text-xs font-semibold bg-white">
+                            <option value="Listrik & Air">Listrik & Air</option>
+                            <option value="Internet & WiFi">Internet & WiFi</option>
+                            <option value="Kebersihan & Keamanan">Kebersihan & Keamanan</option>
+                            <option value="Pemeliharaan Fasilitas">Pemeliharaan Fasilitas</option>
+                            <option value="Operasional Lainnya">Operasional Lainnya</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Tanggal</label>
+                        <input type="text" id="expDate" required placeholder="Contoh: 05 Okt 2026" value="{{ \Carbon\Carbon::now()->translatedFormat('d M Y') }}" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:outline-none text-xs font-semibold">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Nominal Biaya (Rp)</label>
+                    <input type="number" id="expAmount" required min="1000" step="5000" placeholder="Contoh: 450000" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm font-black text-rose-600">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Catatan Tambahan (Opsional)</label>
+                    <textarea id="expNote" rows="2" placeholder="Keterangan transaksi atau nomor resi/referensi..." class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:outline-none text-xs"></textarea>
+                </div>
+
+                <div class="pt-3 flex justify-end space-x-2 border-t border-slate-100">
+                    <button type="button" onclick="closeAddExpenseModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition">Batal</button>
+                    <button type="submit" id="btnSubmitExpense" class="px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl text-xs transition shadow-sm flex items-center">
+                        <i class="fa-solid fa-check mr-1.5"></i> Simpan Pengeluaran
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MODAL STRUK / KUITANSI DIGITAL PEMBAYARAN -->
+    <!-- ========================================================================= -->
+    <div id="receiptModal" class="hidden fixed inset-0 modal-overlay z-50 overflow-y-auto flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 relative text-left">
+            <button onclick="closeReceiptModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Kuitansi Header -->
+            <div class="text-center pb-4 border-b border-dashed border-slate-300">
+                <div class="w-12 h-12 bg-white rounded-xl p-1 shadow-sm flex items-center justify-center overflow-hidden border border-slate-200 mx-auto mb-2">
+                    <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
+                </div>
+                <h3 class="text-base font-black text-navy-950 uppercase tracking-wider">Kuitansi Pembayaran Digital</h3>
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Kost Wisma S Purwokerto</span>
+                <div class="mt-2 inline-flex items-center px-3 py-1 rounded-full text-[11px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300">
+                    <i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> LUNAS TERVERIFIKASI
+                </div>
+            </div>
+
+            <!-- Kuitansi Body -->
+            <div class="py-4 space-y-3 text-xs">
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Nomor Invoice:</span>
+                    <span id="rcpInvoiceId" class="font-mono font-bold text-slate-800"></span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Waktu Bayar:</span>
+                    <span id="rcpDate" class="font-bold text-slate-800"></span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Nama Penghuni:</span>
+                    <span id="rcpUser" class="font-bold text-slate-800"></span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Kamar Hunian:</span>
+                    <span id="rcpRoom" class="font-bold text-slate-800"></span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Keterangan:</span>
+                    <span id="rcpTitle" class="font-bold text-navy-950 text-right"></span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Metode Bayar:</span>
+                    <span id="rcpMethod" class="font-semibold text-slate-700"></span>
+                </div>
+                <div class="border-t border-dashed border-slate-300 pt-3 flex justify-between items-center">
+                    <span class="text-sm font-extrabold text-navy-950">Jumlah Dibayar:</span>
+                    <span id="rcpAmount" class="text-lg font-black text-emerald-600"></span>
+                </div>
+            </div>
+
+            <!-- Footer / Action Buttons -->
+            <div class="pt-4 border-t border-slate-100 flex gap-2">
+                <button onclick="window.print()" class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition flex items-center justify-center">
+                    <i class="fa-solid fa-print mr-1.5"></i> Cetak Struk
+                </button>
+                <button onclick="closeReceiptModal()" class="w-1/2 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs rounded-xl transition flex items-center justify-center">
+                    Tutup
+                </button>
             </div>
         </div>
     </div>
@@ -366,25 +719,72 @@
         let globalData = {
             rooms: [],
             payments: [],
+            expenses: [],
             complaints: []
         };
 
-        // Switch Sections (Tabs)
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if (menu) {
+                menu.classList.toggle('hidden');
+            }
+        }
+
+        // Switch Sections (Kamar & Penghuni, Tenggat Waktu Bayar, Keuangan, Daftar Pengaduan)
         function switchSection(section) {
-            ['rooms', 'finances', 'complaints'].forEach(s => {
+            const sections = ['rooms', 'dueDate', 'finances', 'complaints'];
+            const hashes = {
+                rooms: 'kamar-penghuni',
+                dueDate: 'tenggat-bayar',
+                finances: 'keuangan',
+                complaints: 'pengaduan'
+            };
+
+            sections.forEach(s => {
                 const el = document.getElementById('section' + s.charAt(0).toUpperCase() + s.slice(1));
-                const btn = document.getElementById('tabBtn' + s.charAt(0).toUpperCase() + s.slice(1));
-                if (el && btn) {
-                    if (s === section) {
-                        el.classList.remove('hidden');
-                        btn.className = "pb-3 border-b-2 border-orange-600 text-orange-600 font-bold flex items-center whitespace-nowrap";
-                    } else {
-                        el.classList.add('hidden');
-                        btn.className = "pb-3 text-slate-500 hover:text-navy-900 font-bold flex items-center whitespace-nowrap";
+                const navBtn = document.getElementById('navLink' + s.charAt(0).toUpperCase() + s.slice(1));
+                const pillBtn = document.getElementById('pill' + s.charAt(0).toUpperCase() + s.slice(1));
+
+                if (s === section) {
+                    if (el) el.classList.remove('hidden');
+                    if (navBtn) {
+                        navBtn.className = "nav-link-btn pb-1 border-b-2 border-orange-600 text-orange-600 font-extrabold flex items-center";
+                    }
+                    if (pillBtn) {
+                        pillBtn.className = "pill-btn flex-1 py-3 px-4 rounded-xl transition flex items-center justify-center space-x-2 bg-orange-600 text-white shadow-sm font-extrabold";
+                    }
+                } else {
+                    if (el) el.classList.add('hidden');
+                    if (navBtn) {
+                        navBtn.className = "nav-link-btn pb-1 border-b-2 border-transparent text-slate-700 hover:text-orange-600 font-bold transition flex items-center";
+                    }
+                    if (pillBtn) {
+                        pillBtn.className = "pill-btn flex-1 py-3 px-4 rounded-xl transition flex items-center justify-center space-x-2 bg-slate-50 text-slate-600 hover:text-navy-950 hover:bg-slate-100 font-bold";
                     }
                 }
             });
+
+            // Update URL hash without reload
+            if (history.pushState && hashes[section]) {
+                history.pushState(null, null, '#' + hashes[section]);
+            }
         }
+
+        // Handle URL Hash on load
+        function handleHash() {
+            const hash = window.location.hash.replace('#', '');
+            if (hash === 'kamar-penghuni' || hash === 'rooms') {
+                switchSection('rooms');
+            } else if (hash === 'tenggat-bayar' || hash === 'dueDate') {
+                switchSection('dueDate');
+            } else if (hash === 'keuangan' || hash === 'finances') {
+                switchSection('finances');
+            } else if (hash === 'pengaduan' || hash === 'complaints') {
+                switchSection('complaints');
+            }
+        }
+        window.addEventListener('hashchange', handleHash);
 
         // Fetch Dashboard Data
         async function loadDashboardData() {
@@ -393,29 +793,45 @@
                 const data = await res.json();
                 globalData = data;
 
-                // Update Stats
+                // Update Stats Cards
                 document.getElementById('statTotalRooms').textContent = data.stats.totalRooms || 0;
                 document.getElementById('statOccupied').textContent = data.stats.occupiedCount || 0;
                 document.getElementById('statAvailableCount').textContent = data.stats.availableCount || 0;
-                document.getElementById('statRevenue').textContent = 'Rp ' + Number(data.stats.totalRevenue || 0).toLocaleString('id-ID');
                 document.getElementById('statPendingAmount').textContent = 'Rp ' + Number(data.stats.pendingAmount || 0).toLocaleString('id-ID');
                 
+                const pendingList = (data.payments || []).filter(p => p.status === 'pending');
+                document.getElementById('statPendingCount').textContent = pendingList.length;
+
+                // Finances Stats
+                const totalIncome = data.stats.totalRevenue || 0;
+                const totalExpense = data.stats.totalExpenses || 0;
+                const netBalance = data.stats.netBalance !== undefined ? data.stats.netBalance : (totalIncome - totalExpense);
+
+                document.getElementById('statNetBalance').textContent = 'Rp ' + Number(netBalance).toLocaleString('id-ID');
+                document.getElementById('finTotalIncome').textContent = 'Rp ' + Number(totalIncome).toLocaleString('id-ID');
+                document.getElementById('finTotalExpense').textContent = 'Rp ' + Number(totalExpense).toLocaleString('id-ID');
+                document.getElementById('finNetBalance').textContent = 'Rp ' + Number(netBalance).toLocaleString('id-ID');
+
+                // Complaints Badge
                 const unresolvedCount = data.stats.unresolvedComplaintsCount || 0;
                 document.getElementById('statUnresolvedComplaints').textContent = unresolvedCount;
-                
-                const badge = document.getElementById('badgeComplaintCount');
-                if (badge) {
-                    if (unresolvedCount > 0) {
-                        badge.textContent = unresolvedCount;
-                        badge.classList.remove('hidden');
-                    } else {
-                        badge.classList.add('hidden');
+
+                ['navBadgeComplaint', 'pillBadgeComplaint'].forEach(bId => {
+                    const badge = document.getElementById(bId);
+                    if (badge) {
+                        if (unresolvedCount > 0) {
+                            badge.textContent = unresolvedCount;
+                            badge.classList.remove('hidden');
+                        } else {
+                            badge.classList.add('hidden');
+                        }
                     }
-                }
+                });
 
                 // Render Tables
                 renderRoomsTable(data.rooms);
-                renderPaymentsTable(data.payments);
+                renderDueDateTable(data.payments);
+                renderFinancesTable(data.payments, data.expenses || []);
                 renderComplaintsTable(data.complaints);
             } catch (err) {
                 console.error(err);
@@ -423,153 +839,293 @@
             }
         }
 
-        // Render Rooms Table
+        // =========================================================================
+        // 1. RENDER ROOMS TABLE
+        // =========================================================================
         function renderRoomsTable(rooms) {
             const tbody = document.getElementById('roomsTableBody');
             if (!tbody) return;
 
             if (!rooms || rooms.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">Belum ada data kamar terdaftar.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-slate-400">Belum ada data kamar terdaftar.</td></tr>`;
                 return;
             }
 
             tbody.innerHTML = rooms.map(room => {
                 const isAvailable = room.status === 'available';
                 const statusBadge = isAvailable
-                    ? `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-circle-check mr-1 text-[9px]"></i> Tersedia</span>`
-                    : `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-300"><i class="fa-solid fa-lock mr-1 text-[9px]"></i> Terisi</span>`;
+                    ? `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-black bg-emerald-100 text-emerald-800 border border-emerald-200"><i class="fa-solid fa-circle-check mr-1 text-[9px] text-emerald-600"></i> TERSEDIA</span>`
+                    : `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-black bg-slate-200 text-slate-800 border border-slate-300"><i class="fa-solid fa-lock mr-1 text-[9px] text-slate-600"></i> TERISI</span>`;
                 
                 const toggleBtn = isAvailable
-                    ? `<button onclick="toggleRoomStatus(${room.id})" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md font-bold text-[11px] transition" title="Ubah status ke Terisi"><i class="fa-solid fa-toggle-on text-emerald-600 mr-1"></i> Set Terisi</button>`
-                    : `<button onclick="toggleRoomStatus(${room.id})" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-md font-bold text-[11px] transition" title="Ubah status ke Tersedia"><i class="fa-solid fa-toggle-off text-slate-400 mr-1"></i> Buka Kamar</button>`;
+                    ? `<button onclick="toggleRoomStatus(${room.id})" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-bold text-[11px] transition shadow-2xs" title="Tandai kamar sebagai terisi"><i class="fa-solid fa-lock text-slate-500 mr-1"></i> Set Terisi</button>`
+                    : `<button onclick="toggleRoomStatus(${room.id})" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-lg font-bold text-[11px] transition border border-emerald-200 shadow-2xs" title="Buka kamar agar tersedia untuk booking"><i class="fa-solid fa-lock-open text-emerald-600 mr-1"></i> Buka Kamar</button>`;
 
-                // Get Occupant Info (latest booking with user)
+                // Occupant Info
                 let occupantHtml = `<span class="text-slate-400 italic">Belum ada penghuni</span>`;
                 let ktpHtml = `<span class="text-slate-400">-</span>`;
 
                 const activeBooking = room.bookings && room.bookings.length > 0 ? room.bookings[0] : null;
                 if (activeBooking && activeBooking.user) {
                     const u = activeBooking.user;
+                    const startDate = activeBooking.start_date ? new Date(activeBooking.start_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '-';
                     occupantHtml = `
                         <div>
-                            <p class="font-bold text-navy-900">${u.name}</p>
-                            <p class="text-[11px] text-slate-500">${u.email}</p>
-                            <a href="https://wa.me/${(u.phone || '').replace(/[^0-9]/g, '')}" target="_blank" class="inline-flex items-center text-[10px] text-emerald-600 hover:text-emerald-700 font-semibold mt-0.5">
-                                <i class="fa-brands fa-whatsapp mr-1"></i> ${u.phone || '-'}
-                            </a>
+                            <p class="font-extrabold text-navy-950 text-sm">${u.name}</p>
+                            <p class="text-[11px] text-slate-500">${u.email || ''}</p>
+                            <p class="text-[11px] text-emerald-700 font-semibold mt-0.5"><i class="fa-regular fa-calendar-check mr-1"></i> Masuk: ${startDate}</p>
+                            ${u.phone ? `
+                                <a href="https://wa.me/${u.phone.replace(/[^0-9]/g, '')}?text=Halo%20${encodeURIComponent(u.name)},%20saya%20pengelola%20Kost%20Wisma%20S." target="_blank" class="inline-flex items-center text-[10px] text-emerald-600 font-bold hover:underline mt-1">
+                                    <i class="fa-brands fa-whatsapp mr-1"></i> ${u.phone}
+                                </a>
+                            ` : ''}
                         </div>
                     `;
 
                     if (u.ktp_file) {
                         ktpHtml = `
-                            <button onclick="viewKtp('${u.ktp_file}', '${u.name}')" class="px-2.5 py-1 rounded bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold text-[10px] border border-orange-200 flex items-center transition">
-                                <i class="fa-solid fa-id-card mr-1 text-xs"></i> Lihat KTP
+                            <button onclick="viewKtp('${u.ktp_file}', '${u.name.replace(/'/g, "\\'")}')" class="inline-flex items-center px-2.5 py-1 bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold rounded-lg border border-orange-200 text-[11px] transition shadow-2xs">
+                                <i class="fa-regular fa-id-card mr-1.5 text-orange-600"></i> Lihat KTP
                             </button>
                         `;
-                    } else {
-                        ktpHtml = `<span class="text-[10px] text-slate-400 italic">Belum upload</span>`;
                     }
+                }
+
+                // Features list preview
+                let featuresPreview = '';
+                if (room.features) {
+                    const fList = Array.isArray(room.features) ? room.features : Object.values(room.features);
+                    featuresPreview = fList.slice(0, 3).join(', ') + (fList.length > 3 ? '...' : '');
                 }
 
                 return `
                     <tr class="hover:bg-slate-50/80 transition">
-                        <td class="p-3.5 font-extrabold text-navy-900">${room.number}</td>
-                        <td class="p-3.5">
-                            <span class="font-bold text-slate-700">${room.type}</span>
-                            <div class="text-[10px] text-slate-400 truncate max-w-xs mt-0.5">
-                                ${(Array.isArray(room.features) ? room.features.join(' • ') : '')}
+                        <td class="py-4 px-4 font-black text-navy-950 text-sm">
+                            <span class="px-2.5 py-1 bg-slate-100 rounded-lg text-slate-800 border border-slate-200">${room.number}</span>
+                        </td>
+                        <td class="py-4 px-4">
+                            <span class="font-extrabold text-navy-950 block">${room.type}</span>
+                            <span class="text-[11px] text-slate-500">${featuresPreview || 'Fasilitas Lengkap'}</span>
+                        </td>
+                        <td class="py-4 px-4">
+                            <div class="flex items-center space-x-1.5">
+                                <span class="font-black text-orange-600 text-sm">Rp ${Number(room.price).toLocaleString('id-ID')}</span>
+                                <span class="text-[10px] text-slate-500 font-medium">/bulan</span>
                             </div>
                         </td>
-                        <td class="p-3.5">
-                            <div class="flex items-center space-x-1.5 font-bold text-navy-900">
-                                <span>Rp ${Number(room.price).toLocaleString('id-ID')}</span>
-                                <button onclick="openEditPrice(${room.id}, '${room.number}', ${room.price})" class="text-slate-400 hover:text-orange-600 transition p-1" title="Edit Harga">
-                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
+                        <td class="py-4 px-4 whitespace-nowrap">${statusBadge}</td>
+                        <td class="py-4 px-4">${occupantHtml}</td>
+                        <td class="py-4 px-4 whitespace-nowrap">${ktpHtml}</td>
+                        <td class="py-4 px-4 text-center whitespace-nowrap">
+                            <div class="inline-flex items-center space-x-1.5">
+                                <button onclick="openEditPrice(${room.id}, '${room.number}', ${room.price})" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg font-bold text-[11px] transition border border-slate-300 shadow-2xs" title="Ubah tarif sewa bulanan">
+                                    <i class="fa-solid fa-pen-to-square mr-1 text-orange-600"></i> Tarif
                                 </button>
+                                ${toggleBtn}
                             </div>
-                        </td>
-                        <td class="p-3.5">${statusBadge}</td>
-                        <td class="p-3.5">${occupantHtml}</td>
-                        <td class="p-3.5">${ktpHtml}</td>
-                        <td class="p-3.5 text-center">
-                            ${toggleBtn}
                         </td>
                     </tr>
                 `;
             }).join('');
         }
 
-        // Render Payments Table
-        function renderPaymentsTable(payments) {
-            const tbody = document.getElementById('paymentsTableBody');
+        // =========================================================================
+        // 2. RENDER DUE DATE / TENGGAT WAKTU BAYAR TABLE
+        // =========================================================================
+        function renderDueDateTable(payments) {
+            const tbody = document.getElementById('dueDateTableBody');
             if (!tbody) return;
 
             if (!payments || payments.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">Belum ada catatan tagihan/pembayaran.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-slate-400">Belum ada catatan tagihan sewa.</td></tr>`;
                 return;
             }
 
             tbody.innerHTML = payments.map(p => {
-                const isApproved = p.status === 'approved';
                 const isPending = p.status === 'pending';
+                const isApproved = p.status === 'approved';
+                const userName = p.user ? p.user.name : 'Penghuni';
+                const roomInfo = p.room ? p.room.number : '-';
 
+                // Status Badge
                 let statusBadge = '';
                 if (isApproved) {
-                    statusBadge = `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-circle-check mr-1 text-[9px]"></i> Lunas</span>`;
+                    statusBadge = `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-black bg-emerald-100 text-emerald-800 border border-emerald-200"><i class="fa-solid fa-check text-[9px] mr-1 text-emerald-600"></i> LUNAS</span>`;
                 } else if (isPending) {
-                    statusBadge = `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold bg-orange-50 text-orange-700 border border-orange-200"><i class="fa-solid fa-clock mr-1 text-[9px]"></i> Menunggu Verifikasi</span>`;
+                    statusBadge = `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-black bg-amber-100 text-amber-900 border border-amber-300"><i class="fa-solid fa-clock text-[9px] mr-1 text-amber-700"></i> MENUNGGU</span>`;
                 } else {
-                    statusBadge = `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold bg-red-50 text-red-700 border border-red-200"><i class="fa-solid fa-xmark mr-1 text-[9px]"></i> Ditolak</span>`;
+                    statusBadge = `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-black bg-red-100 text-red-800 border border-red-200"><i class="fa-solid fa-xmark text-[9px] mr-1 text-red-600"></i> DITOLAK</span>`;
                 }
 
-                const userName = p.user ? p.user.name : 'Penghuni';
-                const userPhone = p.user ? p.user.phone : '-';
-                const roomInfo = p.room ? `Kamar ${p.room.number}` : '-';
+                // Proof / Payment Method
+                let methodClean = p.payment_method || '';
+                if (methodClean) {
+                    methodClean = methodClean.replace(/^Midtrans\s*\((.*?)\)$/i, '$1').replace(/^Midtrans\s+/i, '');
+                    if (methodClean.toLowerCase() === 'payment gateway') methodClean = '';
+                }
 
-                const proofBtn = p.proof_image
-                    ? `<button onclick="viewProof('${p.proof_image}')" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px]"><i class="fa-solid fa-image mr-1"></i> Bukti Bayar</button>`
-                    : `<span class="text-[10px] text-slate-400">Transfer Bank</span>`;
+                let proofBtn = '';
+                if (p.proof_image) {
+                    proofBtn = `
+                        <button onclick="viewProof('${p.proof_image}')" class="inline-flex items-center px-2 py-0.5 bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold rounded text-[10px] border border-orange-200 transition">
+                            <i class="fa-solid fa-image mr-1"></i> Bukti Transfer
+                        </button>
+                    `;
+                }
 
-                const actionBtns = isPending ? `
-                    <div class="flex items-center justify-center space-x-1.5">
-                        <button onclick="approvePayment(${p.id})" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded font-bold text-[10px] transition"><i class="fa-solid fa-check mr-1"></i> Lunas</button>
-                        <button onclick="rejectPayment(${p.id})" class="px-2.5 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded font-bold text-[10px] transition"><i class="fa-solid fa-xmark mr-1"></i> Tolak</button>
-                    </div>
-                ` : `<span class="text-[10px] text-slate-400 italic">Selesai</span>`;
+                // Action Buttons
+                let actionBtns = '';
+                if (isPending) {
+                    actionBtns = `
+                        <div class="inline-flex items-center space-x-1.5">
+                            <button onclick="approvePayment(${p.id})" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[11px] transition shadow-2xs" title="Verifikasi Lunas">
+                                <i class="fa-solid fa-check mr-1"></i> Setujui
+                            </button>
+                            <button onclick="rejectPayment(${p.id})" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-lg text-[11px] transition border border-rose-200" title="Tolak">
+                                <i class="fa-solid fa-xmark mr-1"></i> Tolak
+                            </button>
+                        </div>
+                    `;
+                } else if (isApproved) {
+                    const payDate = p.created_at ? new Date(p.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : p.due_date;
+                    actionBtns = `
+                        <button onclick="openReceiptModal(${p.id}, '${(p.title || '').replace(/'/g, "\\'")}', ${p.amount}, '${p.due_date || ''}', '${(methodClean || 'BCA Virtual Account').replace(/'/g, "\\'")}', '${payDate}', '${userName.replace(/'/g, "\\'")}', '${roomInfo}')" class="inline-flex items-center px-3 py-1 bg-slate-100 hover:bg-slate-200 text-navy-950 font-bold text-[11px] rounded-lg transition border border-slate-300 shadow-2xs">
+                            <i class="fa-solid fa-receipt mr-1.5 text-orange-600"></i> Struk
+                        </button>
+                    `;
+                } else {
+                    actionBtns = `<span class="text-slate-400 font-semibold">-</span>`;
+                }
 
                 return `
-                    <tr class="hover:bg-slate-50/80 transition">
-                        <td class="p-3.5">
-                            <p class="font-extrabold text-navy-900">${p.title || 'Sewa Kamar'}</p>
-                            <p class="text-[11px] font-semibold text-orange-600">${roomInfo}</p>
+                    <tr class="hover:bg-slate-50/80 transition ${isPending ? 'bg-amber-50/20' : ''}">
+                        <td class="py-4 px-4">
+                            <span class="font-mono font-bold text-navy-900 block text-[11px]">#INV-${String(p.id).padStart(5, '0')}</span>
+                            <span class="font-bold text-slate-800 text-xs">${p.title}</span>
+                            <span class="text-[10px] text-slate-400 block">Kamar: ${roomInfo}</span>
                         </td>
-                        <td class="p-3.5">
-                            <p class="font-bold text-slate-800">${userName}</p>
-                            <p class="text-[10px] text-slate-500">${userPhone}</p>
+                        <td class="py-4 px-4 font-bold text-slate-900">
+                            ${userName}
+                            ${p.user && p.user.phone ? `<span class="text-[10px] text-slate-500 block font-normal">${p.user.phone}</span>` : ''}
                         </td>
-                        <td class="p-3.5 font-extrabold text-navy-900">
+                        <td class="py-4 px-4 font-black text-slate-900 text-sm">
                             Rp ${Number(p.amount).toLocaleString('id-ID')}
                         </td>
-                        <td class="p-3.5">
-                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-700">
-                                <i class="fa-regular fa-calendar mr-1 text-[10px]"></i> ${p.due_date || '-'}
+                        <td class="py-4 px-4 whitespace-nowrap">
+                            <span class="inline-flex items-center font-bold text-orange-700 bg-orange-50 px-2 py-0.5 rounded-md border border-orange-200 text-[11px]">
+                                <i class="fa-solid fa-calendar-day mr-1.5 text-orange-600"></i> ${p.due_date || '-'}
                             </span>
                         </td>
-                        <td class="p-3.5">${proofBtn}</td>
-                        <td class="p-3.5">${statusBadge}</td>
-                        <td class="p-3.5 text-center">${actionBtns}</td>
+                        <td class="py-4 px-4">
+                            <div class="space-y-1">
+                                <span class="font-semibold text-slate-700 block">${methodClean || (isPending ? '<span class="text-slate-400 font-normal italic">-</span>' : 'Transfer Bank / Online')}</span>
+                                ${proofBtn}
+                            </div>
+                        </td>
+                        <td class="py-4 px-4 text-center whitespace-nowrap">${statusBadge}</td>
+                        <td class="py-4 px-4 text-center whitespace-nowrap">${actionBtns}</td>
                     </tr>
                 `;
             }).join('');
         }
 
-        // Render Complaints Table
+        // =========================================================================
+        // 3. RENDER KEUANGAN TABLE (ARUS KAS MASUK DAN KELUAR)
+        // =========================================================================
+        function renderFinancesTable(payments, expenses) {
+            const tbody = document.getElementById('financesTableBody');
+            if (!tbody) return;
+
+            // Build unified transaction list
+            let transactions = [];
+
+            // 1. Kas Masuk (Pemasukan dari sewa kamar yang status approved)
+            (payments || []).forEach(p => {
+                if (p.status === 'approved') {
+                    const d = p.created_at ? new Date(p.created_at) : new Date();
+                    transactions.push({
+                        type: 'in',
+                        date: p.created_at ? new Date(p.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : p.due_date,
+                        title: p.title + (p.user ? ` (${p.user.name})` : ''),
+                        category: 'Sewa Kamar',
+                        amount: Number(p.amount),
+                        note: 'Pembayaran sewa lunas terverifikasi',
+                        id: p.id,
+                        rawDate: d
+                    });
+                }
+            });
+
+            // 2. Kas Keluar (Pengeluaran operasional kost)
+            (expenses || []).forEach(e => {
+                const d = e.created_at ? new Date(e.created_at) : new Date();
+                transactions.push({
+                    type: 'out',
+                    date: e.date,
+                    title: e.title,
+                    category: e.category,
+                    amount: Number(e.amount),
+                    note: e.note || '-',
+                    id: e.id,
+                    isExpense: true,
+                    rawDate: d
+                });
+            });
+
+            // Sort latest first
+            transactions.sort((a, b) => b.rawDate - a.rawDate);
+
+            // Filter
+            const filter = document.getElementById('filterFinanceType').value;
+            if (filter === 'in') transactions = transactions.filter(t => t.type === 'in');
+            if (filter === 'out') transactions = transactions.filter(t => t.type === 'out');
+
+            if (transactions.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-slate-400">Belum ada catatan transaksi keuangan.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = transactions.map(t => {
+                const isIncome = t.type === 'in';
+                const typeBadge = isIncome
+                    ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-200"><i class="fa-solid fa-arrow-down mr-1 text-[9px] text-emerald-600"></i> KAS MASUK</span>`
+                    : `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-rose-800 border border-rose-200"><i class="fa-solid fa-arrow-up mr-1 text-[9px] text-rose-600"></i> KAS KELUAR</span>`;
+
+                const amountFormatted = isIncome
+                    ? `<span class="font-black text-emerald-600 text-sm">+ Rp ${t.amount.toLocaleString('id-ID')}</span>`
+                    : `<span class="font-black text-rose-600 text-sm">- Rp ${t.amount.toLocaleString('id-ID')}</span>`;
+
+                const action = t.isExpense
+                    ? `<button onclick="deleteExpense(${t.id})" class="text-slate-400 hover:text-rose-600 font-bold text-xs transition p-1" title="Hapus catatan pengeluaran"><i class="fa-regular fa-trash-can"></i></button>`
+                    : `<span class="text-slate-300">-</span>`;
+
+                return `
+                    <tr class="hover:bg-slate-50/80 transition">
+                        <td class="py-3.5 px-4 font-medium text-slate-600 whitespace-nowrap">${t.date}</td>
+                        <td class="py-3.5 px-4 font-bold text-navy-950">${t.title}</td>
+                        <td class="py-3.5 px-4">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700">
+                                ${t.category}
+                            </span>
+                        </td>
+                        <td class="py-3.5 px-4 text-center whitespace-nowrap">${typeBadge}</td>
+                        <td class="py-3.5 px-4 text-right whitespace-nowrap">${amountFormatted}</td>
+                        <td class="py-3.5 px-4 text-slate-500 text-[11px] max-w-xs truncate">${t.note}</td>
+                        <td class="py-3.5 px-4 text-center whitespace-nowrap">${action}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // =========================================================================
+        // 4. RENDER COMPLAINTS TABLE
+        // =========================================================================
         function renderComplaintsTable(complaints) {
             const tbody = document.getElementById('complaintsTableBody');
             if (!tbody) return;
 
             if (!complaints || complaints.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">Tidak ada pengaduan kendala yang masuk.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-slate-400">Tidak ada pengaduan kendala yang masuk.</td></tr>`;
                 return;
             }
 
@@ -580,11 +1136,11 @@
 
                 let badge = '';
                 if (isPending) {
-                    badge = `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-red-100 text-red-700 border border-red-300"><i class="fa-solid fa-triangle-exclamation mr-1 text-[9px]"></i> Belum Diperbaiki</span>`;
+                    badge = `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-red-100 text-red-700 border border-red-300"><i class="fa-solid fa-triangle-exclamation mr-1 text-[9px]"></i> BELUM DIPERBAIKI</span>`;
                 } else if (isInProgress) {
-                    badge = `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-blue-100 text-blue-700 border border-blue-300"><i class="fa-solid fa-spinner fa-spin mr-1 text-[9px]"></i> Sedang Dikerjakan</span>`;
+                    badge = `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-blue-100 text-blue-700 border border-blue-300"><i class="fa-solid fa-spinner fa-spin mr-1 text-[9px]"></i> SEDANG DIKERJAKAN</span>`;
                 } else {
-                    badge = `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-700 border border-emerald-300"><i class="fa-solid fa-check-double mr-1 text-[9px]"></i> Selesai Diperbaiki</span>`;
+                    badge = `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-700 border border-emerald-300"><i class="fa-solid fa-check-double mr-1 text-[9px]"></i> SELESAI DIPERBAIKI</span>`;
                 }
 
                 const userName = c.user ? c.user.name : 'Penghuni';
@@ -596,39 +1152,41 @@
 
                 return `
                     <tr class="hover:bg-slate-50/80 transition ${isPending ? 'bg-orange-50/20' : ''}">
-                        <td class="p-3.5 text-slate-500 text-[11px] whitespace-nowrap">
+                        <td class="py-4 px-4 text-slate-500 text-[11px] whitespace-nowrap">
                             <i class="fa-regular fa-clock mr-1 text-slate-400"></i> ${createdAt}
                         </td>
-                        <td class="p-3.5">
-                            <p class="font-bold text-navy-900">${userName}</p>
+                        <td class="py-4 px-4">
+                            <p class="font-extrabold text-navy-950 text-sm">${userName}</p>
                             <p class="text-[11px] text-orange-600 font-semibold">${roomInfo}</p>
-                            <a href="https://wa.me/${(userPhone || '').replace(/[^0-9]/g, '')}?text=Halo%20${encodeURIComponent(userName)},%20terkait%20pengaduan%20fasilitas%20Anda:%20${encodeURIComponent(c.message)}" target="_blank" class="inline-flex items-center text-[10px] text-emerald-600 font-semibold hover:underline mt-0.5">
-                                <i class="fa-brands fa-whatsapp mr-1"></i> Chat Penghuni
-                            </a>
+                            ${userPhone && userPhone !== '-' ? `
+                                <a href="https://wa.me/${userPhone.replace(/[^0-9]/g, '')}?text=Halo%20${encodeURIComponent(userName)},%20terkait%20pengaduan%20fasilitas%20Anda:%20${encodeURIComponent(c.message)}" target="_blank" class="inline-flex items-center text-[10px] text-emerald-600 font-bold hover:underline mt-0.5">
+                                    <i class="fa-brands fa-whatsapp mr-1"></i> Chat WhatsApp
+                                </a>
+                            ` : ''}
                         </td>
-                        <td class="p-3.5">
+                        <td class="py-4 px-4 whitespace-nowrap">
                             <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-700">
                                 ${c.category}
                             </span>
                         </td>
-                        <td class="p-3.5 text-slate-700 leading-relaxed font-medium">
+                        <td class="py-4 px-4 text-slate-700 leading-relaxed font-medium">
                             "${c.message}"
                         </td>
-                        <td class="p-3.5 whitespace-nowrap">${badge}</td>
-                        <td class="p-3.5 text-center whitespace-nowrap">
+                        <td class="py-4 px-4 text-center whitespace-nowrap">${badge}</td>
+                        <td class="py-4 px-4 text-center whitespace-nowrap">
                             <div class="inline-flex items-center space-x-1">
                                 ${!isResolved ? `
-                                    <button onclick="updateComplaintStatus(${c.id}, 'resolved')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded text-[10px] transition shadow-sm" title="Tandai Selesai Diperbaiki">
+                                    <button onclick="updateComplaintStatus(${c.id}, 'resolved')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[10px] transition shadow-2xs" title="Tandai Selesai Diperbaiki">
                                         <i class="fa-solid fa-check mr-1"></i> Selesai
                                     </button>
                                 ` : ''}
                                 ${isPending ? `
-                                    <button onclick="updateComplaintStatus(${c.id}, 'in_progress')" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded text-[10px] border border-blue-200 transition" title="Tandai Sedang Dikerjakan">
+                                    <button onclick="updateComplaintStatus(${c.id}, 'in_progress')" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded-lg text-[10px] border border-blue-200 transition" title="Tandai Sedang Dikerjakan">
                                         <i class="fa-solid fa-wrench mr-1"></i> Proses
                                     </button>
                                 ` : ''}
                                 ${isResolved ? `
-                                    <button onclick="updateComplaintStatus(${c.id}, 'pending')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded text-[10px]" title="Buka Kembali">
+                                    <button onclick="updateComplaintStatus(${c.id}, 'pending')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-lg text-[10px]" title="Buka Kembali">
                                         Buka Lagi
                                     </button>
                                 ` : ''}
@@ -639,7 +1197,9 @@
             }).join('');
         }
 
-        // Filter Rooms Table
+        // =========================================================================
+        // FILTER HANDLERS
+        // =========================================================================
         function filterRoomsTable() {
             const filter = document.getElementById('filterRoomStatus').value;
             let filtered = globalData.rooms;
@@ -648,16 +1208,18 @@
             renderRoomsTable(filtered);
         }
 
-        // Filter Payments Table
-        function filterPaymentsTable() {
+        function filterDueDateTable() {
             const filter = document.getElementById('filterPaymentStatus').value;
             let filtered = globalData.payments;
             if (filter === 'pending') filtered = filtered.filter(p => p.status === 'pending');
             if (filter === 'approved') filtered = filtered.filter(p => p.status === 'approved');
-            renderPaymentsTable(filtered);
+            renderDueDateTable(filtered);
         }
 
-        // Filter Complaints Table
+        function filterFinancesTable() {
+            renderFinancesTable(globalData.payments, globalData.expenses || []);
+        }
+
         function filterComplaintsTable() {
             const filter = document.getElementById('filterComplaintStatus').value;
             let filtered = globalData.complaints;
@@ -667,7 +1229,9 @@
             renderComplaintsTable(filtered);
         }
 
-        // Toggle Room Status
+        // =========================================================================
+        // ROOM ACTIONS (TOGGLE STATUS & EDIT PRICE)
+        // =========================================================================
         async function toggleRoomStatus(roomId) {
             try {
                 const res = await fetch(`/api/owner/rooms/${roomId}/toggle`, {
@@ -686,7 +1250,6 @@
             }
         }
 
-        // Edit Room Price
         function openEditPrice(roomId, roomNumber, currentPrice) {
             document.getElementById('editPriceRoomId').value = roomId;
             document.getElementById('editPriceTitle').textContent = `Perbarui Tarif Kamar ${roomNumber}`;
@@ -724,7 +1287,9 @@
             }
         }
 
-        // Approve / Reject Payment
+        // =========================================================================
+        // PAYMENT APPROVAL & RECEIPT MODAL
+        // =========================================================================
         async function approvePayment(paymentId) {
             if (!confirm('Verifikasi pembayaran ini sebagai LUNAS?')) return;
             try {
@@ -761,7 +1326,96 @@
             }
         }
 
-        // Update Complaint Status
+        function openReceiptModal(id, title, amount, dueDate, method, datePaid, userName, roomInfo) {
+            document.getElementById('rcpInvoiceId').textContent = '#INV-' + String(id).padStart(5, '0');
+            document.getElementById('rcpTitle').textContent = title;
+            document.getElementById('rcpAmount').textContent = 'Rp ' + Number(amount).toLocaleString('id-ID');
+            document.getElementById('rcpMethod').textContent = method || 'Transfer Bank / Online';
+            document.getElementById('rcpDate').textContent = datePaid || dueDate;
+            document.getElementById('rcpUser').textContent = userName || '-';
+            document.getElementById('rcpRoom').textContent = roomInfo || '-';
+            document.getElementById('receiptModal').classList.remove('hidden');
+        }
+
+        function closeReceiptModal() {
+            document.getElementById('receiptModal').classList.add('hidden');
+        }
+
+        // =========================================================================
+        // EXPENSE / KEUANGAN KAS KELUAR
+        // =========================================================================
+        function openAddExpenseModal() {
+            document.getElementById('expTitle').value = '';
+            document.getElementById('expAmount').value = '';
+            document.getElementById('expNote').value = '';
+            document.getElementById('addExpenseModal').classList.remove('hidden');
+        }
+
+        function closeAddExpenseModal() {
+            document.getElementById('addExpenseModal').classList.add('hidden');
+        }
+
+        async function submitAddExpense(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmitExpense');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Menyimpan...';
+
+            const payload = {
+                title: document.getElementById('expTitle').value,
+                category: document.getElementById('expCategory').value,
+                date: document.getElementById('expDate').value,
+                amount: document.getElementById('expAmount').value,
+                note: document.getElementById('expNote').value,
+            };
+
+            try {
+                const res = await fetch('/api/owner/expenses', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    closeAddExpenseModal();
+                    loadDashboardData();
+                } else {
+                    alert(data.message || 'Gagal menyimpan pengeluaran.');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Terjadi kesalahan jaringan.');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-check mr-1.5"></i> Simpan Pengeluaran';
+            }
+        }
+
+        async function deleteExpense(expenseId) {
+            if (!confirm('Apakah Anda yakin ingin menghapus catatan pengeluaran ini?')) return;
+            try {
+                const res = await fetch(`/api/owner/expenses/${expenseId}`, {
+                    method: 'DELETE',
+                    headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    loadDashboardData();
+                } else {
+                    alert(data.message || 'Gagal menghapus pengeluaran.');
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // =========================================================================
+        // COMPLAINT ACTIONS
+        // =========================================================================
         async function updateComplaintStatus(complaintId, newStatus) {
             try {
                 const res = await fetch(`/api/owner/complaints/${complaintId}/status`, {
@@ -785,16 +1439,19 @@
             }
         }
 
-        // View KTP Modal
+        // =========================================================================
+        // KTP & PROOF VIEWER
+        // =========================================================================
         function viewKtp(filePath, userName) {
             document.getElementById('ktpModalTitle').textContent = `Foto KTP - ${userName}`;
+            document.getElementById('ktpModalSubtitle').textContent = 'Identitas terdaftar penghuni kost';
             const content = document.getElementById('ktpModalContent');
             if (filePath.toLowerCase().endsWith('.pdf')) {
                 content.innerHTML = `
                     <div class="p-6 bg-slate-50 rounded-xl border border-slate-200">
                         <i class="fa-solid fa-file-pdf text-5xl text-red-500 mb-3"></i>
-                        <p class="text-xs font-bold text-navy-900 mb-3">Dokumen KTP dalam format PDF</p>
-                        <a href="/${filePath}" target="_blank" class="inline-flex items-center px-4 py-2 bg-navy-900 hover:bg-navy-800 text-white font-bold rounded-lg text-xs transition">
+                        <p class="text-xs font-bold text-navy-950 mb-3">Dokumen KTP dalam format PDF</p>
+                        <a href="/${filePath}" target="_blank" class="inline-flex items-center px-4 py-2 bg-navy-950 hover:bg-navy-900 text-white font-bold rounded-lg text-xs transition">
                             <i class="fa-solid fa-arrow-up-right-from-square mr-2"></i> Buka File PDF KTP
                         </a>
                     </div>
@@ -817,10 +1474,13 @@
         }
 
         function viewProof(filePath) {
-            viewKtp(filePath, 'Bukti Pembayaran');
+            viewKtp(filePath, 'Bukti Transfer Pembayaran');
+            document.getElementById('ktpModalSubtitle').textContent = 'Bukti pembayaran sewa yang diunggah oleh penghuni';
         }
 
-        // Logout
+        // =========================================================================
+        // LOGOUT
+        // =========================================================================
         async function logout() {
             try {
                 const res = await fetch('/api/logout', {
@@ -833,11 +1493,15 @@
                 }
             } catch (err) {
                 console.error(err);
+                window.location.href = '/';
             }
         }
 
         // Init
-        document.addEventListener('DOMContentLoaded', loadDashboardData);
+        document.addEventListener('DOMContentLoaded', () => {
+            handleHash();
+            loadDashboardData();
+        });
     </script>
 </body>
 </html>
