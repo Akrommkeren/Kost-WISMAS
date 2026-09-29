@@ -1410,8 +1410,8 @@
                             <p class="font-bold text-navy-950 text-xs">${userName}</p>
                             <p class="text-xs text-slate-500 font-medium mt-0.5">${roomInfo}</p>
                             ${userPhone && userPhone !== '-' ? `
-                                <a href="https://wa.me/${userPhone.replace(/[^0-9]/g, '')}?text=Halo%20${encodeURIComponent(userName)},%20terkait%20pengaduan%20fasilitas%20Anda:%20${encodeURIComponent(c.message)}" target="_blank" class="inline-flex items-center text-[10px] text-emerald-600 font-bold hover:underline mt-0.5">
-                                    <i class="fa-brands fa-whatsapp mr-1"></i> Chat WhatsApp
+                                <a href="https://wa.me/${userPhone.replace(/[^0-9]/g, '')}?text=Halo%20${encodeURIComponent(userName)},%20terkait%20pengaduan%20fasilitas%20Anda:%20${encodeURIComponent(c.message)}" target="_blank" class="inline-flex items-center text-[10px] text-emerald-600 font-bold hover:underline mt-0.5" title="Konfirmasi via WhatsApp">
+                                    <i class="fa-brands fa-whatsapp mr-1"></i> Konfirmasi
                                 </a>
                             ` : ''}
                         </td>
