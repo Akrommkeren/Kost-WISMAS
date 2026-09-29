@@ -152,8 +152,8 @@
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <!-- 4 STATS OVERVIEW CARDS (SIMPLE, SLIM, NO ICONS, NOT A BUTTON) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 mb-8">
+            <!-- 3 STATS OVERVIEW CARDS (SIMPLE, SLIM, NO ICONS, NOT A BUTTON) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 mb-8">
                 
                 <!-- Card 1: Okupansi Kamar -->
                 <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs">
@@ -182,18 +182,7 @@
                     </div>
                 </div>
 
-                <!-- Card 3: Saldo Kas Bersih -->
-                <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs">
-                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Saldo Kas Bersih</div>
-                    <div class="text-xl sm:text-2xl font-black text-emerald-600" id="statNetBalance">Rp 0</div>
-                    <div class="mt-2.5">
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold bg-blue-50 text-blue-800 border border-blue-200/80">
-                            Pemasukan dikurangi operasional
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Card 4: Pengaduan Aktif -->
+                <!-- Card 3: Pengaduan Aktif -->
                 <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs">
                     <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Pengaduan Aktif</div>
                     <div class="flex items-baseline space-x-1.5">
@@ -220,11 +209,14 @@
                             <p class="text-xs text-slate-500 mt-0.5">Kelola status ketersediaan kamar, tarif sewa bulanan, data penghuni aktif, dan dokumen KTP.</p>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <select id="filterRoomStatus" onchange="filterRoomsTable()" class="px-3.5 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 focus:ring-2 focus:ring-orange-500 focus:outline-none bg-white shadow-2xs">
-                                <option value="all">Semua Status Kamar</option>
-                                <option value="available">Hanya Kamar Tersedia</option>
-                                <option value="occupied">Hanya Kamar Terisi</option>
-                            </select>
+                            <div class="relative inline-flex items-center">
+                                <select id="filterRoomStatus" onchange="filterRoomsTable()" class="appearance-none bg-white hover:bg-slate-50 border border-slate-300 hover:border-slate-400 text-xs font-bold text-slate-700 pl-3.5 pr-8 py-2 rounded-xl focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:outline-none shadow-2xs cursor-pointer transition">
+                                    <option value="all">Semua Status Kamar</option>
+                                    <option value="available">Hanya Kamar Tersedia</option>
+                                    <option value="occupied">Hanya Kamar Terisi</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down absolute right-3 text-[10px] text-slate-400 pointer-events-none"></i>
+                            </div>
                         </div>
                     </div>
 
@@ -263,11 +255,14 @@
                             <p class="text-xs text-slate-500 mt-0.5">Pantau waktu jatuh tempo sewa, verifikasi bukti transfer masuk, serta konfirmasi status pelunasan penghuni.</p>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <select id="filterPaymentStatus" onchange="filterDueDateTable()" class="px-3.5 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 focus:ring-2 focus:ring-orange-500 focus:outline-none bg-white shadow-2xs">
-                                <option value="all">Semua Status Tagihan</option>
-                                <option value="pending">Menunggu Verifikasi (Pending)</option>
-                                <option value="approved">Lunas (Disetujui)</option>
-                            </select>
+                            <div class="relative inline-flex items-center">
+                                <select id="filterPaymentStatus" onchange="filterDueDateTable()" class="appearance-none bg-white hover:bg-slate-50 border border-slate-300 hover:border-slate-400 text-xs font-bold text-slate-700 pl-3.5 pr-8 py-2 rounded-xl focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:outline-none shadow-2xs cursor-pointer transition">
+                                    <option value="all">Semua Status Tagihan</option>
+                                    <option value="pending">Menunggu Verifikasi (Pending)</option>
+                                    <option value="approved">Lunas (Disetujui)</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down absolute right-3 text-[10px] text-slate-400 pointer-events-none"></i>
+                            </div>
                         </div>
                     </div>
 
@@ -337,11 +332,14 @@
                                 <p class="text-xs text-slate-500 mt-0.5">Catatan seluruh arus kas pemasukan sewa kamar dan biaya operasional kost.</p>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <select id="filterFinanceType" onchange="filterFinancesTable()" class="px-3.5 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 focus:ring-2 focus:ring-orange-500 focus:outline-none bg-white shadow-2xs">
-                                    <option value="all">Semua Transaksi (Keluar & Masuk)</option>
-                                    <option value="in">Hanya Uang Masuk (Pemasukan)</option>
-                                    <option value="out">Hanya Uang Keluar (Pengeluaran)</option>
-                                </select>
+                                <div class="relative inline-flex items-center">
+                                    <select id="filterFinanceType" onchange="filterFinancesTable()" class="appearance-none bg-white hover:bg-slate-50 border border-slate-300 hover:border-slate-400 text-xs font-bold text-slate-700 pl-3.5 pr-8 py-2 rounded-xl focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:outline-none shadow-2xs cursor-pointer transition">
+                                        <option value="all">Semua Transaksi (Keluar & Masuk)</option>
+                                        <option value="in">Hanya Uang Masuk (Pemasukan)</option>
+                                        <option value="out">Hanya Uang Keluar (Pengeluaran)</option>
+                                    </select>
+                                    <i class="fa-solid fa-chevron-down absolute right-3 text-[10px] text-slate-400 pointer-events-none"></i>
+                                </div>
                                 <button onclick="openAddExpenseModal()" class="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white font-extrabold text-xs rounded-xl shadow-md transition flex items-center shrink-0">
                                     <i class="fa-solid fa-plus mr-1.5"></i> Catat Pengeluaran Baru
                                 </button>
@@ -386,12 +384,15 @@
                             <p class="text-xs text-slate-500 mt-0.5">Tinjau laporan kendala fasilitas penghuni yang belum diperbaiki agar segera ditindaklanjuti.</p>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <select id="filterComplaintStatus" onchange="filterComplaintsTable()" class="px-3.5 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 focus:ring-2 focus:ring-orange-500 focus:outline-none bg-white shadow-2xs">
-                                <option value="all">Semua Status Pengaduan</option>
-                                <option value="pending">Belum Diperbaiki (Perlu Tindakan)</option>
-                                <option value="in_progress">Sedang Dikerjakan</option>
-                                <option value="resolved">Selesai Diperbaiki</option>
-                            </select>
+                            <div class="relative inline-flex items-center">
+                                <select id="filterComplaintStatus" onchange="filterComplaintsTable()" class="appearance-none bg-white hover:bg-slate-50 border border-slate-300 hover:border-slate-400 text-xs font-bold text-slate-700 pl-3.5 pr-8 py-2 rounded-xl focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:outline-none shadow-2xs cursor-pointer transition">
+                                    <option value="all">Semua Status Pengaduan</option>
+                                    <option value="pending">Belum Diperbaiki (Perlu Tindakan)</option>
+                                    <option value="in_progress">Sedang Dikerjakan</option>
+                                    <option value="resolved">Selesai Diperbaiki</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down absolute right-3 text-[10px] text-slate-400 pointer-events-none"></i>
+                            </div>
                         </div>
                     </div>
 
@@ -813,7 +814,8 @@
                 const totalExpense = data.stats.totalExpenses || 0;
                 const netBalance = data.stats.netBalance !== undefined ? data.stats.netBalance : (totalIncome - totalExpense);
 
-                document.getElementById('statNetBalance').textContent = 'Rp ' + Number(netBalance).toLocaleString('id-ID');
+                const statNetBalanceEl = document.getElementById('statNetBalance');
+                if (statNetBalanceEl) statNetBalanceEl.textContent = 'Rp ' + Number(netBalance).toLocaleString('id-ID');
                 document.getElementById('finTotalIncome').textContent = 'Rp ' + Number(totalIncome).toLocaleString('id-ID');
                 document.getElementById('finTotalExpense').textContent = 'Rp ' + Number(totalExpense).toLocaleString('id-ID');
                 document.getElementById('finNetBalance').textContent = 'Rp ' + Number(netBalance).toLocaleString('id-ID');
@@ -868,15 +870,15 @@
 
                 const periodDropdown = `
                     <div class="relative inline-flex items-center">
-                        <select onchange="updateRentalPeriod(${room.id}, this.value)" class="appearance-none bg-slate-50 hover:bg-white border border-slate-300 hover:border-slate-400 text-slate-800 text-xs font-bold rounded-lg pl-3 pr-7 py-1.5 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:outline-none shadow-2xs cursor-pointer transition">
+                        <select onchange="updateRentalPeriod(${room.id}, this.value)" class="appearance-none bg-slate-50 hover:bg-white border border-slate-300 hover:border-slate-400 text-slate-800 text-xs font-bold rounded-lg pl-3 pr-8 py-1.5 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:outline-none shadow-2xs cursor-pointer transition">
                             ${periodOptions}
                         </select>
-                        <i class="fa-solid fa-chevron-down absolute right-2.5 text-[10px] text-slate-400 pointer-events-none"></i>
+                        <i class="fa-solid fa-chevron-down absolute right-3 text-[10px] text-slate-400 pointer-events-none"></i>
                     </div>
                 `;
 
-                // Occupant Info (Ditambahkan box berdesain rapi dengan avatar icon & nama penghuni)
-                let occupantHtml = `<span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium text-slate-400 bg-slate-50 border border-slate-200/70 italic">Belum Ada</span>`;
+                // Occupant Info
+                let occupantHtml = `<span class="text-xs font-medium text-slate-400 italic">Belum Ada</span>`;
                 const activeBooking = room.bookings && room.bookings.length > 0 ? room.bookings[0] : null;
                 if (activeBooking && activeBooking.user) {
                     const u = activeBooking.user;
@@ -894,12 +896,11 @@
                     };
                     const tenantDataAttr = encodeURIComponent(JSON.stringify(tenantData));
                     occupantHtml = `
-                        <button type="button" onclick="openTenantModal('${tenantDataAttr}')" class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 hover:bg-orange-50 text-slate-800 hover:text-orange-700 border border-slate-200 hover:border-orange-200 transition shadow-2xs group focus:outline-none" title="Klik untuk melihat detail profil & KTP penghuni">
+                        <button type="button" onclick="openTenantModal('${tenantDataAttr}')" class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 hover:bg-orange-50 text-slate-800 hover:text-orange-700 border border-slate-200 hover:border-orange-200 transition shadow-2xs focus:outline-none" title="Klik untuk melihat detail profil & KTP penghuni">
                             <div class="w-5 h-5 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-[10px] font-black shrink-0">
                                 <i class="fa-solid fa-user"></i>
                             </div>
                             <span>${u.name}</span>
-                            <i class="fa-solid fa-arrow-up-right-from-square text-[9px] text-slate-400 group-hover:text-orange-500 ml-0.5"></i>
                         </button>
                     `;
                 }
