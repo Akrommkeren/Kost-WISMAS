@@ -24,8 +24,8 @@
                             600: '#2563eb',
                             700: '#1d4ed8',
                             800: '#1e40af',
-                            900: '#0f172a',
-                            950: '#0b1120',
+                            900: '#1e3a8a',
+                            950: '#08142c',
                         },
                         orange: {
                             50: '#fff7ed',
@@ -152,97 +152,53 @@
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <!-- 4 STATS OVERVIEW CARDS -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <!-- 4 STATS OVERVIEW CARDS (SIMPLE, SLIM, NO ICONS, NOT A BUTTON) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 mb-8">
                 
                 <!-- Card 1: Okupansi Kamar -->
-                <div onclick="switchSection('rooms')" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm cursor-pointer hover:border-orange-300 transition group">
-                    <div class="flex items-center justify-between text-slate-500 mb-2">
-                        <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Okupansi Kamar</span>
-                        <div class="w-9 h-9 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center transition group-hover:scale-105">
-                            <i class="fa-solid fa-door-open"></i>
-                        </div>
-                    </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs">
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Okupansi Kamar</div>
                     <div class="flex items-baseline space-x-1.5">
-                        <span id="statOccupied" class="text-2xl font-black text-navy-950">-</span>
+                        <span id="statOccupied" class="text-xl sm:text-2xl font-black text-navy-950">-</span>
                         <span class="text-xs text-slate-400">terisi dari</span>
-                        <span id="statTotalRooms" class="text-base font-bold text-slate-700">-</span>
+                        <span id="statTotalRooms" class="text-sm font-bold text-slate-700">-</span>
                         <span class="text-xs text-slate-400">kamar</span>
                     </div>
-                    <div class="mt-3 flex items-center text-xs">
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                            <i class="fa-solid fa-circle-check mr-1 text-[9px] text-emerald-600"></i> <span id="statAvailableCount">-</span> Tersedia
-                        </span>
+                    <div class="mt-2 text-[11px] text-emerald-700 font-bold">
+                        <span id="statAvailableCount">-</span> Kamar Tersedia
                     </div>
                 </div>
 
-                <!-- Card 2: Tenggat Waktu Bayar (Menunggu Verifikasi) -->
-                <div onclick="switchSection('dueDate')" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm cursor-pointer hover:border-orange-300 transition group">
-                    <div class="flex items-center justify-between text-slate-500 mb-2">
-                        <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Tenggat Waktu Bayar</span>
-                        <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center transition group-hover:scale-105">
-                            <i class="fa-solid fa-calendar-check"></i>
-                        </div>
+                <!-- Card 2: Tenggat Waktu Bayar -->
+                <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs">
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Tenggat Waktu Bayar</div>
+                    <div class="text-xl sm:text-2xl font-black text-orange-600" id="statPendingAmount">Rp 0</div>
+                    <div class="mt-2 text-[11px] text-slate-500 font-medium">
+                        <span id="statPendingCount" class="font-bold text-slate-700">0</span> tagihan menunggu verifikasi
                     </div>
-                    <div class="text-2xl font-black text-orange-600" id="statPendingAmount">Rp 0</div>
-                    <p class="mt-3 text-[11px] text-slate-500 flex items-center font-medium">
-                        <i class="fa-solid fa-clock mr-1.5 text-amber-500"></i> <span id="statPendingCount">0</span> tagihan menunggu verifikasi
-                    </p>
                 </div>
 
-                <!-- Card 3: Keuangan (Saldo Arus Kas Bersih) -->
-                <div onclick="switchSection('finances')" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm cursor-pointer hover:border-orange-300 transition group">
-                    <div class="flex items-center justify-between text-slate-500 mb-2">
-                        <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Saldo Kas Bersih</span>
-                        <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center transition group-hover:scale-105">
-                            <i class="fa-solid fa-wallet"></i>
-                        </div>
+                <!-- Card 3: Saldo Kas Bersih -->
+                <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs">
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Saldo Kas Bersih</div>
+                    <div class="text-xl sm:text-2xl font-black text-emerald-600" id="statNetBalance">Rp 0</div>
+                    <div class="mt-2 text-[11px] text-slate-500 font-medium truncate">
+                        Pemasukan sewa dikurangi operasional
                     </div>
-                    <div class="text-2xl font-black text-emerald-600" id="statNetBalance">Rp 0</div>
-                    <p class="mt-3 text-[11px] text-slate-500 flex items-center font-medium truncate">
-                        <i class="fa-solid fa-arrow-trend-up mr-1.5 text-emerald-500"></i> Pemasukan sewa dikurangi biaya operasional
-                    </p>
                 </div>
 
                 <!-- Card 4: Pengaduan Aktif -->
-                <div onclick="switchSection('complaints')" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm cursor-pointer hover:border-orange-300 transition group">
-                    <div class="flex items-center justify-between text-slate-500 mb-2">
-                        <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Pengaduan Aktif</span>
-                        <div class="w-9 h-9 rounded-xl bg-red-50 text-red-600 flex items-center justify-center transition group-hover:scale-105">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                        </div>
-                    </div>
-                    <div class="flex items-baseline space-x-2">
-                        <span id="statUnresolvedComplaints" class="text-2xl font-black text-red-600">-</span>
+                <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs">
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Pengaduan Aktif</div>
+                    <div class="flex items-baseline space-x-1.5">
+                        <span id="statUnresolvedComplaints" class="text-xl sm:text-2xl font-black text-red-600">-</span>
                         <span class="text-xs text-slate-400">laporan kendala</span>
                     </div>
-                    <div class="mt-3">
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-900 border border-amber-300">
-                            <i class="fa-solid fa-wrench mr-1 text-[9px] text-amber-700"></i> Perlu tindak lanjut owner
-                        </span>
+                    <div class="mt-2 text-[11px] text-amber-700 font-bold">
+                        Perlu tindak lanjut owner
                     </div>
                 </div>
 
-            </div>
-
-            <!-- TAB PILL SWITCHER (Sinkron dengan Navbar) -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-1.5 flex flex-wrap gap-1.5 mb-8 text-xs font-extrabold">
-                <button id="pillRooms" onclick="switchSection('rooms')" class="pill-btn flex-1 py-3 px-4 rounded-xl transition flex items-center justify-center space-x-2 bg-orange-600 text-white shadow-sm">
-                    <i class="fa-solid fa-bed"></i>
-                    <span>Kamar & Penghuni</span>
-                </button>
-                <button id="pillDueDate" onclick="switchSection('dueDate')" class="pill-btn flex-1 py-3 px-4 rounded-xl transition flex items-center justify-center space-x-2 bg-slate-50 text-slate-600 hover:text-navy-950 hover:bg-slate-100">
-                    <i class="fa-solid fa-calendar-check"></i>
-                    <span>Tenggat Waktu Bayar</span>
-                </button>
-                <button id="pillFinances" onclick="switchSection('finances')" class="pill-btn flex-1 py-3 px-4 rounded-xl transition flex items-center justify-center space-x-2 bg-slate-50 text-slate-600 hover:text-navy-950 hover:bg-slate-100">
-                    <i class="fa-solid fa-wallet"></i>
-                    <span>Keuangan</span>
-                </button>
-                <button id="pillComplaints" onclick="switchSection('complaints')" class="pill-btn flex-1 py-3 px-4 rounded-xl transition flex items-center justify-center space-x-2 bg-slate-50 text-slate-600 hover:text-navy-950 hover:bg-slate-100">
-                    <i class="fa-solid fa-clipboard-list"></i>
-                    <span>Daftar Pengaduan</span>
-                </button>
             </div>
 
             <!-- ========================================================================= -->
@@ -709,23 +665,16 @@
             sections.forEach(s => {
                 const el = document.getElementById('section' + s.charAt(0).toUpperCase() + s.slice(1));
                 const navBtn = document.getElementById('navLink' + s.charAt(0).toUpperCase() + s.slice(1));
-                const pillBtn = document.getElementById('pill' + s.charAt(0).toUpperCase() + s.slice(1));
 
                 if (s === section) {
                     if (el) el.classList.remove('hidden');
                     if (navBtn) {
                         navBtn.className = "text-orange-600 hover:text-orange-600 transition";
                     }
-                    if (pillBtn) {
-                        pillBtn.className = "pill-btn flex-1 py-3 px-4 rounded-xl transition flex items-center justify-center space-x-2 bg-orange-600 text-white shadow-sm font-extrabold";
-                    }
                 } else {
                     if (el) el.classList.add('hidden');
                     if (navBtn) {
                         navBtn.className = "text-slate-700 hover:text-orange-600 transition";
-                    }
-                    if (pillBtn) {
-                        pillBtn.className = "pill-btn flex-1 py-3 px-4 rounded-xl transition flex items-center justify-center space-x-2 bg-slate-50 text-slate-600 hover:text-navy-950 hover:bg-slate-100 font-bold";
                     }
                 }
             });
