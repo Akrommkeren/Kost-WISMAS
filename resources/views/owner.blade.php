@@ -899,9 +899,6 @@
                         <p class="text-[10px] sm:text-[11px] text-slate-500 leading-relaxed font-medium mt-0.5">
                             0821-7890-1234
                         </p>
-                        <p class="text-[10px] sm:text-[11px] text-slate-500 leading-none font-medium">
-                            info@wismas.com
-                        </p>
                     </div>
                 </div>
 
