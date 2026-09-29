@@ -75,6 +75,54 @@
             width: 2.5rem;
             height: 100%;
         }
+
+        @media print {
+            @page {
+                size: portrait;
+                margin: 10mm;
+            }
+            html, body {
+                background: #ffffff !important;
+                height: auto !important;
+                min-height: auto !important;
+                overflow: visible !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            body {
+                display: block !important;
+            }
+            /* Sembunyikan semua elemen di body selain receiptModal */
+            body > *:not(#receiptModal) {
+                display: none !important;
+            }
+            #receiptModal {
+                display: block !important;
+                position: static !important;
+                background: transparent !important;
+                padding: 0 !important;
+                margin: 0 auto !important;
+                width: 100% !important;
+                box-shadow: none !important;
+                overflow: visible !important;
+                z-index: auto !important;
+            }
+            #receiptCard {
+                box-shadow: none !important;
+                border: 1px solid #cbd5e1 !important;
+                border-radius: 16px !important;
+                width: 100% !important;
+                max-width: 440px !important;
+                margin: 0 auto !important;
+                padding: 24px !important;
+                background: #ffffff !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-orange-500 selection:text-white flex flex-col min-h-screen">
@@ -832,8 +880,8 @@
     <!-- MODAL STRUK / KUITANSI DIGITAL PEMBAYARAN -->
     <!-- ========================================================================= -->
     <div id="receiptModal" class="hidden fixed inset-0 modal-overlay z-50 overflow-y-auto flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 relative text-left">
-            <button onclick="closeReceiptModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center transition">
+        <div id="receiptCard" class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 relative text-left">
+            <button onclick="closeReceiptModal()" class="no-print absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center transition">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
 
@@ -882,11 +930,11 @@
             </div>
 
             <!-- Footer / Action Buttons -->
-            <div class="pt-4 border-t border-slate-100 flex gap-2">
-                <button onclick="window.print()" class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition flex items-center justify-center">
+            <div class="no-print pt-4 border-t border-slate-100 flex gap-2">
+                <button onclick="printReceipt()" class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition flex items-center justify-center cursor-pointer">
                     <i class="fa-solid fa-print mr-1.5"></i> Cetak Invoice
                 </button>
-                <button onclick="closeReceiptModal()" class="w-1/2 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs rounded-xl transition flex items-center justify-center">
+                <button onclick="closeReceiptModal()" class="w-1/2 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs rounded-xl transition flex items-center justify-center cursor-pointer">
                     Tutup
                 </button>
             </div>
@@ -2000,6 +2048,10 @@
 
         function closeReceiptModal() {
             document.getElementById('receiptModal').classList.add('hidden');
+        }
+
+        function printReceipt() {
+            window.print();
         }
 
         // =========================================================================
