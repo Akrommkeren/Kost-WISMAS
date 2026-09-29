@@ -78,8 +78,8 @@
 
         @media print {
             @page {
-                size: portrait;
-                margin: 10mm;
+                size: A4 portrait;
+                margin: 15mm 20mm;
             }
             html, body {
                 background: #ffffff !important;
@@ -109,12 +109,12 @@
             }
             #receiptCard {
                 box-shadow: none !important;
-                border: 1px solid #cbd5e1 !important;
-                border-radius: 16px !important;
+                border: none !important;
+                border-radius: 0 !important;
                 width: 100% !important;
-                max-width: 440px !important;
-                margin: 0 auto !important;
-                padding: 24px !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
                 background: #ffffff !important;
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
@@ -877,65 +877,150 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- MODAL STRUK / KUITANSI DIGITAL PEMBAYARAN -->
+    <!-- MODAL INVOICE PEMBAYARAN DIGITAL (SESUAI CONTOH REFERENSI) -->
     <!-- ========================================================================= -->
-    <div id="receiptModal" class="hidden fixed inset-0 modal-overlay z-50 overflow-y-auto flex items-center justify-center p-4">
-        <div id="receiptCard" class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 relative text-left">
-            <button onclick="closeReceiptModal()" class="no-print absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center transition">
+    <div id="receiptModal" class="hidden fixed inset-0 modal-overlay z-50 overflow-y-auto flex items-center justify-center p-3 sm:p-6">
+        <div id="receiptCard" class="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-10 shadow-2xl border border-slate-200 relative text-left">
+            <button type="button" onclick="closeReceiptModal()" class="no-print absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center transition cursor-pointer" title="Tutup">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
 
-            <!-- Kuitansi Header -->
-            <div class="text-center pb-4 border-b border-dashed border-slate-300">
-                <div class="w-12 h-12 bg-white rounded-xl p-1 shadow-sm flex items-center justify-center overflow-hidden border border-slate-200 mx-auto mb-2">
-                    <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
+            <!-- Invoice Header (Logo + Info Kost di Kiri, INVOICE di Kanan) -->
+            <div class="flex flex-row justify-between items-start pb-5 border-b border-slate-200 gap-4">
+                <!-- Left: Logo & Info Kost WISMA S -->
+                <div class="flex items-start space-x-3.5 sm:space-x-4">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-xl overflow-hidden border border-slate-200 bg-white flex items-center justify-center p-1 shadow-2xs">
+                        <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost WISMA S" class="w-full h-full object-contain">
+                    </div>
+                    <div class="space-y-0.5">
+                        <h2 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight leading-snug">Kost WISMA S</h2>
+                        <p class="text-[11px] sm:text-xs text-slate-600 max-w-xs sm:max-w-sm leading-relaxed font-normal">
+                            Perumahan Griya Karang Indah Blok S-15 RT 01 RW 12 kel. Karang Pucung Kec. Purwokerto Selatan Kab. Banyumas
+                        </p>
+                        <p class="text-[11px] sm:text-xs text-slate-600 font-medium">081225143752</p>
+                        <p class="text-[11px] sm:text-xs text-slate-600 font-medium">ovancuys@gmail.com</p>
+                    </div>
                 </div>
-                <h3 class="text-base font-black text-navy-950 uppercase tracking-wider">Kuitansi Pembayaran Digital</h3>
-                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Kost Wisma S Purwokerto</span>
-                <div class="mt-2 inline-flex items-center px-3 py-1 rounded-full text-[11px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300">
-                    <i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> LUNAS TERVERIFIKASI
+
+                <!-- Right: Title INVOICE -->
+                <div class="text-right shrink-0">
+                    <h1 class="text-3xl sm:text-4xl font-black text-blue-600 tracking-wider" style="color: #2563eb;">INVOICE</h1>
                 </div>
             </div>
 
-            <!-- Kuitansi Body -->
-            <div class="py-4 space-y-3 text-xs">
-                <div class="flex justify-between">
-                    <span class="text-slate-500">Nomor Invoice:</span>
-                    <span id="rcpInvoiceId" class="font-mono font-bold text-slate-800"></span>
+            <!-- Bill To & Invoice Info (2 Kolom) -->
+            <div class="grid grid-cols-2 gap-4 py-5 text-xs sm:text-sm">
+                <!-- BILL TO (Data Penghuni) -->
+                <div class="space-y-0.5">
+                    <span class="block text-[11px] sm:text-xs font-black uppercase tracking-wider text-slate-900 mb-1">BILL TO</span>
+                    <div id="rcpTenantName" class="text-sm sm:text-base font-black text-slate-900 leading-tight"></div>
+                    <div id="rcpRoomNumber" class="text-xs font-bold text-slate-700"></div>
+                    <div id="rcpTenantPhone" class="text-xs text-slate-600 font-medium"></div>
+                    <div id="rcpTenantEmail" class="text-xs text-slate-600 font-medium"></div>
                 </div>
-                <div class="flex justify-between">
-                    <span class="text-slate-500">Waktu Bayar:</span>
-                    <span id="rcpDate" class="font-bold text-slate-800"></span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-slate-500">Nama Penghuni:</span>
-                    <span id="rcpUser" class="font-bold text-slate-800"></span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-slate-500">Kamar Hunian:</span>
-                    <span id="rcpRoom" class="font-bold text-slate-800"></span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-slate-500">Keterangan:</span>
-                    <span id="rcpTitle" class="font-bold text-navy-950 text-right"></span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-slate-500">Metode Bayar:</span>
-                    <span id="rcpMethod" class="font-semibold text-slate-700"></span>
-                </div>
-                <div class="border-t border-dashed border-slate-300 pt-3 flex justify-between items-center">
-                    <span class="text-sm font-extrabold text-navy-950">Jumlah Dibayar:</span>
-                    <span id="rcpAmount" class="text-lg font-black text-emerald-600"></span>
+
+                <!-- INVOICE META (INVOICE #, DATE, DUE DATE Rata Kanan) -->
+                <div class="flex flex-col items-end justify-start">
+                    <div class="w-full max-w-[240px] space-y-1.5 text-xs sm:text-sm">
+                        <div class="flex justify-between items-center gap-3">
+                            <span class="font-extrabold text-slate-900 uppercase tracking-wider text-[11px] sm:text-xs">INVOICE #</span>
+                            <span id="rcpInvoiceNo" class="font-bold text-slate-900 text-right"></span>
+                        </div>
+                        <div class="flex justify-between items-center gap-3">
+                            <span class="font-extrabold text-slate-900 uppercase tracking-wider text-[11px] sm:text-xs">DATE</span>
+                            <span id="rcpDate" class="font-semibold text-slate-800 text-right"></span>
+                        </div>
+                        <div class="flex justify-between items-center gap-3">
+                            <span class="font-extrabold text-slate-900 uppercase tracking-wider text-[11px] sm:text-xs">DUE DATE</span>
+                            <span id="rcpDueDate" class="font-semibold text-slate-800 text-right"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Footer / Action Buttons -->
-            <div class="no-print pt-4 border-t border-slate-100 flex gap-2">
-                <button onclick="printReceipt()" class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition flex items-center justify-center cursor-pointer">
-                    <i class="fa-solid fa-print mr-1.5"></i> Cetak Invoice
-                </button>
-                <button onclick="closeReceiptModal()" class="w-1/2 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs rounded-xl transition flex items-center justify-center cursor-pointer">
+            <!-- Tabel Item Transaksi (Header Biru) -->
+            <div class="overflow-x-auto my-2">
+                <table class="w-full border-collapse border border-blue-600 text-xs sm:text-sm">
+                    <thead>
+                        <tr class="bg-blue-600 text-white font-bold" style="background-color: #2563eb; color: #ffffff;">
+                            <th class="py-2.5 px-3 sm:px-4 text-left border-r border-blue-500 w-[50%]">Description</th>
+                            <th class="py-2.5 px-2 sm:px-3 text-center border-r border-blue-500 w-[12%]">QTY</th>
+                            <th class="py-2.5 px-3 sm:px-4 text-right border-r border-blue-500 w-[19%]">Price</th>
+                            <th class="py-2.5 px-3 sm:px-4 text-right w-[19%]">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-blue-200">
+                            <td id="rcpDescription" class="py-3 px-3 sm:px-4 text-left font-bold text-slate-800 border-r border-blue-200 leading-snug"></td>
+                            <td id="rcpQty" class="py-3 px-2 sm:px-3 text-center font-bold text-slate-800 border-r border-blue-200">1</td>
+                            <td id="rcpPrice" class="py-3 px-3 sm:px-4 text-right font-bold text-slate-800 border-r border-blue-200"></td>
+                            <td id="rcpAmount" class="py-3 px-3 sm:px-4 text-right font-bold text-slate-800"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Ringkasan & Stempel "Paid" -->
+            <div class="relative py-3">
+                <!-- STAMP PAID (WATERMARK STEMPEL HIJAU MIRING) -->
+                <div class="absolute right-36 sm:right-48 top-1 pointer-events-none select-none z-10" style="transform: rotate(-25deg);">
+                    <div class="border-4 sm:border-[5px] border-emerald-500 text-emerald-500 rounded-2xl sm:rounded-3xl px-5 py-0.5 sm:px-6 sm:py-1 font-black text-2xl sm:text-3xl tracking-wider uppercase opacity-90 shadow-2xs" style="border-color: #22c55e; color: #22c55e;">
+                        Paid
+                    </div>
+                </div>
+
+                <!-- Summary Box (Rata Kanan) -->
+                <div class="flex justify-end">
+                    <div class="w-full sm:w-72 space-y-1 text-xs sm:text-sm font-semibold">
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-700 font-bold">Subtotal</span>
+                            <span id="rcpSubtotal" class="text-slate-900 font-extrabold text-right"></span>
+                        </div>
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-700 font-bold">Total</span>
+                            <span id="rcpTotal" class="text-slate-900 font-extrabold text-right"></span>
+                        </div>
+                        <div class="flex justify-between py-1 border-b border-slate-100">
+                            <span class="text-slate-700 font-bold">Paid</span>
+                            <span id="rcpPaid" class="text-slate-900 font-extrabold text-right"></span>
+                        </div>
+                        <div class="flex justify-between items-center bg-blue-600 text-white px-3 py-2 font-black text-xs sm:text-sm tracking-wide" style="background-color: #2563eb; color: #ffffff;">
+                            <span>BALANCE DUE</span>
+                            <span id="rcpBalanceDue" class="font-black">Rp0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer: Syarat atau Catatan & Tanda Tangan -->
+            <div class="grid grid-cols-2 gap-4 pt-6 mt-4 items-end border-t border-transparent">
+                <!-- Syarat atau Catatan -->
+                <div class="space-y-1">
+                    <h4 class="text-xs sm:text-sm font-extrabold text-slate-900">Syarat atau Catatan</h4>
+                    <p class="text-xs text-slate-600 font-medium">Terima kasih atas bisnis Anda.</p>
+                </div>
+
+                <!-- Tanda Tangan Digital Pengelola -->
+                <div class="flex flex-col items-end">
+                    <div class="flex flex-col items-center">
+                        <svg class="w-36 h-20 text-slate-900" viewBox="0 0 200 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M 25,70 C 15,65 15,45 35,40 C 50,36 60,50 55,68 C 50,82 25,85 18,80 C 10,75 15,65 30,62 C 60,58 110,65 155,75" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M 58,22 C 60,15 65,16 66,75 C 66,82 62,85 58,80" stroke="#0f172a" stroke-width="2.8" stroke-linecap="round"/>
+                            <path d="M 66,32 C 85,25 90,40 88,72 C 87,80 92,85 96,78 C 102,68 104,50 102,70 C 101,78 105,82 110,76" stroke="#0f172a" stroke-width="2.6" stroke-linecap="round"/>
+                            <path d="M 20,55 L 140,55" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round"/>
+                        </svg>
+                        <p class="text-xs font-bold text-slate-800 tracking-wide mt-1">Pengelola Kost WISMA S</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer / Action Buttons (No Print) -->
+            <div class="no-print pt-6 mt-6 border-t border-slate-200 flex justify-end gap-3">
+                <button type="button" onclick="closeReceiptModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition flex items-center cursor-pointer">
                     Tutup
+                </button>
+                <button type="button" onclick="printReceipt()" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs rounded-xl transition flex items-center cursor-pointer shadow-md">
+                    <i class="fa-solid fa-print mr-2"></i> Cetak Invoice
                 </button>
             </div>
         </div>
@@ -1236,13 +1321,15 @@
                 // Detail Data object for modal
                 const detailData = {
                     payment_id: p.id,
-                    invoice_no: '#INV-' + String(p.id).padStart(5, '0'),
+                    title: p.title || '',
+                    invoice_no: 'INV' + String(p.id).padStart(5, '0'),
                     status: p.status,
                     has_paid: hasPaid,
                     is_confirmed: isConfirmed,
                     amount: Number(p.amount).toLocaleString('id-ID'),
                     due_date: p.due_date || '-',
                     pay_date: payDate,
+                    raw_created_at: p.created_at || '',
                     method: methodClean || (hasPaid ? 'Transfer Bank / Online' : 'Belum Memilih Metode'),
                     room_number: roomNumber,
                     room_type: roomType,
@@ -1259,7 +1346,7 @@
                 let invoiceBtn = '';
                 if (isApproved && isConfirmed) {
                     invoiceBtn = `
-                        <button onclick="openReceiptModal(${p.id}, '${(p.title || '').replace(/'/g, "\\'")}', ${p.amount}, '${p.due_date || ''}', '${(methodClean || 'BCA Virtual Account').replace(/'/g, "\\'")}', '${payDate}', '${tenantName.replace(/'/g, "\\'")}', '${roomNumber}')" class="inline-flex items-center px-3 py-1.5 bg-white hover:bg-slate-50 text-navy-950 font-bold text-xs rounded-lg transition border border-slate-300 shadow-2xs group focus:outline-none cursor-pointer" title="Lihat Invoice Pembayaran">
+                        <button onclick="openReceiptModal(${p.id}, '${(p.title || '').replace(/'/g, "\\'")}', ${p.amount}, '${p.due_date || ''}', '${(methodClean || 'BCA Virtual Account').replace(/'/g, "\\'")}', '${p.created_at || payDate}', '${tenantName.replace(/'/g, "\\'")}', '${roomNumber}', '${(tenantPhone || '').replace(/'/g, "\\'")}', '${(tenantEmail || '').replace(/'/g, "\\'")}')" class="inline-flex items-center px-3 py-1.5 bg-white hover:bg-slate-50 text-navy-950 font-bold text-xs rounded-lg transition border border-slate-300 shadow-2xs group focus:outline-none cursor-pointer" title="Lihat Invoice Pembayaran">
                             <i class="fa-solid fa-file-invoice mr-1.5 text-orange-600"></i> Invoice
                         </button>
                     `;
@@ -2035,14 +2122,137 @@
             }
         }
 
-        function openReceiptModal(id, title, amount, dueDate, method, datePaid, userName, roomInfo) {
-            document.getElementById('rcpInvoiceId').textContent = '#INV-' + String(id).padStart(5, '0');
-            document.getElementById('rcpTitle').textContent = title;
-            document.getElementById('rcpAmount').textContent = 'Rp ' + Number(amount).toLocaleString('id-ID');
-            document.getElementById('rcpMethod').textContent = method || 'Transfer Bank / Online';
-            document.getElementById('rcpDate').textContent = datePaid || dueDate;
-            document.getElementById('rcpUser').textContent = userName || '-';
-            document.getElementById('rcpRoom').textContent = roomInfo || '-';
+        function formatInvoiceDate(rawDate) {
+            if (!rawDate || rawDate === '-') return '-';
+            const str = String(rawDate).trim();
+            if (/^\d{2}\/\d{2}\/\d{4}$/.test(str)) return str;
+
+            const parsed = new Date(str);
+            if (!isNaN(parsed.getTime()) && !/^\d{1,2}\s+[a-zA-Z]+/.test(str)) {
+                const dd = String(parsed.getDate()).padStart(2, '0');
+                const mm = String(parsed.getMonth() + 1).padStart(2, '0');
+                const yyyy = parsed.getFullYear();
+                return `${dd}/${mm}/${yyyy}`;
+            }
+
+            const idMonths = {
+                'jan': '01', 'januari': '01',
+                'feb': '02', 'peb': '02', 'februari': '02',
+                'mar': '03', 'maret': '03',
+                'apr': '04', 'april': '04',
+                'mei': '05', 'may': '05',
+                'jun': '06', 'juni': '06',
+                'jul': '07', 'juli': '07',
+                'agu': '08', 'ags': '08', 'agustus': '08', 'aug': '08',
+                'sep': '09', 'september': '09',
+                'okt': '10', 'oktober': '10', 'oct': '10',
+                'nop': '11', 'nov': '11', 'november': '11',
+                'des': '12', 'desember': '12', 'dec': '12'
+            };
+
+            const match = str.match(/^(\d{1,2})\s+([a-zA-Z]+)\s+(\d{4})/);
+            if (match) {
+                const dd = match[1].padStart(2, '0');
+                const mKey = match[2].toLowerCase();
+                const mm = idMonths[mKey] || '01';
+                const yyyy = match[3];
+                return `${dd}/${mm}/${yyyy}`;
+            }
+
+            return str;
+        }
+
+        function openReceiptModal(id, title, amount, dueDate, method, datePaid, userName, roomInfo, userPhone, userEmail) {
+            const p = (globalData.payments || []).find(item => item.id == id);
+
+            let tenantUser = null;
+            let matchingRoom = null;
+            if (p) {
+                if (p.user) {
+                    tenantUser = p.user;
+                }
+                if (p.room) {
+                    matchingRoom = p.room;
+                    if (!tenantUser && p.room.bookings && p.room.bookings.length > 0) {
+                        const b = p.room.bookings.find(x => x.status === 'confirmed') || p.room.bookings[0];
+                        if (b && b.user) tenantUser = b.user;
+                    }
+                }
+            }
+
+            const resolvedName = (userName && userName !== '-') ? userName : ((tenantUser && tenantUser.name) ? tenantUser.name : (p && p.tenant_name ? p.tenant_name : 'Agung'));
+            const resolvedRoom = (roomInfo && roomInfo !== '-') ? roomInfo : ((matchingRoom && matchingRoom.number) ? matchingRoom.number : 'Kamar 102');
+            const resolvedPhone = (userPhone && userPhone !== '-') ? userPhone : ((tenantUser && tenantUser.phone) ? tenantUser.phone : '-');
+            const resolvedEmail = (userEmail && userEmail !== '-') ? userEmail : ((tenantUser && tenantUser.email) ? tenantUser.email : '-');
+
+            const invNum = 'INV' + String(id).padStart(5, '0');
+            const elInv = document.getElementById('rcpInvoiceNo');
+            if (elInv) elInv.textContent = invNum;
+
+            const elName = document.getElementById('rcpTenantName');
+            if (elName) elName.textContent = resolvedName;
+
+            const elRoom = document.getElementById('rcpRoomNumber');
+            if (elRoom) elRoom.textContent = resolvedRoom;
+
+            const elPhone = document.getElementById('rcpTenantPhone');
+            if (elPhone) elPhone.textContent = resolvedPhone;
+
+            const elEmail = document.getElementById('rcpTenantEmail');
+            if (elEmail) elEmail.textContent = resolvedEmail;
+
+            // Date & Due Date
+            const rawPayDate = datePaid || (p ? p.created_at : null) || new Date();
+            const rawDueDate = dueDate || (p ? p.due_date : null);
+            const elDate = document.getElementById('rcpDate');
+            if (elDate) elDate.textContent = formatInvoiceDate(rawPayDate);
+            const elDue = document.getElementById('rcpDueDate');
+            if (elDue) elDue.textContent = formatInvoiceDate(rawDueDate);
+
+            // Description
+            let resolvedDesc = title || (p ? p.title : '');
+            if (!resolvedDesc || resolvedDesc === '-') {
+                resolvedDesc = `${resolvedRoom} - Sewa Kamar`;
+            } else if (resolvedRoom && resolvedRoom !== '-' && !resolvedDesc.toLowerCase().includes('kamar')) {
+                resolvedDesc = `${resolvedRoom} - ${resolvedDesc}`;
+            }
+            const elDesc = document.getElementById('rcpDescription');
+            if (elDesc) elDesc.textContent = resolvedDesc;
+
+            // Nominal
+            const numAmount = Number(amount || (p ? p.amount : 0));
+            const formattedAmount = 'Rp' + numAmount.toLocaleString('id-ID');
+
+            const elPrice = document.getElementById('rcpPrice');
+            if (elPrice) elPrice.textContent = formattedAmount;
+
+            const elAmount = document.getElementById('rcpAmount');
+            if (elAmount) elAmount.textContent = formattedAmount;
+
+            const elSub = document.getElementById('rcpSubtotal');
+            if (elSub) elSub.textContent = formattedAmount;
+
+            const elTot = document.getElementById('rcpTotal');
+            if (elTot) elTot.textContent = formattedAmount;
+
+            const elPaid = document.getElementById('rcpPaid');
+            if (elPaid) elPaid.textContent = formattedAmount;
+
+            const elBal = document.getElementById('rcpBalanceDue');
+            if (elBal) elBal.textContent = 'Rp0';
+
+            // Backward compatibility
+            const elOldTitle = document.getElementById('rcpTitle');
+            if (elOldTitle) elOldTitle.textContent = resolvedDesc;
+            const elOldInv = document.getElementById('rcpInvoiceId');
+            if (elOldInv) elOldInv.textContent = invNum;
+            const elOldUser = document.getElementById('rcpUser');
+            if (elOldUser) elOldUser.textContent = resolvedName;
+            const elOldRoom = document.getElementById('rcpRoom');
+            if (elOldRoom) elOldRoom.textContent = resolvedRoom;
+            const elOldMethod = document.getElementById('rcpMethod');
+            if (elOldMethod) elOldMethod.textContent = method || (p ? p.payment_method : 'Transfer Bank / Online');
+
             document.getElementById('receiptModal').classList.remove('hidden');
         }
 
@@ -2101,7 +2311,7 @@
                     if (d.is_confirmed) {
                         desc.textContent = `Status: LUNAS • Pembayaran telah terkonfirmasi via ${d.method}`;
                         actionContainer.innerHTML = `
-                            <button type="button" onclick="closePaymentRoomDetailModal(); openReceiptModal(${d.payment_id}, 'Pembayaran Sewa ${d.room_number.replace(/'/g, "\\'")}', '${d.amount.replace(/[^0-9]/g, '')}', '${d.due_date}', '${d.method.replace(/'/g, "\\'")}', '${d.pay_date}', '${d.tenant_name.replace(/'/g, "\\'")}', '${d.room_number.replace(/'/g, "\\'")}')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition shadow-sm flex items-center justify-center cursor-pointer" title="Status Lunas (Klik untuk melihat invoice)">
+                            <button type="button" onclick="closePaymentRoomDetailModal(); openReceiptModal(${d.payment_id}, '${(d.title || ('Pembayaran Sewa ' + d.room_number)).replace(/'/g, "\\'")}', '${d.amount.replace(/[^0-9]/g, '')}', '${d.due_date}', '${d.method.replace(/'/g, "\\'")}', '${d.raw_created_at || d.pay_date}', '${d.tenant_name.replace(/'/g, "\\'")}', '${d.room_number.replace(/'/g, "\\'")}', '${(d.tenant_phone || '').replace(/'/g, "\\'")}', '${(d.tenant_email || '').replace(/'/g, "\\'")}')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition shadow-sm flex items-center justify-center cursor-pointer" title="Status Lunas (Klik untuk melihat invoice)">
                                 <i class="fa-solid fa-circle-check mr-1.5"></i> Status Lunas (Terkonfirmasi)
                             </button>
                         `;
