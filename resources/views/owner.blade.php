@@ -153,7 +153,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <!-- 3 STATS OVERVIEW CARDS (SIMPLE, SLIM, NO ICONS, NOT A BUTTON) -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 mb-8">
+            <div id="overviewStatsCards" class="grid grid-cols-1 md:grid-cols-3 gap-3.5 mb-8">
                 
                 <!-- Card 1: Okupansi Kamar -->
                 <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs">
@@ -320,27 +320,33 @@
                     <!-- Ringkasan Arus Kas Keuangan -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                            <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1">Total Pemasukan (Kas Masuk)</span>
+                            <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1">Total Pemasukan</span>
                             <p class="text-2xl font-black text-emerald-600" id="finTotalIncome">Rp 0</p>
-                            <p class="text-[11px] text-slate-500 mt-2 font-medium">
-                                <i class="fa-solid fa-circle-arrow-down text-emerald-500 mr-1"></i> Dari seluruh pembayaran sewa lunas
-                            </p>
+                            <div class="mt-2.5">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200/80">
+                                    Dari seluruh pembayaran sewa lunas
+                                </span>
+                            </div>
                         </div>
 
                         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                            <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1">Total Pengeluaran (Kas Keluar)</span>
+                            <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1">Total Pengeluaran</span>
                             <p class="text-2xl font-black text-rose-600" id="finTotalExpense">Rp 0</p>
-                            <p class="text-[11px] text-slate-500 mt-2 font-medium">
-                                <i class="fa-solid fa-circle-arrow-up text-rose-500 mr-1"></i> Biaya operasional kost terverifikasi
-                            </p>
+                            <div class="mt-2.5">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold bg-rose-50 text-rose-800 border border-rose-200/80">
+                                    Biaya operasional kost terverifikasi
+                                </span>
+                            </div>
                         </div>
 
                         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                            <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1">Saldo Bersih Saat Ini</span>
+                            <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1">Saldo Bersih</span>
                             <p class="text-2xl font-black text-navy-950" id="finNetBalance">Rp 0</p>
-                            <p class="text-[11px] text-slate-500 mt-2 font-medium">
-                                <i class="fa-solid fa-scale-balanced text-orange-500 mr-1"></i> Total Kas Masuk - Total Kas Keluar
-                            </p>
+                            <div class="mt-2.5">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold bg-blue-50 text-blue-900 border border-blue-200/80">
+                                    Total Kas Masuk - Total Kas Keluar
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -348,25 +354,25 @@
                     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                         <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/70 flex flex-wrap items-center justify-between gap-3">
                             <div>
-                                <h2 class="text-base font-extrabold text-navy-950 uppercase tracking-wider">Kelola Keuangan Keluar & Masuk Kost</h2>
+                                <h2 class="text-base font-extrabold text-navy-950 uppercase tracking-wider">Kelola Keuangan</h2>
                                 <p class="text-xs text-slate-500 mt-0.5">Catatan seluruh arus kas pemasukan sewa kamar dan biaya operasional kost.</p>
                             </div>
                             <div class="flex items-center space-x-2">
                                 <div class="relative custom-dropdown-wrapper">
                                     <input type="hidden" id="filterFinanceType" value="all">
-                                    <button type="button" onclick="toggleOwnerDropdown('FinanceType', event)" id="btnFilterFinanceType" class="bg-slate-50 hover:bg-white border border-slate-300 hover:border-slate-400 text-slate-900 text-xs rounded-xl px-3.5 py-2 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:outline-none font-medium flex items-center justify-between transition shadow-2xs min-w-[210px]">
-                                        <span id="displayFilterFinanceType" class="truncate text-left font-semibold">Semua Transaksi (Keluar & Masuk)</span>
+                                    <button type="button" onclick="toggleOwnerDropdown('FinanceType', event)" id="btnFilterFinanceType" class="bg-slate-50 hover:bg-white border border-slate-300 hover:border-slate-400 text-slate-900 text-xs rounded-xl px-3.5 py-2 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:outline-none font-medium flex items-center justify-between transition shadow-2xs min-w-[170px]">
+                                        <span id="displayFilterFinanceType" class="truncate text-left font-semibold">Semua Transaksi</span>
                                         <i id="arrowFilterFinanceType" class="fa-solid fa-chevron-down text-slate-500 text-[10px] shrink-0 ml-2 transition-transform duration-200"></i>
                                     </button>
                                     <div id="menuFilterFinanceType" class="hidden absolute left-0 top-full mt-1.5 z-50 bg-white rounded-xl shadow-xl border border-slate-200 p-1 space-y-0.5 min-w-full">
-                                        <div onclick="selectOwnerFilterOption('FinanceType', 'all', 'Semua Transaksi (Keluar & Masuk)')" data-val="all" class="finance-type-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-semibold text-slate-900 bg-slate-100 truncate">
-                                            Semua Transaksi (Keluar & Masuk)
+                                        <div onclick="selectOwnerFilterOption('FinanceType', 'all', 'Semua Transaksi')" data-val="all" class="finance-type-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-semibold text-slate-900 bg-slate-100 truncate">
+                                            Semua Transaksi
                                         </div>
-                                        <div onclick="selectOwnerFilterOption('FinanceType', 'in', 'Hanya Uang Masuk (Pemasukan)')" data-val="in" class="finance-type-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
-                                            Hanya Uang Masuk (Pemasukan)
+                                        <div onclick="selectOwnerFilterOption('FinanceType', 'in', 'Pemasukan')" data-val="in" class="finance-type-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
+                                            Pemasukan
                                         </div>
-                                        <div onclick="selectOwnerFilterOption('FinanceType', 'out', 'Hanya Uang Keluar (Pengeluaran)')" data-val="out" class="finance-type-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
-                                            Hanya Uang Keluar (Pengeluaran)
+                                        <div onclick="selectOwnerFilterOption('FinanceType', 'out', 'Pengeluaran')" data-val="out" class="finance-type-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
+                                            Pengeluaran
                                         </div>
                                     </div>
                                 </div>
@@ -728,14 +734,16 @@
     <!-- ========================================================================= -->
     <div id="addExpenseModal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative border border-slate-200">
-            <div class="flex justify-between items-center pb-3 border-b border-slate-200 mb-4">
-                <div>
-                    <h3 class="font-extrabold text-base text-navy-950">Catat Pengeluaran Operasional</h3>
-                    <p class="text-xs text-slate-500">Pencatatan arus kas keluar gedung kost</p>
-                </div>
-                <button onclick="closeAddExpenseModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition">
-                    <i class="fa-solid fa-xmark"></i>
+            <!-- Modal Header: Logo Kost di bagian atas & center, teks judul & subjudul center -->
+            <div class="relative pb-4 border-b border-slate-200 mb-5 text-center">
+                <button type="button" onclick="closeAddExpenseModal()" class="absolute top-0 right-0 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition focus:outline-none" title="Tutup Modal">
+                    <i class="fa-solid fa-xmark text-sm"></i>
                 </button>
+                <div class="w-14 h-14 rounded-2xl bg-white shadow-sm border border-slate-200 p-1 flex items-center justify-center overflow-hidden mx-auto mb-2.5">
+                    <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
+                </div>
+                <h3 class="font-extrabold text-base text-navy-950">Catat Pengeluaran Operasional</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Pencatatan arus kas keluar gedung kost</p>
             </div>
 
             <form onsubmit="submitAddExpense(event)" class="space-y-4 text-xs">
@@ -747,18 +755,35 @@
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Kategori</label>
-                        <select id="expCategory" required class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:outline-none text-xs font-semibold bg-white">
-                            <option value="Listrik & Air">Listrik & Air</option>
-                            <option value="Internet & WiFi">Internet & WiFi</option>
-                            <option value="Kebersihan & Keamanan">Kebersihan & Keamanan</option>
-                            <option value="Pemeliharaan Fasilitas">Pemeliharaan Fasilitas</option>
-                            <option value="Operasional Lainnya">Operasional Lainnya</option>
-                        </select>
+                        <div class="relative custom-dropdown-wrapper">
+                            <input type="hidden" id="expCategory" value="Listrik & Air">
+                            <button type="button" onclick="toggleExpenseCategoryDropdown(event)" id="btnExpCategory" class="w-full bg-slate-50 hover:bg-white border border-slate-300 hover:border-slate-400 text-slate-900 text-xs rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:outline-none font-semibold flex items-center justify-between transition shadow-2xs">
+                                <span id="displayExpCategory" class="truncate text-left font-semibold">Listrik & Air</span>
+                                <i id="arrowExpCategory" class="fa-solid fa-chevron-down text-slate-500 text-[10px] shrink-0 ml-1.5 transition-transform duration-200"></i>
+                            </button>
+                            <div id="menuExpCategory" class="hidden absolute left-0 top-full mt-1.5 z-50 bg-white rounded-xl shadow-xl border border-slate-200 p-1 space-y-0.5 min-w-full">
+                                <div onclick="selectExpenseCategory('Listrik & Air')" data-val="Listrik & Air" class="exp-cat-opt px-2.5 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-semibold text-slate-900 bg-slate-100 truncate">
+                                    Listrik & Air
+                                </div>
+                                <div onclick="selectExpenseCategory('Internet & WiFi')" data-val="Internet & WiFi" class="exp-cat-opt px-2.5 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
+                                    Internet & WiFi
+                                </div>
+                                <div onclick="selectExpenseCategory('Kebersihan & Keamanan')" data-val="Kebersihan & Keamanan" class="exp-cat-opt px-2.5 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
+                                    Kebersihan & Keamanan
+                                </div>
+                                <div onclick="selectExpenseCategory('Pemeliharaan Fasilitas')" data-val="Pemeliharaan Fasilitas" class="exp-cat-opt px-2.5 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
+                                    Pemeliharaan Fasilitas
+                                </div>
+                                <div onclick="selectExpenseCategory('Operasional Lainnya')" data-val="Operasional Lainnya" class="exp-cat-opt px-2.5 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
+                                    Operasional Lainnya
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div>
                         <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Tanggal</label>
-                        <input type="text" id="expDate" required placeholder="Contoh: 05 Okt 2026" value="{{ \Carbon\Carbon::now()->translatedFormat('d M Y') }}" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:outline-none text-xs font-semibold">
+                        <input type="text" id="expDate" required placeholder="Contoh: 05 Okt 2026" value="{{ \Carbon\Carbon::now()->translatedFormat('d M Y') }}" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:outline-none text-xs font-semibold bg-slate-50 hover:bg-white">
                     </div>
                 </div>
 
@@ -891,6 +916,16 @@
                     }
                 }
             });
+
+            // Sembunyikan overview stats (Okupansi Kamar, tenggat waktu bayar, pengaduan aktif) pada halaman keuangan
+            const overviewStats = document.getElementById('overviewStatsCards');
+            if (overviewStats) {
+                if (section === 'finances') {
+                    overviewStats.classList.add('hidden');
+                } else {
+                    overviewStats.classList.remove('hidden');
+                }
+            }
 
             // Update URL hash without reload
             if (history.pushState && hashes[section]) {
@@ -1209,10 +1244,12 @@
             (payments || []).forEach(p => {
                 if (p.status === 'approved') {
                     const d = p.created_at ? new Date(p.created_at) : new Date();
+                    const tenantName = (p.user && p.user.name) ? p.user.name : ((p.room && p.room.bookings && p.room.bookings.length > 0 && p.room.bookings[0].user) ? p.room.bookings[0].user.name : '');
                     transactions.push({
                         type: 'in',
                         date: p.created_at ? new Date(p.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : p.due_date,
-                        title: p.title + (p.user ? ` (${p.user.name})` : ''),
+                        title: p.title,
+                        tenantName: tenantName,
                         category: 'Sewa Kamar',
                         amount: Number(p.amount),
                         note: 'Pembayaran sewa lunas terverifikasi',
@@ -1268,7 +1305,10 @@
                 return `
                     <tr class="hover:bg-slate-50/80 transition">
                         <td class="py-3.5 px-4 font-medium text-slate-600 whitespace-nowrap">${t.date}</td>
-                        <td class="py-3.5 px-4 font-bold text-navy-950">${t.title}</td>
+                        <td class="py-3.5 px-4">
+                            <span class="font-bold text-navy-950 block">${t.title}</span>
+                            ${t.category === 'Sewa Kamar' && t.tenantName ? `<span class="font-bold text-navy-950 block text-xs mt-0.5">${t.tenantName}</span>` : ''}
+                        </td>
                         <td class="py-3.5 px-4">
                             <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700">
                                 ${t.category}
@@ -1373,6 +1413,11 @@
                 if (menu) menu.classList.add('hidden');
                 if (arrow) arrow.style.transform = 'rotate(0deg)';
             });
+
+            const expMenu = document.getElementById('menuExpCategory');
+            const expArrow = document.getElementById('arrowExpCategory');
+            if (expMenu) expMenu.classList.add('hidden');
+            if (expArrow) expArrow.style.transform = 'rotate(0deg)';
 
             document.querySelectorAll('[id^="menuPeriod-"]').forEach(menu => {
                 menu.classList.add('hidden');
@@ -1498,6 +1543,50 @@
             if (wrapper) wrapper.style.zIndex = 'auto';
 
             updateRentalPeriod(roomId, period);
+        }
+
+        // Custom Dropdown Kategori Pengeluaran (Modal Tambah Kas Keluar)
+        function toggleExpenseCategoryDropdown(event) {
+            if (event) event.stopPropagation();
+            const menu = document.getElementById('menuExpCategory');
+            const arrow = document.getElementById('arrowExpCategory');
+            if (!menu) return;
+
+            const isHidden = menu.classList.contains('hidden');
+            closeAllCustomDropdowns();
+
+            if (isHidden) {
+                menu.classList.remove('hidden');
+                if (arrow) arrow.style.transform = 'rotate(180deg)';
+            } else {
+                menu.classList.add('hidden');
+                if (arrow) arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function selectExpenseCategory(val) {
+            const input = document.getElementById('expCategory');
+            if (input) input.value = val;
+
+            const display = document.getElementById('displayExpCategory');
+            if (display) display.textContent = val;
+
+            const menu = document.getElementById('menuExpCategory');
+            if (menu) {
+                menu.querySelectorAll('.exp-cat-opt').forEach(item => {
+                    if (item.dataset.val === val) {
+                        item.classList.add('bg-slate-100', 'font-semibold');
+                        item.classList.remove('font-medium');
+                    } else {
+                        item.classList.remove('bg-slate-100', 'font-semibold');
+                        item.classList.add('font-medium');
+                    }
+                });
+                menu.classList.add('hidden');
+            }
+
+            const arrow = document.getElementById('arrowExpCategory');
+            if (arrow) arrow.style.transform = 'rotate(0deg)';
         }
 
         // Close dropdown when clicked outside
@@ -1866,6 +1955,7 @@
             document.getElementById('expTitle').value = '';
             document.getElementById('expAmount').value = '';
             document.getElementById('expNote').value = '';
+            selectExpenseCategory('Listrik & Air');
             document.getElementById('addExpenseModal').classList.remove('hidden');
         }
 
