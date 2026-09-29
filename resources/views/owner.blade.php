@@ -261,7 +261,7 @@
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                     <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/70 flex flex-wrap items-center justify-between gap-3">
                         <div>
-                            <h2 class="text-base font-extrabold text-navy-950 uppercase tracking-wider">Tenggat Waktu Bayar & Tagihan Penghuni</h2>
+                            <h2 class="text-base font-extrabold text-navy-950 uppercase tracking-wider">Tenggat Waktu Bayar & Tagihan</h2>
                             <p class="text-xs text-slate-500 mt-0.5">Pantau waktu jatuh tempo sewa, verifikasi bukti transfer masuk, serta konfirmasi status pelunasan penghuni.</p>
                         </div>
                         <div class="flex items-center space-x-2">
@@ -275,11 +275,11 @@
                                     <div onclick="selectOwnerFilterOption('PaymentStatus', 'all', 'Semua Status Tagihan')" data-val="all" class="payment-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-semibold text-slate-900 bg-slate-100 truncate">
                                         Semua Status Tagihan
                                     </div>
-                                    <div onclick="selectOwnerFilterOption('PaymentStatus', 'pending', 'Menunggu Verifikasi (Pending)')" data-val="pending" class="payment-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
-                                        Menunggu Verifikasi (Pending)
+                                    <div onclick="selectOwnerFilterOption('PaymentStatus', 'pending', 'Menunggu Verifikasi')" data-val="pending" class="payment-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
+                                        Menunggu Verifikasi
                                     </div>
-                                    <div onclick="selectOwnerFilterOption('PaymentStatus', 'approved', 'Lunas (Disetujui)')" data-val="approved" class="payment-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
-                                        Lunas (Disetujui)
+                                    <div onclick="selectOwnerFilterOption('PaymentStatus', 'approved', 'Lunas')" data-val="approved" class="payment-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
+                                        Lunas
                                     </div>
                                 </div>
                             </div>
@@ -291,13 +291,13 @@
                             <table class="w-full text-left border-collapse text-xs">
                                 <thead>
                                     <tr class="border-b border-slate-200 text-[11px] font-extrabold uppercase text-slate-500 tracking-wider bg-slate-50/80">
-                                        <th class="py-3 px-4">No. Invoice & Kamar</th>
+                                        <th class="py-3 px-4">No. Invoice</th>
                                         <th class="py-3 px-4">Nama Penghuni</th>
                                         <th class="py-3 px-4">Nominal</th>
                                         <th class="py-3 px-4">Tenggat Waktu Bayar</th>
                                         <th class="py-3 px-4">Metode Bayar & Bukti</th>
                                         <th class="py-3 px-4 text-center">Status</th>
-                                        <th class="py-3 px-4 text-center">Tindakan Owner</th>
+                                        <th class="py-3 px-4 text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="dueDateTableBody" class="divide-y divide-slate-100">
@@ -599,6 +599,87 @@
                 <button type="button" onclick="closeTenantModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition">
                     Tutup
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MODAL RINCIAN TAGIHAN & INFORMASI KAMAR PENGHUNI -->
+    <!-- ========================================================================= -->
+    <div id="paymentRoomDetailModal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative border border-slate-200 max-h-[90vh] overflow-y-auto">
+            <!-- Modal Header: Logo Kost di paling atas & center, teks judul & subjudul center -->
+            <div class="relative pb-4 border-b border-slate-200 mb-5 text-center">
+                <button onclick="closePaymentRoomDetailModal()" class="absolute top-0 right-0 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition focus:outline-none" title="Tutup Modal">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+                <div class="w-14 h-14 rounded-2xl bg-white shadow-sm border border-slate-200 p-1 flex items-center justify-center overflow-hidden mx-auto mb-2.5">
+                    <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
+                </div>
+                <h3 class="font-extrabold text-base text-navy-950">Rincian Tagihan & Informasi Kamar</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Detail kamar penghuni dan status pelunasan pembayaran</p>
+            </div>
+
+            <!-- Status Pembayaran Card (Menampilkan Berhasil atau Tidak) -->
+            <div id="prmStatusCard" class="rounded-xl p-4 mb-4 border flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div id="prmStatusIcon" class="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0">
+                        <!-- Icon -->
+                    </div>
+                    <div>
+                        <span id="prmStatusTitle" class="font-extrabold text-sm block"></span>
+                        <p id="prmStatusDesc" class="text-xs text-slate-500 mt-0.5"></p>
+                    </div>
+                </div>
+                <div class="text-right shrink-0">
+                    <span class="text-[10px] uppercase font-bold text-slate-400 block">Nominal</span>
+                    <span id="prmAmount" class="font-black text-sm text-navy-950"></span>
+                </div>
+            </div>
+
+            <!-- Rincian Informasi Kamar & Penghuni Terintegrasi -->
+            <div class="space-y-3 mb-5">
+                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Informasi Kamar & Penghuni</div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                        <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider mb-0.5">Kamar</span>
+                        <span class="font-bold text-navy-950" id="prmRoomNumber">-</span>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                        <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider mb-0.5">Tipe Kamar</span>
+                        <span class="font-bold text-navy-950" id="prmRoomType">-</span>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                        <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider mb-0.5">Nama Penghuni</span>
+                        <span class="font-bold text-navy-950" id="prmTenantName">-</span>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                        <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider mb-0.5">Periode Sewa</span>
+                        <span class="font-bold text-orange-600" id="prmRentalPeriod">-</span>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                        <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider mb-0.5">Tarif Sewa Kamar</span>
+                        <span class="font-bold text-slate-800" id="prmRoomPrice">-</span>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                        <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider mb-0.5">Tenggat Waktu Bayar</span>
+                        <span class="font-bold text-orange-700" id="prmDueDate">-</span>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                        <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider mb-0.5">Nomor HP / WhatsApp</span>
+                        <span class="font-bold text-slate-800" id="prmTenantPhone">-</span>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                        <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider mb-0.5">Email Penghuni</span>
+                        <span class="font-bold text-slate-800 break-all" id="prmTenantEmail">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons Footer Modal -->
+            <div id="prmActionContainer" class="pt-3 border-t border-slate-100 flex gap-2">
+                <!-- Action button (e.g. Verifikasi Lunas atau Lihat Struk) -->
             </div>
         </div>
     </div>
@@ -996,8 +1077,26 @@
             tbody.innerHTML = payments.map(p => {
                 const isPending = p.status === 'pending';
                 const isApproved = p.status === 'approved';
-                const userName = p.user ? p.user.name : 'Penghuni';
-                const roomInfo = p.room ? p.room.number : '-';
+
+                // Ambil data kamar & penghuni terintegrasi dari globalData.rooms
+                const matchingRoom = (globalData && globalData.rooms) 
+                    ? globalData.rooms.find(r => r.id === (p.room_id || (p.room ? p.room.id : null)) || r.number === (p.room ? p.room.number : null))
+                    : null;
+
+                const activeBooking = (matchingRoom && matchingRoom.bookings && matchingRoom.bookings.length > 0)
+                    ? matchingRoom.bookings[0]
+                    : null;
+
+                const tenantUser = (activeBooking && activeBooking.user) ? activeBooking.user : (p.user || null);
+                const tenantName = tenantUser ? tenantUser.name : (p.user ? p.user.name : 'Penghuni');
+                const rawRoomNum = matchingRoom ? matchingRoom.number : (p.room ? p.room.number : '-');
+                const roomNumber = rawRoomNum.toLowerCase().startsWith('kamar') ? rawRoomNum : `Kamar ${rawRoomNum}`;
+                const roomType = matchingRoom ? matchingRoom.type : (p.room ? p.room.type : '-');
+                const roomPrice = matchingRoom ? Number(matchingRoom.price).toLocaleString('id-ID') : Number(p.amount).toLocaleString('id-ID');
+                const rentalPeriod = matchingRoom ? (matchingRoom.rental_period || 'Bulanan') : 'Bulanan';
+                const startDate = activeBooking ? (activeBooking.start_date || '-') : '-';
+                const tenantEmail = tenantUser ? (tenantUser.email || '-') : '-';
+                const tenantPhone = tenantUser ? (tenantUser.phone || '-') : '-';
 
                 // Status Badge
                 let statusBadge = '';
@@ -1025,57 +1124,67 @@
                     `;
                 }
 
-                // Action Buttons
-                let actionBtns = '';
-                if (isPending) {
-                    actionBtns = `
-                        <div class="inline-flex items-center space-x-1.5">
-                            <button onclick="approvePayment(${p.id})" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[11px] transition shadow-2xs" title="Verifikasi Lunas">
-                                <i class="fa-solid fa-check mr-1"></i> Setujui
-                            </button>
-                            <button onclick="rejectPayment(${p.id})" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-lg text-[11px] transition border border-rose-200" title="Tolak">
-                                <i class="fa-solid fa-xmark mr-1"></i> Tolak
-                            </button>
-                        </div>
-                    `;
-                } else if (isApproved) {
-                    const payDate = p.created_at ? new Date(p.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : p.due_date;
-                    actionBtns = `
-                        <button onclick="openReceiptModal(${p.id}, '${(p.title || '').replace(/'/g, "\\'")}', ${p.amount}, '${p.due_date || ''}', '${(methodClean || 'BCA Virtual Account').replace(/'/g, "\\'")}', '${payDate}', '${userName.replace(/'/g, "\\'")}', '${roomInfo}')" class="inline-flex items-center px-3 py-1 bg-slate-100 hover:bg-slate-200 text-navy-950 font-bold text-[11px] rounded-lg transition border border-slate-300 shadow-2xs">
-                            <i class="fa-solid fa-receipt mr-1.5 text-orange-600"></i> Struk
+                const payDate = p.created_at ? new Date(p.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : (p.due_date || '-');
+
+                // Detail Data object for modal
+                const detailData = {
+                    payment_id: p.id,
+                    invoice_no: '#INV-' + String(p.id).padStart(5, '0'),
+                    status: p.status,
+                    amount: Number(p.amount).toLocaleString('id-ID'),
+                    due_date: p.due_date || '-',
+                    pay_date: payDate,
+                    method: methodClean || 'Transfer Bank / Online',
+                    room_number: roomNumber,
+                    room_type: roomType,
+                    room_price: roomPrice,
+                    rental_period: rentalPeriod,
+                    tenant_name: tenantName,
+                    tenant_email: tenantEmail,
+                    tenant_phone: tenantPhone,
+                    start_date: startDate
+                };
+                const detailDataAttr = encodeURIComponent(JSON.stringify(detailData));
+
+                // Action Column: jika berhasil (approved/lunas) tampilkan struk/invoice, jika belum -
+                let actionBtn = '';
+                if (isApproved) {
+                    actionBtn = `
+                        <button onclick="openReceiptModal(${p.id}, '${(p.title || '').replace(/'/g, "\\'")}', ${p.amount}, '${p.due_date || ''}', '${(methodClean || 'BCA Virtual Account').replace(/'/g, "\\'")}', '${payDate}', '${tenantName.replace(/'/g, "\\'")}', '${roomNumber}')" class="inline-flex items-center px-3 py-1.5 bg-white hover:bg-slate-50 text-navy-950 font-bold text-xs rounded-lg transition border border-slate-300 shadow-2xs group focus:outline-none" title="Lihat Struk / Invoice Pembayaran">
+                            <i class="fa-solid fa-receipt mr-1.5 text-orange-600"></i> Struk / Invoice
                         </button>
                     `;
                 } else {
-                    actionBtns = `<span class="text-slate-400 font-semibold">-</span>`;
+                    actionBtn = `<span class="text-slate-400 font-semibold text-xs">-</span>`;
                 }
 
                 return `
                     <tr class="hover:bg-slate-50/80 transition ${isPending ? 'bg-amber-50/20' : ''}">
-                        <td class="py-4 px-4">
-                            <span class="font-mono font-bold text-navy-900 block text-[11px]">#INV-${String(p.id).padStart(5, '0')}</span>
-                            <span class="font-bold text-slate-800 text-xs">${p.title}</span>
-                            <span class="text-[10px] text-slate-400 block">Kamar: ${roomInfo}</span>
+                        <td class="py-3.5 px-4 whitespace-nowrap">
+                            <span class="font-mono font-bold text-navy-950 block text-xs">#INV-${String(p.id).padStart(5, '0')}</span>
+                            <span class="text-[11px] font-semibold text-slate-500 block mt-0.5">${roomNumber}</span>
                         </td>
-                        <td class="py-4 px-4 font-bold text-slate-900">
-                            ${userName}
-                            ${p.user && p.user.phone ? `<span class="text-[10px] text-slate-500 block font-normal">${p.user.phone}</span>` : ''}
+                        <td class="py-3.5 px-4 font-bold text-slate-900 text-xs whitespace-nowrap">
+                            ${tenantName}
                         </td>
-                        <td class="py-4 px-4 font-black text-slate-900 text-sm">
+                        <td class="py-3.5 px-4 font-black text-slate-900 text-xs whitespace-nowrap">
                             Rp ${Number(p.amount).toLocaleString('id-ID')}
                         </td>
-                        <td class="py-4 px-4 whitespace-nowrap">
-                            <span class="inline-flex items-center font-bold text-orange-700 bg-orange-50 px-2 py-0.5 rounded-md border border-orange-200 text-[11px]">
-                                <i class="fa-solid fa-calendar-day mr-1.5 text-orange-600"></i> ${p.due_date || '-'}
-                            </span>
+                        <td class="py-3.5 px-4 whitespace-nowrap">
+                            <button type="button" onclick="openPaymentRoomDetailModal('${detailDataAttr}')" class="inline-flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold bg-orange-50 hover:bg-orange-100 text-orange-800 border border-orange-200/80 transition shadow-2xs group focus:outline-none cursor-pointer" title="Klik untuk melihat rincian informasi kamar & status pembayaran">
+                                <i class="fa-solid fa-calendar-day text-orange-600"></i>
+                                <span>${p.due_date || '-'}</span>
+                                <i class="fa-solid fa-circle-info text-[11px] text-orange-500 group-hover:scale-110 transition-transform ml-0.5"></i>
+                            </button>
                         </td>
-                        <td class="py-4 px-4">
-                            <div class="space-y-1">
+                        <td class="py-3.5 px-4">
+                            <div class="space-y-1 text-xs">
                                 <span class="font-semibold text-slate-700 block">${methodClean || (isPending ? '<span class="text-slate-400 font-normal italic">-</span>' : 'Transfer Bank / Online')}</span>
                                 ${proofBtn}
                             </div>
                         </td>
-                        <td class="py-4 px-4 text-center whitespace-nowrap">${statusBadge}</td>
-                        <td class="py-4 px-4 text-center whitespace-nowrap">${actionBtns}</td>
+                        <td class="py-3.5 px-4 text-center whitespace-nowrap">${statusBadge}</td>
+                        <td class="py-3.5 px-4 text-center whitespace-nowrap">${actionBtn}</td>
                     </tr>
                 `;
             }).join('');
@@ -1639,6 +1748,75 @@
 
         function closeReceiptModal() {
             document.getElementById('receiptModal').classList.add('hidden');
+        }
+
+        // =========================================================================
+        // RINCIAN TAGIHAN & INFORMASI KAMAR MODAL
+        // =========================================================================
+        function openPaymentRoomDetailModal(dataAttr) {
+            try {
+                const d = JSON.parse(decodeURIComponent(dataAttr));
+
+                document.getElementById('prmRoomNumber').textContent = d.room_number;
+                document.getElementById('prmRoomType').textContent = d.room_type || '-';
+                document.getElementById('prmTenantName').textContent = d.tenant_name || '-';
+                document.getElementById('prmRentalPeriod').textContent = d.rental_period || 'Bulanan';
+                document.getElementById('prmRoomPrice').textContent = `Rp ${d.room_price}`;
+                document.getElementById('prmDueDate').textContent = d.due_date || '-';
+                document.getElementById('prmTenantPhone').textContent = d.tenant_phone || '-';
+                document.getElementById('prmTenantEmail').textContent = d.tenant_email || '-';
+                document.getElementById('prmAmount').textContent = `Rp ${d.amount}`;
+
+                // Status card styling
+                const card = document.getElementById('prmStatusCard');
+                const icon = document.getElementById('prmStatusIcon');
+                const title = document.getElementById('prmStatusTitle');
+                const desc = document.getElementById('prmStatusDesc');
+                const actionContainer = document.getElementById('prmActionContainer');
+
+                if (d.status === 'approved') {
+                    card.className = 'rounded-xl p-4 mb-4 border bg-emerald-50 border-emerald-200 text-emerald-950 flex items-center justify-between';
+                    icon.className = 'w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg shrink-0';
+                    icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+                    title.textContent = 'Pembayaran Berhasil (LUNAS)';
+                    desc.textContent = `Dibayar pada ${d.pay_date} via ${d.method}`;
+                    actionContainer.innerHTML = `
+                        <button type="button" onclick="closePaymentRoomDetailModal(); openReceiptModal(${d.payment_id}, 'Pembayaran Sewa ${d.room_number.replace(/'/g, "\\'")}', '${d.amount.replace(/[^0-9]/g, '')}', '${d.due_date}', '${d.method.replace(/'/g, "\\'")}', '${d.pay_date}', '${d.tenant_name.replace(/'/g, "\\'")}', '${d.room_number.replace(/'/g, "\\'")}')" class="w-full py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl text-xs transition shadow-sm flex items-center justify-center">
+                            <i class="fa-solid fa-receipt mr-1.5"></i> Lihat Struk / Invoice Pembayaran
+                        </button>
+                    `;
+                } else if (d.status === 'pending') {
+                    card.className = 'rounded-xl p-4 mb-4 border bg-amber-50 border-amber-200 text-amber-950 flex items-center justify-between';
+                    icon.className = 'w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-lg shrink-0';
+                    icon.innerHTML = '<i class="fa-solid fa-clock"></i>';
+                    title.textContent = 'Menunggu Verifikasi (Belum Berhasil)';
+                    desc.textContent = `Tenggat waktu bayar: ${d.due_date}`;
+                    actionContainer.innerHTML = `
+                        <button type="button" onclick="closePaymentRoomDetailModal(); approvePayment(${d.payment_id})" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition shadow-sm flex items-center justify-center">
+                            <i class="fa-solid fa-check mr-1.5"></i> Verifikasi Pembayaran Sebagai LUNAS
+                        </button>
+                    `;
+                } else {
+                    card.className = 'rounded-xl p-4 mb-4 border bg-rose-50 border-rose-200 text-rose-950 flex items-center justify-between';
+                    icon.className = 'w-10 h-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-lg shrink-0';
+                    icon.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
+                    title.textContent = 'Pembayaran Gagal / Ditolak';
+                    desc.textContent = 'Status pembayaran ditolak oleh pengelola';
+                    actionContainer.innerHTML = `
+                        <button type="button" onclick="closePaymentRoomDetailModal()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition">
+                            Tutup
+                        </button>
+                    `;
+                }
+
+                document.getElementById('paymentRoomDetailModal').classList.remove('hidden');
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function closePaymentRoomDetailModal() {
+            document.getElementById('paymentRoomDetailModal').classList.add('hidden');
         }
 
         // =========================================================================
