@@ -412,6 +412,13 @@
                                     </tbody>
                                 </table>
                             </div>
+
+                            <!-- Tombol Export Data Keuangan di Pojok Kanan Bawah -->
+                            <div class="mt-4 pt-3 flex justify-end border-t border-slate-100">
+                                <button type="button" onclick="exportFinances()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-sm transition flex items-center cursor-pointer" title="Export Laporan Keuangan ke format CSV / Excel">
+                                    <i class="fa-solid fa-file-excel mr-1.5 text-sm"></i> Export CSV / Excel
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -1341,6 +1348,128 @@
                     </tr>
                 `;
             }).join('');
+        }
+
+        // =========================================================================
+        // EKSPOR DATA KEUANGAN (PEMASUKAN, PENGELUARAN, SALDO BERSIH) KE CSV/EXCEL
+        // =========================================================================
+        function exportFinances() {
+            if (!globalData) {
+                alert('Data keuangan belum selesai dimuat.');
+                return;
+            }
+
+            const payments = globalData.payments || [];
+            const expenses = globalData.expenses || [];
+
+            let transactions = [];
+            let totalIncome = 0;
+            let totalExpense = 0;
+
+            // 1. Kas Masuk (Pemasukan dari sewa kamar yang status approved)
+            payments.forEach(p => {
+                if (p.status === 'approved') {
+                    const d = p.created_at ? new Date(p.created_at) : new Date();
+                    const tenantName = (p.user && p.user.name) ? p.user.name : ((p.room && p.room.bookings && p.room.bookings.length > 0 && p.room.bookings[0].user) ? p.room.bookings[0].user.name : '-');
+                    const amt = Number(p.amount) || 0;
+                    totalIncome += amt;
+                    transactions.push({
+                        type: 'in',
+                        typeLabel: 'Pemasukan',
+                        date: p.created_at ? new Date(p.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : p.due_date,
+                        title: p.title,
+                        tenantName: tenantName,
+                        category: 'Sewa Kamar',
+                        amount: amt,
+                        note: 'Pembayaran sewa lunas terverifikasi',
+                        rawDate: d
+                    });
+                }
+            });
+
+            // 2. Kas Keluar (Pengeluaran operasional kost)
+            expenses.forEach(e => {
+                const d = e.created_at ? new Date(e.created_at) : new Date();
+                let displayDate = e.date;
+                if (/^\d{4}-\d{2}-\d{2}$/.test(e.date)) {
+                    const [year, month, day] = e.date.split('-');
+                    const dt = new Date(year, month - 1, day);
+                    displayDate = dt.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+                }
+                const amt = Number(e.amount) || 0;
+                totalExpense += amt;
+                transactions.push({
+                    type: 'out',
+                    typeLabel: 'Pengeluaran',
+                    date: displayDate,
+                    title: e.title,
+                    tenantName: '-',
+                    category: e.category,
+                    amount: amt,
+                    note: e.note || '-',
+                    rawDate: d
+                });
+            });
+
+            // Urutkan transaksi terbaru lebih dahulu
+            transactions.sort((a, b) => b.rawDate - a.rawDate);
+
+            const netBalance = totalIncome - totalExpense;
+            const now = new Date();
+            const exportDateStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+            const escapeCsv = (val) => {
+                if (val === null || val === undefined) return '""';
+                const str = String(val).replace(/"/g, '""');
+                return `"${str}"`;
+            };
+
+            const rows = [];
+            rows.push([escapeCsv('LAPORAN KEUANGAN KOST WISMA S')]);
+            rows.push([escapeCsv(`Waktu Ekspor: ${exportDateStr}`)]);
+            rows.push([]);
+            rows.push([escapeCsv('RINGKASAN KEUANGAN')]);
+            rows.push([escapeCsv('Kategori'), escapeCsv('Keterangan'), escapeCsv('Nominal (Rp)')]);
+            rows.push([escapeCsv('Total Pemasukan'), escapeCsv('Dari seluruh pembayaran sewa lunas'), totalIncome]);
+            rows.push([escapeCsv('Total Pengeluaran'), escapeCsv('Biaya operasional kost terverifikasi'), totalExpense]);
+            rows.push([escapeCsv('Saldo Bersih'), escapeCsv('Total Kas Masuk - Total Kas Keluar'), netBalance]);
+            rows.push([]);
+            rows.push([escapeCsv('RINCIAN TRANSAKSI KEUANGAN')]);
+            rows.push([
+                escapeCsv('No'),
+                escapeCsv('Tanggal'),
+                escapeCsv('Deskripsi Transaksi'),
+                escapeCsv('Penghuni'),
+                escapeCsv('Kategori'),
+                escapeCsv('Arus Kas'),
+                escapeCsv('Nominal (Rp)'),
+                escapeCsv('Catatan')
+            ]);
+
+            transactions.forEach((t, idx) => {
+                rows.push([
+                    idx + 1,
+                    escapeCsv(t.date),
+                    escapeCsv(t.title),
+                    escapeCsv(t.tenantName),
+                    escapeCsv(t.category),
+                    escapeCsv(t.typeLabel),
+                    t.amount,
+                    escapeCsv(t.note)
+                ]);
+            });
+
+            const csvContent = '\uFEFF' + rows.map(r => r.join(',')).join('\r\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            const dateFile = now.toISOString().split('T')[0];
+            link.setAttribute('href', url);
+            link.setAttribute('download', `laporan_keuangan_wismas_${dateFile}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
         }
 
         // =========================================================================
