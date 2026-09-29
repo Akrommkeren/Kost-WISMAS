@@ -896,8 +896,8 @@
                         <h2 class="text-base sm:text-lg font-black tracking-tight leading-snug">
                             <span class="text-orange-600" style="color: #ea580c;">Kost</span> <span class="text-navy-900" style="color: #1e3a8a;">WISMA S</span>
                         </h2>
-                        <p class="text-[10px] sm:text-[11px] text-slate-500 max-w-[240px] sm:max-w-[270px] leading-relaxed font-normal mt-0.5">
-                            Griya Karang Indah Blok S-15, Karangpucung, Purwokerto Selatan 53142
+                        <p class="text-[10px] sm:text-[11px] text-slate-500 leading-relaxed font-medium mt-0.5">
+                            0821-7890-1234
                         </p>
                     </div>
                 </div>
