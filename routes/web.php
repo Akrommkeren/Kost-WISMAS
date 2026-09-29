@@ -31,6 +31,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/api/owner/rooms/{room}/price', [OwnerController::class, 'updateRoomPrice']);
     Route::post('/api/owner/rooms/{room}/rental-period', [OwnerController::class, 'updateRentalPeriod']);
     Route::post('/api/owner/payments/{payment}/approve', [OwnerController::class, 'approvePayment']);
+    Route::post('/api/owner/payments/{payment}/mark-paid', [OwnerController::class, 'markAsPaidByTenant']);
     Route::post('/api/owner/payments/{payment}/reject', [OwnerController::class, 'rejectPayment']);
     Route::post('/api/owner/complaints/{complaint}/status', [OwnerController::class, 'updateComplaintStatus']);
     Route::post('/api/owner/facilities', [OwnerController::class, 'storeFacility']);

@@ -297,7 +297,7 @@
                                         <th class="py-3 px-4">Tenggat Waktu Bayar</th>
                                         <th class="py-3 px-4">Metode Bayar & Bukti</th>
                                         <th class="py-3 px-4 text-center">Status</th>
-                                        <th class="py-3 px-4 text-center">Aksi</th>
+                                        <th class="py-3 px-4 text-center">Invoice</th>
                                     </tr>
                                 </thead>
                                 <tbody id="dueDateTableBody" class="divide-y divide-slate-100">
@@ -838,7 +838,7 @@
             <!-- Footer / Action Buttons -->
             <div class="pt-4 border-t border-slate-100 flex gap-2">
                 <button onclick="window.print()" class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition flex items-center justify-center">
-                    <i class="fa-solid fa-print mr-1.5"></i> Cetak Struk
+                    <i class="fa-solid fa-print mr-1.5"></i> Cetak Invoice
                 </button>
                 <button onclick="closeReceiptModal()" class="w-1/2 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs rounded-xl transition flex items-center justify-center">
                     Tutup
@@ -1077,6 +1077,7 @@
             tbody.innerHTML = payments.map(p => {
                 const isPending = p.status === 'pending';
                 const isApproved = p.status === 'approved';
+                const hasPaid = isApproved || Boolean(p.payment_method && p.payment_method.trim() !== '') || Boolean(p.proof_image);
 
                 // Ambil data kamar & penghuni terintegrasi dari globalData.rooms
                 const matchingRoom = (globalData && globalData.rooms) 
@@ -1131,10 +1132,11 @@
                     payment_id: p.id,
                     invoice_no: '#INV-' + String(p.id).padStart(5, '0'),
                     status: p.status,
+                    has_paid: hasPaid,
                     amount: Number(p.amount).toLocaleString('id-ID'),
                     due_date: p.due_date || '-',
                     pay_date: payDate,
-                    method: methodClean || 'Transfer Bank / Online',
+                    method: methodClean || (hasPaid ? 'Transfer Bank / Online' : 'Belum Memilih Metode'),
                     room_number: roomNumber,
                     room_type: roomType,
                     room_price: roomPrice,
@@ -1146,16 +1148,16 @@
                 };
                 const detailDataAttr = encodeURIComponent(JSON.stringify(detailData));
 
-                // Action Column: jika berhasil (approved/lunas) tampilkan struk/invoice, jika belum -
-                let actionBtn = '';
+                // Invoice Column: jika berhasil (approved/lunas) tampilkan button Invoice, jika belum -
+                let invoiceBtn = '';
                 if (isApproved) {
-                    actionBtn = `
-                        <button onclick="openReceiptModal(${p.id}, '${(p.title || '').replace(/'/g, "\\'")}', ${p.amount}, '${p.due_date || ''}', '${(methodClean || 'BCA Virtual Account').replace(/'/g, "\\'")}', '${payDate}', '${tenantName.replace(/'/g, "\\'")}', '${roomNumber}')" class="inline-flex items-center px-3 py-1.5 bg-white hover:bg-slate-50 text-navy-950 font-bold text-xs rounded-lg transition border border-slate-300 shadow-2xs group focus:outline-none" title="Lihat Struk / Invoice Pembayaran">
-                            <i class="fa-solid fa-receipt mr-1.5 text-orange-600"></i> Struk / Invoice
+                    invoiceBtn = `
+                        <button onclick="openReceiptModal(${p.id}, '${(p.title || '').replace(/'/g, "\\'")}', ${p.amount}, '${p.due_date || ''}', '${(methodClean || 'BCA Virtual Account').replace(/'/g, "\\'")}', '${payDate}', '${tenantName.replace(/'/g, "\\'")}', '${roomNumber}')" class="inline-flex items-center px-3 py-1.5 bg-white hover:bg-slate-50 text-navy-950 font-bold text-xs rounded-lg transition border border-slate-300 shadow-2xs group focus:outline-none cursor-pointer" title="Lihat Invoice Pembayaran">
+                            <i class="fa-solid fa-file-invoice mr-1.5 text-orange-600"></i> Invoice
                         </button>
                     `;
                 } else {
-                    actionBtn = `<span class="text-slate-400 font-semibold text-xs">-</span>`;
+                    invoiceBtn = `<span class="text-slate-400 font-semibold text-xs">-</span>`;
                 }
 
                 return `
@@ -1184,7 +1186,7 @@
                             </div>
                         </td>
                         <td class="py-3.5 px-4 text-center whitespace-nowrap">${statusBadge}</td>
-                        <td class="py-3.5 px-4 text-center whitespace-nowrap">${actionBtn}</td>
+                        <td class="py-3.5 px-4 text-center whitespace-nowrap">${invoiceBtn}</td>
                     </tr>
                 `;
             }).join('');
@@ -1767,45 +1769,69 @@
                 document.getElementById('prmTenantEmail').textContent = d.tenant_email || '-';
                 document.getElementById('prmAmount').textContent = `Rp ${d.amount}`;
 
-                // Status card styling
+                // Status card styling & content
                 const card = document.getElementById('prmStatusCard');
                 const icon = document.getElementById('prmStatusIcon');
                 const title = document.getElementById('prmStatusTitle');
                 const desc = document.getElementById('prmStatusDesc');
                 const actionContainer = document.getElementById('prmActionContainer');
 
-                if (d.status === 'approved') {
-                    card.className = 'rounded-xl p-4 mb-4 border bg-emerald-50 border-emerald-200 text-emerald-950 flex items-center justify-between';
-                    icon.className = 'w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg shrink-0';
-                    icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
-                    title.textContent = 'Pembayaran Berhasil (LUNAS)';
-                    desc.textContent = `Dibayar pada ${d.pay_date} via ${d.method}`;
-                    actionContainer.innerHTML = `
-                        <button type="button" onclick="closePaymentRoomDetailModal(); openReceiptModal(${d.payment_id}, 'Pembayaran Sewa ${d.room_number.replace(/'/g, "\\'")}', '${d.amount.replace(/[^0-9]/g, '')}', '${d.due_date}', '${d.method.replace(/'/g, "\\'")}', '${d.pay_date}', '${d.tenant_name.replace(/'/g, "\\'")}', '${d.room_number.replace(/'/g, "\\'")}')" class="w-full py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl text-xs transition shadow-sm flex items-center justify-center">
-                            <i class="fa-solid fa-receipt mr-1.5"></i> Lihat Struk / Invoice Pembayaran
-                        </button>
-                    `;
-                } else if (d.status === 'pending') {
-                    card.className = 'rounded-xl p-4 mb-4 border bg-amber-50 border-amber-200 text-amber-950 flex items-center justify-between';
-                    icon.className = 'w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-lg shrink-0';
-                    icon.innerHTML = '<i class="fa-solid fa-clock"></i>';
-                    title.textContent = 'Menunggu Verifikasi (Belum Berhasil)';
-                    desc.textContent = `Tenggat waktu bayar: ${d.due_date}`;
-                    actionContainer.innerHTML = `
-                        <button type="button" onclick="closePaymentRoomDetailModal(); approvePayment(${d.payment_id})" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition shadow-sm flex items-center justify-center">
-                            <i class="fa-solid fa-check mr-1.5"></i> Verifikasi Pembayaran Sebagai LUNAS
-                        </button>
-                    `;
-                } else {
+                if (d.status === 'rejected') {
                     card.className = 'rounded-xl p-4 mb-4 border bg-rose-50 border-rose-200 text-rose-950 flex items-center justify-between';
                     icon.className = 'w-10 h-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-lg shrink-0';
                     icon.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
                     title.textContent = 'Pembayaran Gagal / Ditolak';
+                    title.className = 'font-extrabold text-sm block text-rose-950';
                     desc.textContent = 'Status pembayaran ditolak oleh pengelola';
                     actionContainer.innerHTML = `
-                        <button type="button" onclick="closePaymentRoomDetailModal()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition">
+                        <button type="button" onclick="closePaymentRoomDetailModal()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition cursor-pointer">
                             Tutup
                         </button>
+                    `;
+                } else if (d.has_paid) {
+                    // Pembayaran Berhasil (Penghuni sudah bayar via VA/Transfer/Sistem)
+                    card.className = 'rounded-xl p-4 mb-4 border bg-emerald-50 border-emerald-200 text-emerald-950 flex items-center justify-between';
+                    icon.className = 'w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg shrink-0';
+                    icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+                    title.textContent = 'Pembayaran Berhasil';
+                    title.className = 'font-extrabold text-sm block text-emerald-950';
+
+                    if (d.status === 'approved') {
+                        desc.textContent = `Status: LUNAS • Pembayaran terverifikasi via ${d.method}`;
+                        actionContainer.innerHTML = `
+                            <button type="button" onclick="closePaymentRoomDetailModal(); openReceiptModal(${d.payment_id}, 'Pembayaran Sewa ${d.room_number.replace(/'/g, "\\'")}', '${d.amount.replace(/[^0-9]/g, '')}', '${d.due_date}', '${d.method.replace(/'/g, "\\'")}', '${d.pay_date}', '${d.tenant_name.replace(/'/g, "\\'")}', '${d.room_number.replace(/'/g, "\\'")}')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition shadow-sm flex items-center justify-center cursor-pointer" title="Status Lunas (Klik untuk melihat invoice)">
+                                <i class="fa-solid fa-circle-check mr-1.5"></i> Status Lunas
+                            </button>
+                        `;
+                    } else {
+                        desc.textContent = `Penghuni telah berhasil membayar via ${d.method}. Klik tombol di bawah untuk verifikasi status Lunas.`;
+                        actionContainer.innerHTML = `
+                            <button type="button" onclick="confirmPaymentAsLunas(${d.payment_id})" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition shadow-sm flex items-center justify-center cursor-pointer">
+                                <i class="fa-solid fa-check mr-1.5"></i> Status Lunas
+                            </button>
+                        `;
+                    }
+                } else {
+                    // Belum Dibayar (Penghuni belum melakukan pembayaran)
+                    card.className = 'rounded-xl p-4 mb-4 border bg-amber-50 border-amber-200 text-amber-950 flex items-center justify-between';
+                    icon.className = 'w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-lg shrink-0';
+                    icon.innerHTML = '<i class="fa-solid fa-clock"></i>';
+                    title.textContent = 'Belum Dibayar';
+                    title.className = 'font-extrabold text-sm block text-amber-950';
+                    desc.textContent = `Penghuni belum melakukan pembayaran. Tenggat waktu: ${d.due_date}`;
+
+                    actionContainer.innerHTML = `
+                        <div class="w-full space-y-2">
+                            <button type="button" disabled class="w-full py-2.5 bg-slate-200 text-slate-400 font-bold rounded-xl text-xs flex items-center justify-center cursor-not-allowed border border-slate-300 shadow-none">
+                                <i class="fa-solid fa-ban mr-1.5"></i> Status Lunas
+                            </button>
+                            <div class="flex items-center justify-between px-1">
+                                <span class="text-[11px] text-slate-400 italic">Tombol Status Lunas tidak dapat diklik karena belum dibayar pengguna.</span>
+                                <button type="button" onclick="recordTenantPaid(${d.payment_id})" class="text-[11px] text-orange-600 hover:text-orange-700 font-bold underline transition cursor-pointer">
+                                    Catat Sudah Bayar
+                                </button>
+                            </div>
+                        </div>
                     `;
                 }
 
@@ -1817,6 +1843,86 @@
 
         function closePaymentRoomDetailModal() {
             document.getElementById('paymentRoomDetailModal').classList.add('hidden');
+        }
+
+        async function confirmPaymentAsLunas(paymentId) {
+            try {
+                const res = await fetch(`/api/owner/payments/${paymentId}/approve`, {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    closePaymentRoomDetailModal();
+                    await loadDashboardData();
+                } else {
+                    alert(data.message || 'Gagal mengubah status menjadi Lunas.');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Terjadi kesalahan jaringan.');
+            }
+        }
+
+        async function recordTenantPaid(paymentId) {
+            try {
+                const res = await fetch(`/api/owner/payments/${paymentId}/mark-paid`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken, 
+                        'Accept': 'application/json' 
+                    },
+                    body: JSON.stringify({ payment_method: 'Transfer Bank / Online' })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    await loadDashboardData();
+                    const p = (globalData && globalData.payments) ? globalData.payments.find(x => x.id === paymentId) : null;
+                    if (p) {
+                        const matchingRoom = (globalData && globalData.rooms) 
+                            ? globalData.rooms.find(r => r.id === (p.room_id || (p.room ? p.room.id : null)) || r.number === (p.room ? p.room.number : null))
+                            : null;
+                        const activeBooking = (matchingRoom && matchingRoom.bookings && matchingRoom.bookings.length > 0) ? matchingRoom.bookings[0] : null;
+                        const tenantUser = (activeBooking && activeBooking.user) ? activeBooking.user : (p.user || null);
+                        const tenantName = tenantUser ? tenantUser.name : (p.user ? p.user.name : 'Penghuni');
+                        const rawRoomNum = matchingRoom ? matchingRoom.number : (p.room ? p.room.number : '-');
+                        const roomNumber = rawRoomNum.toLowerCase().startsWith('kamar') ? rawRoomNum : `Kamar ${rawRoomNum}`;
+                        const roomType = matchingRoom ? matchingRoom.type : (p.room ? p.room.type : '-');
+                        const roomPrice = matchingRoom ? Number(matchingRoom.price).toLocaleString('id-ID') : Number(p.amount).toLocaleString('id-ID');
+                        const rentalPeriod = matchingRoom ? (matchingRoom.rental_period || 'Bulanan') : 'Bulanan';
+                        const startDate = activeBooking ? (activeBooking.start_date || '-') : '-';
+                        const tenantEmail = tenantUser ? (tenantUser.email || '-') : '-';
+                        const tenantPhone = tenantUser ? (tenantUser.phone || '-') : '-';
+                        const payDate = p.created_at ? new Date(p.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : (p.due_date || '-');
+
+                        const detailData = {
+                            payment_id: p.id,
+                            invoice_no: '#INV-' + String(p.id).padStart(5, '0'),
+                            status: p.status,
+                            has_paid: true,
+                            amount: Number(p.amount).toLocaleString('id-ID'),
+                            due_date: p.due_date || '-',
+                            pay_date: payDate,
+                            method: p.payment_method || 'Transfer Bank / Online',
+                            room_number: roomNumber,
+                            room_type: roomType,
+                            room_price: roomPrice,
+                            rental_period: rentalPeriod,
+                            tenant_name: tenantName,
+                            tenant_email: tenantEmail,
+                            tenant_phone: tenantPhone,
+                            start_date: startDate
+                        };
+                        openPaymentRoomDetailModal(encodeURIComponent(JSON.stringify(detailData)));
+                    }
+                } else {
+                    alert(data.message || 'Gagal mencatat pembayaran.');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Terjadi kesalahan jaringan.');
+            }
         }
 
         // =========================================================================

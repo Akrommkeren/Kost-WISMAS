@@ -97,6 +97,9 @@ class OwnerController extends Controller
     public function approvePayment(Payment $payment)
     {
         $payment->status = 'approved';
+        if (!$payment->payment_method) {
+            $payment->payment_method = 'Transfer Bank';
+        }
         $payment->save();
 
         // If payment is approved, set room status to occupied
@@ -107,6 +110,19 @@ class OwnerController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Pembayaran #' . $payment->id . ' disetujui & diverifikasi LUNAS.',
+        ]);
+    }
+
+    public function markAsPaidByTenant(Request $request, Payment $payment)
+    {
+        $method = $request->input('payment_method', 'Transfer Bank / Online');
+        $payment->payment_method = $method;
+        $payment->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Penghuni telah dicatat berhasil melakukan pembayaran via ' . $method . '.',
+            'payment' => $payment,
         ]);
     }
 
