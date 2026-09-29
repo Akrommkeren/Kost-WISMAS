@@ -226,17 +226,16 @@
                                 <thead>
                                     <tr class="border-b border-slate-200 text-[11px] font-extrabold uppercase text-slate-500 tracking-wider bg-slate-50/80">
                                         <th class="py-3 px-4">Kamar</th>
-                                        <th class="py-3 px-4">Tipe & Fasilitas</th>
-                                        <th class="py-3 px-4">Tarif Sewa / Bulan</th>
-                                        <th class="py-3 px-4">Status Ketersediaan</th>
-                                        <th class="py-3 px-4">Penghuni Saat Ini</th>
-                                        <th class="py-3 px-4">Foto KTP Penghuni</th>
-                                        <th class="py-3 px-4 text-center">Aksi Pengelola</th>
+                                        <th class="py-3 px-4">Tipe Kamar</th>
+                                        <th class="py-3 px-4">Harga Sewa</th>
+                                        <th class="py-3 px-4">Periode Sewa</th>
+                                        <th class="py-3 px-4">Penghuni</th>
+                                        <th class="py-3 px-4 text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="roomsTableBody" class="divide-y divide-slate-100">
                                     <tr>
-                                        <td colspan="7" class="py-8 text-center text-slate-400">Memuat data kamar & penghuni...</td>
+                                        <td colspan="6" class="py-8 text-center text-slate-400">Memuat data kamar & penghuni...</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -472,6 +471,91 @@
     </footer>
 
     <!-- ========================================================================= -->
+    <!-- MODAL DETAIL PENGHUNI -->
+    <!-- ========================================================================= -->
+    <div id="tenantDetailModal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative border border-slate-200 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-200 mb-4">
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-sm">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-base text-navy-950" id="tenantModalTitle">Detail Penghuni</h3>
+                        <p class="text-xs text-slate-500">Informasi identitas akun dan masa sewa kamar</p>
+                    </div>
+                </div>
+                <button onclick="closeTenantModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Profile Overview Header -->
+            <div class="bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl p-4 border border-orange-200/70 mb-4 flex items-center justify-between">
+                <div>
+                    <h4 class="font-extrabold text-navy-950 text-base" id="tenantModalName">-</h4>
+                    <p class="text-xs text-slate-600" id="tenantModalRoomInfo">-</p>
+                </div>
+                <span class="px-2.5 py-1 rounded-full text-[11px] font-black bg-emerald-100 text-emerald-800 border border-emerald-200 uppercase tracking-wide">
+                    Penghuni Aktif
+                </span>
+            </div>
+
+            <!-- Detail Grid Info -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-5 text-xs">
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                    <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider mb-0.5">Email Terdaftar</span>
+                    <span class="font-bold text-navy-950 break-all" id="tenantModalEmail">-</span>
+                </div>
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                    <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider mb-0.5">Nomor HP / WhatsApp</span>
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-navy-950" id="tenantModalPhone">-</span>
+                        <a id="tenantModalWaLink" href="#" target="_blank" class="hidden text-emerald-600 hover:text-emerald-700 font-extrabold text-xs inline-flex items-center">
+                            <i class="fa-brands fa-whatsapp mr-1 text-sm"></i> Chat
+                        </a>
+                    </div>
+                </div>
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                    <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider mb-0.5">Tanggal Mulai Masuk</span>
+                    <span class="font-bold text-navy-950" id="tenantModalStartDate">-</span>
+                </div>
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                    <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider mb-0.5">Periode Sewa</span>
+                    <span class="font-bold text-orange-600" id="tenantModalRentalPeriod">-</span>
+                </div>
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                    <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider mb-0.5">Tarif Sewa Kamar</span>
+                    <span class="font-bold text-slate-800" id="tenantModalPrice">-</span>
+                </div>
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                    <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider mb-0.5">Terdaftar Akun</span>
+                    <span class="font-bold text-slate-800" id="tenantModalRegistered">-</span>
+                </div>
+            </div>
+
+            <!-- Foto KTP Section -->
+            <div class="border border-slate-200 rounded-xl p-4 mb-4">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-bold text-navy-950 uppercase tracking-wider flex items-center">
+                        <i class="fa-regular fa-id-card mr-2 text-orange-600"></i> Dokumen Foto KTP
+                    </span>
+                    <span id="tenantModalKtpBadge" class="text-[11px] font-semibold text-slate-500"></span>
+                </div>
+                <div id="tenantModalKtpPreview" class="mt-2 text-center">
+                    <!-- KTP image or placeholder -->
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="button" onclick="closeTenantModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
     <!-- MODAL PREVIEW FOTO KTP PENGHUNI -->
     <!-- ========================================================================= -->
     <div id="ktpModal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center hidden p-4">
@@ -496,16 +580,16 @@
     <!-- ========================================================================= -->
     <div id="editPriceModal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative border border-slate-200">
-            <h3 class="font-extrabold text-base text-navy-950 mb-1" id="editPriceTitle">Perbarui Tarif Kamar</h3>
-            <p class="text-xs text-slate-500 mb-4">Masukkan tarif sewa per bulan terbaru untuk kamar ini.</p>
+            <h3 class="font-extrabold text-base text-navy-950 mb-1" id="editPriceTitle">Perbarui Harga Sewa</h3>
+            <p class="text-xs text-slate-500 mb-4">Masukkan harga sewa terbaru untuk kamar ini.</p>
             <input type="hidden" id="editPriceRoomId">
             <div class="mb-5">
-                <label class="block text-xs font-bold text-navy-950 uppercase mb-1">Tarif Baru (Rp)</label>
+                <label class="block text-xs font-bold text-navy-950 uppercase mb-1">Harga Sewa Baru (Rp)</label>
                 <input type="number" id="editPriceInput" step="50000" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm font-black text-navy-950">
             </div>
             <div class="flex justify-end space-x-2">
                 <button type="button" onclick="closeEditPriceModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition">Batal</button>
-                <button type="button" onclick="submitEditPrice()" class="px-4 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl text-xs transition shadow-sm">Simpan Tarif</button>
+                <button type="button" onclick="submitEditPrice()" class="px-4 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl text-xs transition shadow-sm">Simpan Harga</button>
             </div>
         </div>
     </div>
@@ -750,82 +834,86 @@
             if (!tbody) return;
 
             if (!rooms || rooms.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-slate-400">Belum ada data kamar terdaftar.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-slate-400">Belum ada data kamar terdaftar.</td></tr>`;
                 return;
             }
 
             tbody.innerHTML = rooms.map(room => {
                 const isAvailable = room.status === 'available';
-                const statusBadge = isAvailable
-                    ? `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-black bg-emerald-100 text-emerald-800 border border-emerald-200"><i class="fa-solid fa-circle-check mr-1 text-[9px] text-emerald-600"></i> TERSEDIA</span>`
-                    : `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-black bg-slate-200 text-slate-800 border border-slate-300"><i class="fa-solid fa-lock mr-1 text-[9px] text-slate-600"></i> TERISI</span>`;
-                
+
+                // Toggle Action Button (Kamar Tersedia <-> Kamar Terisi)
                 const toggleBtn = isAvailable
-                    ? `<button onclick="toggleRoomStatus(${room.id})" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-bold text-[11px] transition shadow-2xs" title="Tandai kamar sebagai terisi"><i class="fa-solid fa-lock text-slate-500 mr-1"></i> Set Terisi</button>`
-                    : `<button onclick="toggleRoomStatus(${room.id})" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-lg font-bold text-[11px] transition border border-emerald-200 shadow-2xs" title="Buka kamar agar tersedia untuk booking"><i class="fa-solid fa-lock-open text-emerald-600 mr-1"></i> Buka Kamar</button>`;
+                    ? `<button onclick="toggleRoomStatus(${room.id})" class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 transition shadow-2xs" title="Kamar masih tersedia. Klik untuk ubah status menjadi Terisi">
+                        <i class="fa-solid fa-circle-check mr-1.5 text-emerald-600"></i> Kamar Tersedia
+                       </button>`
+                    : `<button onclick="toggleRoomStatus(${room.id})" class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300 transition shadow-2xs" title="Kamar sudah terisi. Klik untuk ubah status menjadi Tersedia">
+                        <i class="fa-solid fa-lock mr-1.5 text-slate-500"></i> Kamar Terisi
+                       </button>`;
 
-                // Occupant Info
-                let occupantHtml = `<span class="text-slate-400 italic">Belum ada penghuni</span>`;
-                let ktpHtml = `<span class="text-slate-400">-</span>`;
+                // Rental Period Dropdown
+                const curPeriod = room.rental_period || 'Bulanan';
+                const periods = ['Harian', 'Mingguan', 'Bulanan', '3 Bulan', '6 Bulan', 'Tahunan'];
+                const periodOptions = periods.map(p => {
+                    const sel = (curPeriod.toLowerCase() === p.toLowerCase()) ? 'selected' : '';
+                    return `<option value="${p}" ${sel}>${p}</option>`;
+                }).join('');
 
+                const periodDropdown = `
+                    <select onchange="updateRentalPeriod(${room.id}, this.value)" class="text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg px-2.5 py-1 focus:ring-1 focus:ring-orange-500 focus:outline-none shadow-2xs cursor-pointer">
+                        ${periodOptions}
+                    </select>
+                `;
+
+                // Occupant Info (Profile icon + Name, click to open Tenant Detail Modal)
+                let occupantHtml = `<span class="text-slate-400 text-xs italic">-</span>`;
                 const activeBooking = room.bookings && room.bookings.length > 0 ? room.bookings[0] : null;
                 if (activeBooking && activeBooking.user) {
                     const u = activeBooking.user;
-                    const startDate = activeBooking.start_date ? new Date(activeBooking.start_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '-';
+                    const tenantData = {
+                        name: u.name,
+                        email: u.email || '-',
+                        phone: u.phone || '-',
+                        ktp_file: u.ktp_file || '',
+                        start_date: activeBooking.start_date || '-',
+                        created_at: u.created_at || '-',
+                        room_number: room.number,
+                        room_type: room.type,
+                        room_price: Number(room.price).toLocaleString('id-ID'),
+                        rental_period: curPeriod
+                    };
+                    const tenantDataAttr = encodeURIComponent(JSON.stringify(tenantData));
                     occupantHtml = `
-                        <div>
-                            <p class="font-extrabold text-navy-950 text-sm">${u.name}</p>
-                            <p class="text-[11px] text-slate-500">${u.email || ''}</p>
-                            <p class="text-[11px] text-emerald-700 font-semibold mt-0.5"><i class="fa-regular fa-calendar-check mr-1"></i> Masuk: ${startDate}</p>
-                            ${u.phone ? `
-                                <a href="https://wa.me/${u.phone.replace(/[^0-9]/g, '')}?text=Halo%20${encodeURIComponent(u.name)},%20saya%20pengelola%20Kost%20Wisma%20S." target="_blank" class="inline-flex items-center text-[10px] text-emerald-600 font-bold hover:underline mt-1">
-                                    <i class="fa-brands fa-whatsapp mr-1"></i> ${u.phone}
-                                </a>
-                            ` : ''}
-                        </div>
+                        <button type="button" onclick="openTenantModal('${tenantDataAttr}')" class="inline-flex items-center space-x-1.5 text-xs font-bold text-slate-800 hover:text-orange-600 group transition focus:outline-none" title="Klik untuk melihat detail profil & KTP penghuni">
+                            <i class="fa-solid fa-circle-user text-orange-600 text-sm"></i>
+                            <span class="group-hover:underline underline-offset-2">${u.name}</span>
+                        </button>
                     `;
-
-                    if (u.ktp_file) {
-                        ktpHtml = `
-                            <button onclick="viewKtp('${u.ktp_file}', '${u.name.replace(/'/g, "\\'")}')" class="inline-flex items-center px-2.5 py-1 bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold rounded-lg border border-orange-200 text-[11px] transition shadow-2xs">
-                                <i class="fa-regular fa-id-card mr-1.5 text-orange-600"></i> Lihat KTP
-                            </button>
-                        `;
-                    }
-                }
-
-                // Features list preview
-                let featuresPreview = '';
-                if (room.features) {
-                    const fList = Array.isArray(room.features) ? room.features : Object.values(room.features);
-                    featuresPreview = fList.slice(0, 3).join(', ') + (fList.length > 3 ? '...' : '');
                 }
 
                 return `
                     <tr class="hover:bg-slate-50/80 transition">
-                        <td class="py-4 px-4 font-black text-navy-950 text-sm">
-                            <span class="px-2.5 py-1 bg-slate-100 rounded-lg text-slate-800 border border-slate-200">${room.number}</span>
+                        <td class="py-3 px-4 text-xs font-bold text-slate-800 whitespace-nowrap">
+                            ${room.number}
                         </td>
-                        <td class="py-4 px-4">
-                            <span class="font-extrabold text-navy-950 block">${room.type}</span>
-                            <span class="text-[11px] text-slate-500">${featuresPreview || 'Fasilitas Lengkap'}</span>
+                        <td class="py-3 px-4 text-xs font-medium text-slate-700">
+                            ${room.type}
                         </td>
-                        <td class="py-4 px-4">
-                            <div class="flex items-center space-x-1.5">
-                                <span class="font-black text-orange-600 text-sm">Rp ${Number(room.price).toLocaleString('id-ID')}</span>
-                                <span class="text-[10px] text-slate-500 font-medium">/bulan</span>
-                            </div>
-                        </td>
-                        <td class="py-4 px-4 whitespace-nowrap">${statusBadge}</td>
-                        <td class="py-4 px-4">${occupantHtml}</td>
-                        <td class="py-4 px-4 whitespace-nowrap">${ktpHtml}</td>
-                        <td class="py-4 px-4 text-center whitespace-nowrap">
+                        <td class="py-3 px-4 whitespace-nowrap">
                             <div class="inline-flex items-center space-x-1.5">
-                                <button onclick="openEditPrice(${room.id}, '${room.number}', ${room.price})" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg font-bold text-[11px] transition border border-slate-300 shadow-2xs" title="Ubah tarif sewa bulanan">
-                                    <i class="fa-solid fa-pen-to-square mr-1 text-orange-600"></i> Tarif
+                                <span class="font-bold text-orange-600 text-xs">Rp ${Number(room.price).toLocaleString('id-ID')}</span>
+                                <button onclick="openEditPrice(${room.id}, '${room.number.replace(/'/g, "\\'")}', ${room.price})" class="p-1 text-slate-400 hover:text-orange-600 transition" title="Edit Harga Sewa">
+                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
                                 </button>
-                                ${toggleBtn}
                             </div>
+                        </td>
+                        <td class="py-3 px-4 whitespace-nowrap">
+                            ${periodDropdown}
+                        </td>
+                        <td class="py-3 px-4 whitespace-nowrap">
+                            ${occupantHtml}
+                        </td>
+                        <td class="py-3 px-4 text-center whitespace-nowrap">
+                            ${toggleBtn}
                         </td>
                     </tr>
                 `;
@@ -1155,7 +1243,7 @@
 
         function openEditPrice(roomId, roomNumber, currentPrice) {
             document.getElementById('editPriceRoomId').value = roomId;
-            document.getElementById('editPriceTitle').textContent = `Perbarui Tarif Kamar ${roomNumber}`;
+            document.getElementById('editPriceTitle').textContent = `Perbarui Harga Sewa ${roomNumber}`;
             document.getElementById('editPriceInput').value = currentPrice;
             document.getElementById('editPriceModal').classList.remove('hidden');
         }
@@ -1188,6 +1276,110 @@
                 console.error(err);
                 alert('Terjadi kesalahan jaringan.');
             }
+        }
+
+        async function updateRentalPeriod(roomId, period) {
+            try {
+                const res = await fetch(`/api/owner/rooms/${roomId}/rental-period`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ rental_period: period })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    if (globalData && globalData.rooms) {
+                        const r = globalData.rooms.find(x => x.id === roomId);
+                        if (r) r.rental_period = period;
+                    }
+                } else {
+                    alert(data.message || 'Gagal memperbarui periode sewa.');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Terjadi kesalahan jaringan.');
+            }
+        }
+
+        // =========================================================================
+        // TENANT DETAIL MODAL
+        // =========================================================================
+        function openTenantModal(dataAttr) {
+            try {
+                const d = JSON.parse(decodeURIComponent(dataAttr));
+                document.getElementById('tenantModalName').textContent = d.name || '-';
+                document.getElementById('tenantModalRoomInfo').textContent = `${d.room_number} • ${d.room_type}`;
+                document.getElementById('tenantModalEmail').textContent = d.email || '-';
+                document.getElementById('tenantModalPhone').textContent = d.phone || '-';
+                
+                const waLink = document.getElementById('tenantModalWaLink');
+                if (d.phone && d.phone !== '-') {
+                    waLink.href = `https://wa.me/${d.phone.replace(/[^0-9]/g, '')}?text=Halo%20${encodeURIComponent(d.name)},%20saya%20pengelola%20Kost%20Wisma%20S.`;
+                    waLink.classList.remove('hidden');
+                } else {
+                    waLink.classList.add('hidden');
+                }
+
+                let formattedStartDate = '-';
+                if (d.start_date && d.start_date !== '-') {
+                    const dt = new Date(d.start_date);
+                    formattedStartDate = isNaN(dt) ? d.start_date : dt.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                }
+                document.getElementById('tenantModalStartDate').textContent = formattedStartDate;
+                document.getElementById('tenantModalRentalPeriod').textContent = d.rental_period || 'Bulanan';
+                document.getElementById('tenantModalPrice').textContent = `Rp ${d.room_price}`;
+
+                let formattedReg = '-';
+                if (d.created_at && d.created_at !== '-') {
+                    const dt = new Date(d.created_at);
+                    formattedReg = isNaN(dt) ? d.created_at : dt.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+                }
+                document.getElementById('tenantModalRegistered').textContent = formattedReg;
+
+                // KTP handling
+                const ktpPreview = document.getElementById('tenantModalKtpPreview');
+                const ktpBadge = document.getElementById('tenantModalKtpBadge');
+                if (d.ktp_file) {
+                    const filePath = d.ktp_file.startsWith('http') || d.ktp_file.startsWith('/') ? d.ktp_file : `/storage/${d.ktp_file}`;
+                    ktpBadge.textContent = 'Sudah Diunggah';
+                    ktpBadge.className = 'text-[11px] font-bold text-emerald-700';
+                    
+                    if (filePath.toLowerCase().endsWith('.pdf')) {
+                        ktpPreview.innerHTML = `
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
+                                <span class="text-xs text-slate-700 font-semibold"><i class="fa-solid fa-file-pdf text-red-600 mr-2 text-base"></i> Dokumen KTP (PDF)</span>
+                                <a href="${filePath}" target="_blank" class="px-3 py-1.5 bg-orange-600 text-white font-bold rounded-lg text-xs hover:bg-orange-700 transition">Buka File</a>
+                            </div>
+                        `;
+                    } else {
+                        ktpPreview.innerHTML = `
+                            <div class="relative group rounded-xl overflow-hidden border border-slate-200 max-h-56 bg-slate-100 flex items-center justify-center p-1">
+                                <img src="${filePath}" alt="KTP ${d.name}" class="w-full h-auto max-h-52 object-contain rounded-lg">
+                            </div>
+                            <div class="mt-2.5 flex justify-center">
+                                <a href="${filePath}" target="_blank" class="inline-flex items-center text-xs font-bold text-orange-600 hover:underline">
+                                    <i class="fa-solid fa-arrow-up-right-from-square mr-1.5"></i> Buka Foto Ukuran Penuh
+                                </a>
+                            </div>
+                        `;
+                    }
+                } else {
+                    ktpBadge.textContent = 'Belum Ada';
+                    ktpBadge.className = 'text-[11px] font-semibold text-slate-400';
+                    ktpPreview.innerHTML = `<p class="py-4 text-slate-400 text-xs italic">Penghuni belum mengunggah dokumen KTP saat pendaftaran.</p>`;
+                }
+
+                document.getElementById('tenantDetailModal').classList.remove('hidden');
+            } catch (e) {
+                console.error('Error opening tenant modal', e);
+            }
+        }
+
+        function closeTenantModal() {
+            document.getElementById('tenantDetailModal').classList.add('hidden');
         }
 
         // =========================================================================

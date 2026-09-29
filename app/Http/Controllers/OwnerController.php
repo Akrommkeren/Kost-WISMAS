@@ -81,6 +81,19 @@ class OwnerController extends Controller
         ]);
     }
 
+    public function updateRentalPeriod(Request $request, Room $room)
+    {
+        $request->validate(['rental_period' => 'required|string']);
+        $room->rental_period = $request->rental_period;
+        $room->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Periode sewa ' . $room->number . ' berhasil diubah menjadi ' . $room->rental_period . '.',
+            'room' => $room,
+        ]);
+    }
+
     public function approvePayment(Payment $payment)
     {
         $payment->status = 'approved';

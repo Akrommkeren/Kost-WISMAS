@@ -13,6 +13,7 @@ class Room extends Model
         'number',
         'type',
         'price',
+        'rental_period',
         'status',
         'image',
         'features',
