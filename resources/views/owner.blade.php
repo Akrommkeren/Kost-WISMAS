@@ -164,8 +164,10 @@
                         <span id="statTotalRooms" class="text-sm font-bold text-slate-700">-</span>
                         <span class="text-xs text-slate-400">kamar</span>
                     </div>
-                    <div class="mt-2 text-[11px] text-emerald-700 font-bold">
-                        <span id="statAvailableCount">-</span> Kamar Tersedia
+                    <div class="mt-2.5">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200/80">
+                            <span id="statAvailableCount">-</span>&nbsp;Kamar Tersedia
+                        </span>
                     </div>
                 </div>
 
@@ -173,8 +175,10 @@
                 <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs">
                     <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Tenggat Waktu Bayar</div>
                     <div class="text-xl sm:text-2xl font-black text-orange-600" id="statPendingAmount">Rp 0</div>
-                    <div class="mt-2 text-[11px] text-slate-500 font-medium">
-                        <span id="statPendingCount" class="font-bold text-slate-700">0</span> tagihan menunggu verifikasi
+                    <div class="mt-2.5">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold bg-amber-50 text-amber-900 border border-amber-200/80">
+                            <span id="statPendingCount">0</span>&nbsp;tagihan menunggu verifikasi
+                        </span>
                     </div>
                 </div>
 
@@ -182,8 +186,10 @@
                 <div class="bg-white p-4 rounded-xl border border-slate-200/90 shadow-2xs">
                     <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Saldo Kas Bersih</div>
                     <div class="text-xl sm:text-2xl font-black text-emerald-600" id="statNetBalance">Rp 0</div>
-                    <div class="mt-2 text-[11px] text-slate-500 font-medium truncate">
-                        Pemasukan sewa dikurangi operasional
+                    <div class="mt-2.5">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold bg-blue-50 text-blue-800 border border-blue-200/80">
+                            Pemasukan dikurangi operasional
+                        </span>
                     </div>
                 </div>
 
@@ -194,8 +200,10 @@
                         <span id="statUnresolvedComplaints" class="text-xl sm:text-2xl font-black text-red-600">-</span>
                         <span class="text-xs text-slate-400">laporan kendala</span>
                     </div>
-                    <div class="mt-2 text-[11px] text-amber-700 font-bold">
-                        Perlu tindak lanjut owner
+                    <div class="mt-2.5">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold bg-rose-50 text-rose-800 border border-rose-200/80">
+                            Perlu tindak lanjut owner
+                        </span>
                     </div>
                 </div>
 
@@ -850,7 +858,7 @@
                         <i class="fa-solid fa-lock mr-1.5 text-slate-500"></i> Kamar Terisi
                        </button>`;
 
-                // Rental Period Dropdown
+                // Rental Period Dropdown (Mirip dropdown halaman publik/penghuni dengan chevron icon)
                 const curPeriod = room.rental_period || 'Bulanan';
                 const periods = ['Harian', 'Mingguan', 'Bulanan', '3 Bulan', '6 Bulan', 'Tahunan'];
                 const periodOptions = periods.map(p => {
@@ -859,13 +867,16 @@
                 }).join('');
 
                 const periodDropdown = `
-                    <select onchange="updateRentalPeriod(${room.id}, this.value)" class="text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg px-2.5 py-1 focus:ring-1 focus:ring-orange-500 focus:outline-none shadow-2xs cursor-pointer">
-                        ${periodOptions}
-                    </select>
+                    <div class="relative inline-flex items-center">
+                        <select onchange="updateRentalPeriod(${room.id}, this.value)" class="appearance-none bg-slate-50 hover:bg-white border border-slate-300 hover:border-slate-400 text-slate-800 text-xs font-bold rounded-lg pl-3 pr-7 py-1.5 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:outline-none shadow-2xs cursor-pointer transition">
+                            ${periodOptions}
+                        </select>
+                        <i class="fa-solid fa-chevron-down absolute right-2.5 text-[10px] text-slate-400 pointer-events-none"></i>
+                    </div>
                 `;
 
-                // Occupant Info (Profile icon + Name, click to open Tenant Detail Modal)
-                let occupantHtml = `<span class="text-slate-400 text-xs italic">-</span>`;
+                // Occupant Info (Ditambahkan box berdesain rapi dengan avatar icon & nama penghuni)
+                let occupantHtml = `<span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium text-slate-400 bg-slate-50 border border-slate-200/70 italic">Belum Ada</span>`;
                 const activeBooking = room.bookings && room.bookings.length > 0 ? room.bookings[0] : null;
                 if (activeBooking && activeBooking.user) {
                     const u = activeBooking.user;
@@ -883,9 +894,12 @@
                     };
                     const tenantDataAttr = encodeURIComponent(JSON.stringify(tenantData));
                     occupantHtml = `
-                        <button type="button" onclick="openTenantModal('${tenantDataAttr}')" class="inline-flex items-center space-x-1.5 text-xs font-bold text-slate-800 hover:text-orange-600 group transition focus:outline-none" title="Klik untuk melihat detail profil & KTP penghuni">
-                            <i class="fa-solid fa-circle-user text-orange-600 text-sm"></i>
-                            <span class="group-hover:underline underline-offset-2">${u.name}</span>
+                        <button type="button" onclick="openTenantModal('${tenantDataAttr}')" class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 hover:bg-orange-50 text-slate-800 hover:text-orange-700 border border-slate-200 hover:border-orange-200 transition shadow-2xs group focus:outline-none" title="Klik untuk melihat detail profil & KTP penghuni">
+                            <div class="w-5 h-5 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-[10px] font-black shrink-0">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <span>${u.name}</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[9px] text-slate-400 group-hover:text-orange-500 ml-0.5"></i>
                         </button>
                     `;
                 }
