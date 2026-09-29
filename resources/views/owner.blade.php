@@ -1127,12 +1127,15 @@
 
                 const payDate = p.created_at ? new Date(p.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : (p.due_date || '-');
 
+                const isConfirmed = Boolean(p.is_confirmed);
+
                 // Detail Data object for modal
                 const detailData = {
                     payment_id: p.id,
                     invoice_no: '#INV-' + String(p.id).padStart(5, '0'),
                     status: p.status,
                     has_paid: hasPaid,
+                    is_confirmed: isConfirmed,
                     amount: Number(p.amount).toLocaleString('id-ID'),
                     due_date: p.due_date || '-',
                     pay_date: payDate,
@@ -1148,9 +1151,9 @@
                 };
                 const detailDataAttr = encodeURIComponent(JSON.stringify(detailData));
 
-                // Invoice Column: jika berhasil (approved/lunas) tampilkan button Invoice, jika belum -
+                // Invoice Column: jika berhasil (approved/lunas) dan sudah dikonfirmasi tampilkan button Invoice, jika belum -
                 let invoiceBtn = '';
-                if (isApproved) {
+                if (isApproved && isConfirmed) {
                     invoiceBtn = `
                         <button onclick="openReceiptModal(${p.id}, '${(p.title || '').replace(/'/g, "\\'")}', ${p.amount}, '${p.due_date || ''}', '${(methodClean || 'BCA Virtual Account').replace(/'/g, "\\'")}', '${payDate}', '${tenantName.replace(/'/g, "\\'")}', '${roomNumber}')" class="inline-flex items-center px-3 py-1.5 bg-white hover:bg-slate-50 text-navy-950 font-bold text-xs rounded-lg transition border border-slate-300 shadow-2xs group focus:outline-none cursor-pointer" title="Lihat Invoice Pembayaran">
                             <i class="fa-solid fa-file-invoice mr-1.5 text-orange-600"></i> Invoice
@@ -1796,15 +1799,15 @@
                     title.textContent = 'Pembayaran Berhasil';
                     title.className = 'font-extrabold text-sm block text-emerald-950';
 
-                    if (d.status === 'approved') {
-                        desc.textContent = `Status: LUNAS • Pembayaran terverifikasi via ${d.method}`;
+                    if (d.is_confirmed) {
+                        desc.textContent = `Status: LUNAS • Pembayaran telah terkonfirmasi via ${d.method}`;
                         actionContainer.innerHTML = `
                             <button type="button" onclick="closePaymentRoomDetailModal(); openReceiptModal(${d.payment_id}, 'Pembayaran Sewa ${d.room_number.replace(/'/g, "\\'")}', '${d.amount.replace(/[^0-9]/g, '')}', '${d.due_date}', '${d.method.replace(/'/g, "\\'")}', '${d.pay_date}', '${d.tenant_name.replace(/'/g, "\\'")}', '${d.room_number.replace(/'/g, "\\'")}')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition shadow-sm flex items-center justify-center cursor-pointer" title="Status Lunas (Klik untuk melihat invoice)">
-                                <i class="fa-solid fa-circle-check mr-1.5"></i> Status Lunas
+                                <i class="fa-solid fa-circle-check mr-1.5"></i> Status Lunas (Terkonfirmasi)
                             </button>
                         `;
                     } else {
-                        desc.textContent = `Penghuni telah berhasil membayar via ${d.method}. Klik tombol di bawah untuk verifikasi status Lunas.`;
+                        desc.textContent = `Penghuni telah berhasil membayar via ${d.method}. Klik tombol di bawah untuk konfirmasi status Lunas & menerbitkan invoice.`;
                         actionContainer.innerHTML = `
                             <button type="button" onclick="confirmPaymentAsLunas(${d.payment_id})" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition shadow-sm flex items-center justify-center cursor-pointer">
                                 <i class="fa-solid fa-check mr-1.5"></i> Status Lunas
@@ -1821,17 +1824,9 @@
                     desc.textContent = `Penghuni belum melakukan pembayaran. Tenggat waktu: ${d.due_date}`;
 
                     actionContainer.innerHTML = `
-                        <div class="w-full space-y-2">
-                            <button type="button" disabled class="w-full py-2.5 bg-slate-200 text-slate-400 font-bold rounded-xl text-xs flex items-center justify-center cursor-not-allowed border border-slate-300 shadow-none">
-                                <i class="fa-solid fa-ban mr-1.5"></i> Status Lunas
-                            </button>
-                            <div class="flex items-center justify-between px-1">
-                                <span class="text-[11px] text-slate-400 italic">Tombol Status Lunas tidak dapat diklik karena belum dibayar pengguna.</span>
-                                <button type="button" onclick="recordTenantPaid(${d.payment_id})" class="text-[11px] text-orange-600 hover:text-orange-700 font-bold underline transition cursor-pointer">
-                                    Catat Sudah Bayar
-                                </button>
-                            </div>
-                        </div>
+                        <button type="button" disabled class="w-full py-2.5 bg-slate-200 text-slate-400 font-bold rounded-xl text-xs flex items-center justify-center cursor-not-allowed border border-slate-300 shadow-none">
+                            <i class="fa-solid fa-ban mr-1.5"></i> Status Lunas
+                        </button>
                     `;
                 }
 
@@ -1857,67 +1852,6 @@
                     await loadDashboardData();
                 } else {
                     alert(data.message || 'Gagal mengubah status menjadi Lunas.');
-                }
-            } catch (err) {
-                console.error(err);
-                alert('Terjadi kesalahan jaringan.');
-            }
-        }
-
-        async function recordTenantPaid(paymentId) {
-            try {
-                const res = await fetch(`/api/owner/payments/${paymentId}/mark-paid`, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken, 
-                        'Accept': 'application/json' 
-                    },
-                    body: JSON.stringify({ payment_method: 'Transfer Bank / Online' })
-                });
-                const data = await res.json();
-                if (data.success) {
-                    await loadDashboardData();
-                    const p = (globalData && globalData.payments) ? globalData.payments.find(x => x.id === paymentId) : null;
-                    if (p) {
-                        const matchingRoom = (globalData && globalData.rooms) 
-                            ? globalData.rooms.find(r => r.id === (p.room_id || (p.room ? p.room.id : null)) || r.number === (p.room ? p.room.number : null))
-                            : null;
-                        const activeBooking = (matchingRoom && matchingRoom.bookings && matchingRoom.bookings.length > 0) ? matchingRoom.bookings[0] : null;
-                        const tenantUser = (activeBooking && activeBooking.user) ? activeBooking.user : (p.user || null);
-                        const tenantName = tenantUser ? tenantUser.name : (p.user ? p.user.name : 'Penghuni');
-                        const rawRoomNum = matchingRoom ? matchingRoom.number : (p.room ? p.room.number : '-');
-                        const roomNumber = rawRoomNum.toLowerCase().startsWith('kamar') ? rawRoomNum : `Kamar ${rawRoomNum}`;
-                        const roomType = matchingRoom ? matchingRoom.type : (p.room ? p.room.type : '-');
-                        const roomPrice = matchingRoom ? Number(matchingRoom.price).toLocaleString('id-ID') : Number(p.amount).toLocaleString('id-ID');
-                        const rentalPeriod = matchingRoom ? (matchingRoom.rental_period || 'Bulanan') : 'Bulanan';
-                        const startDate = activeBooking ? (activeBooking.start_date || '-') : '-';
-                        const tenantEmail = tenantUser ? (tenantUser.email || '-') : '-';
-                        const tenantPhone = tenantUser ? (tenantUser.phone || '-') : '-';
-                        const payDate = p.created_at ? new Date(p.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : (p.due_date || '-');
-
-                        const detailData = {
-                            payment_id: p.id,
-                            invoice_no: '#INV-' + String(p.id).padStart(5, '0'),
-                            status: p.status,
-                            has_paid: true,
-                            amount: Number(p.amount).toLocaleString('id-ID'),
-                            due_date: p.due_date || '-',
-                            pay_date: payDate,
-                            method: p.payment_method || 'Transfer Bank / Online',
-                            room_number: roomNumber,
-                            room_type: roomType,
-                            room_price: roomPrice,
-                            rental_period: rentalPeriod,
-                            tenant_name: tenantName,
-                            tenant_email: tenantEmail,
-                            tenant_phone: tenantPhone,
-                            start_date: startDate
-                        };
-                        openPaymentRoomDetailModal(encodeURIComponent(JSON.stringify(detailData)));
-                    }
-                } else {
-                    alert(data.message || 'Gagal mencatat pembayaran.');
                 }
             } catch (err) {
                 console.error(err);

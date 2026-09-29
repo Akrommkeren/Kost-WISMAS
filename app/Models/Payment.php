@@ -18,6 +18,11 @@ class Payment extends Model
         'payment_method',
         'proof_image',
         'status',
+        'is_confirmed',
+    ];
+
+    protected $casts = [
+        'is_confirmed' => 'boolean',
     ];
 
     public function user()

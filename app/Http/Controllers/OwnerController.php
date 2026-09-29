@@ -97,6 +97,7 @@ class OwnerController extends Controller
     public function approvePayment(Payment $payment)
     {
         $payment->status = 'approved';
+        $payment->is_confirmed = true;
         if (!$payment->payment_method) {
             $payment->payment_method = 'Transfer Bank';
         }
