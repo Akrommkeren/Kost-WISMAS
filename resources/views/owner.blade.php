@@ -215,7 +215,7 @@
                                     <span id="displayFilterRoomStatus" class="truncate text-left font-semibold">Semua Status Kamar</span>
                                     <i id="arrowFilterRoomStatus" class="fa-solid fa-chevron-down text-slate-500 text-[10px] shrink-0 ml-2 transition-transform duration-200"></i>
                                 </button>
-                                <div id="menuFilterRoomStatus" class="hidden absolute right-0 top-full mt-1.5 z-50 bg-white rounded-xl shadow-xl border border-slate-200 p-1 space-y-0.5 min-w-[185px]">
+                                <div id="menuFilterRoomStatus" class="hidden absolute left-0 top-full mt-1.5 z-50 bg-white rounded-xl shadow-xl border border-slate-200 p-1 space-y-0.5 min-w-full">
                                     <div onclick="selectOwnerFilterOption('RoomStatus', 'all', 'Semua Status Kamar')" data-val="all" class="room-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-semibold text-slate-900 bg-slate-100 truncate">
                                         Semua Status Kamar
                                     </div>
@@ -271,7 +271,7 @@
                                     <span id="displayFilterPaymentStatus" class="truncate text-left font-semibold">Semua Status Tagihan</span>
                                     <i id="arrowFilterPaymentStatus" class="fa-solid fa-chevron-down text-slate-500 text-[10px] shrink-0 ml-2 transition-transform duration-200"></i>
                                 </button>
-                                <div id="menuFilterPaymentStatus" class="hidden absolute right-0 top-full mt-1.5 z-50 bg-white rounded-xl shadow-xl border border-slate-200 p-1 space-y-0.5 min-w-[220px]">
+                                <div id="menuFilterPaymentStatus" class="hidden absolute left-0 top-full mt-1.5 z-50 bg-white rounded-xl shadow-xl border border-slate-200 p-1 space-y-0.5 min-w-full">
                                     <div onclick="selectOwnerFilterOption('PaymentStatus', 'all', 'Semua Status Tagihan')" data-val="all" class="payment-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-semibold text-slate-900 bg-slate-100 truncate">
                                         Semua Status Tagihan
                                     </div>
@@ -358,7 +358,7 @@
                                         <span id="displayFilterFinanceType" class="truncate text-left font-semibold">Semua Transaksi (Keluar & Masuk)</span>
                                         <i id="arrowFilterFinanceType" class="fa-solid fa-chevron-down text-slate-500 text-[10px] shrink-0 ml-2 transition-transform duration-200"></i>
                                     </button>
-                                    <div id="menuFilterFinanceType" class="hidden absolute right-0 top-full mt-1.5 z-50 bg-white rounded-xl shadow-xl border border-slate-200 p-1 space-y-0.5 min-w-[230px]">
+                                    <div id="menuFilterFinanceType" class="hidden absolute left-0 top-full mt-1.5 z-50 bg-white rounded-xl shadow-xl border border-slate-200 p-1 space-y-0.5 min-w-full">
                                         <div onclick="selectOwnerFilterOption('FinanceType', 'all', 'Semua Transaksi (Keluar & Masuk)')" data-val="all" class="finance-type-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-semibold text-slate-900 bg-slate-100 truncate">
                                             Semua Transaksi (Keluar & Masuk)
                                         </div>
@@ -420,7 +420,7 @@
                                     <span id="displayFilterComplaintStatus" class="truncate text-left font-semibold">Semua Status Pengaduan</span>
                                     <i id="arrowFilterComplaintStatus" class="fa-solid fa-chevron-down text-slate-500 text-[10px] shrink-0 ml-2 transition-transform duration-200"></i>
                                 </button>
-                                <div id="menuFilterComplaintStatus" class="hidden absolute right-0 top-full mt-1.5 z-50 bg-white rounded-xl shadow-xl border border-slate-200 p-1 space-y-0.5 min-w-[220px]">
+                                <div id="menuFilterComplaintStatus" class="hidden absolute left-0 top-full mt-1.5 z-50 bg-white rounded-xl shadow-xl border border-slate-200 p-1 space-y-0.5 min-w-full">
                                     <div onclick="selectOwnerFilterOption('ComplaintStatus', 'all', 'Semua Status Pengaduan')" data-val="all" class="complaint-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-semibold text-slate-900 bg-slate-100 truncate">
                                         Semua Status Pengaduan
                                     </div>
