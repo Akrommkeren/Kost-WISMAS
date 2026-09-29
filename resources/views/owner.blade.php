@@ -66,6 +66,15 @@
             background-color: rgba(8, 20, 44, 0.75);
             backdrop-filter: blur(5px);
         }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            opacity: 0;
+            cursor: pointer;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 2.5rem;
+            height: 100%;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-orange-500 selection:text-white flex flex-col min-h-screen">
@@ -324,7 +333,7 @@
                             <p class="text-2xl font-black text-emerald-600" id="finTotalIncome">Rp 0</p>
                             <div class="mt-2.5">
                                 <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200/80">
-                                    Dari seluruh pembayaran sewa lunas
+                                    <i class="fa-solid fa-circle-arrow-down mr-1.5 text-emerald-600"></i> Dari seluruh pembayaran sewa lunas
                                 </span>
                             </div>
                         </div>
@@ -334,7 +343,7 @@
                             <p class="text-2xl font-black text-rose-600" id="finTotalExpense">Rp 0</p>
                             <div class="mt-2.5">
                                 <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold bg-rose-50 text-rose-800 border border-rose-200/80">
-                                    Biaya operasional kost terverifikasi
+                                    <i class="fa-solid fa-circle-arrow-up mr-1.5 text-rose-600"></i> Biaya operasional kost terverifikasi
                                 </span>
                             </div>
                         </div>
@@ -344,7 +353,7 @@
                             <p class="text-2xl font-black text-navy-950" id="finNetBalance">Rp 0</p>
                             <div class="mt-2.5">
                                 <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold bg-blue-50 text-blue-900 border border-blue-200/80">
-                                    Total Kas Masuk - Total Kas Keluar
+                                    <i class="fa-solid fa-scale-balanced mr-1.5 text-blue-600"></i> Total Kas Masuk - Total Kas Keluar
                                 </span>
                             </div>
                         </div>
@@ -783,7 +792,12 @@
 
                     <div>
                         <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Tanggal</label>
-                        <input type="text" id="expDate" required placeholder="Contoh: 05 Okt 2026" value="{{ \Carbon\Carbon::now()->translatedFormat('d M Y') }}" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:outline-none text-xs font-semibold bg-slate-50 hover:bg-white">
+                        <div class="relative flex items-center">
+                            <input type="date" id="expDate" required value="{{ date('Y-m-d') }}" onclick="try { this.showPicker(); } catch(e) {}" class="w-full pl-3.5 pr-10 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:outline-none text-xs font-semibold bg-slate-50 hover:bg-white cursor-pointer">
+                            <button type="button" onclick="try { document.getElementById('expDate').showPicker(); } catch(e) { document.getElementById('expDate').focus(); }" class="absolute right-3 text-slate-400 hover:text-orange-600 transition focus:outline-none cursor-pointer" title="Pilih Tanggal">
+                                <i class="fa-regular fa-calendar-days text-sm text-orange-600"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -1262,9 +1276,15 @@
             // 2. Kas Keluar (Pengeluaran operasional kost)
             (expenses || []).forEach(e => {
                 const d = e.created_at ? new Date(e.created_at) : new Date();
+                let displayDate = e.date;
+                if (/^\d{4}-\d{2}-\d{2}$/.test(e.date)) {
+                    const [year, month, day] = e.date.split('-');
+                    const dt = new Date(year, month - 1, day);
+                    displayDate = dt.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+                }
                 transactions.push({
                     type: 'out',
-                    date: e.date,
+                    date: displayDate,
                     title: e.title,
                     category: e.category,
                     amount: Number(e.amount),
@@ -1307,7 +1327,7 @@
                         <td class="py-3.5 px-4 font-medium text-slate-600 whitespace-nowrap">${t.date}</td>
                         <td class="py-3.5 px-4">
                             <span class="font-bold text-navy-950 block">${t.title}</span>
-                            ${t.category === 'Sewa Kamar' && t.tenantName ? `<span class="font-bold text-navy-950 block text-xs mt-0.5">${t.tenantName}</span>` : ''}
+                            ${t.category === 'Sewa Kamar' && t.tenantName ? `<span class="font-medium text-slate-400 block text-xs mt-0.5">${t.tenantName}</span>` : ''}
                         </td>
                         <td class="py-3.5 px-4">
                             <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700">
@@ -1955,6 +1975,9 @@
             document.getElementById('expTitle').value = '';
             document.getElementById('expAmount').value = '';
             document.getElementById('expNote').value = '';
+            const today = new Date().toISOString().split('T')[0];
+            const dateInput = document.getElementById('expDate');
+            if (dateInput) dateInput.value = today;
             selectExpenseCategory('Listrik & Air');
             document.getElementById('addExpenseModal').classList.remove('hidden');
         }
@@ -1969,10 +1992,17 @@
             btn.disabled = true;
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Menyimpan...';
 
+            let expenseDate = document.getElementById('expDate').value;
+            if (/^\d{4}-\d{2}-\d{2}$/.test(expenseDate)) {
+                const [year, month, day] = expenseDate.split('-');
+                const dt = new Date(year, month - 1, day);
+                expenseDate = dt.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+            }
+
             const payload = {
                 title: document.getElementById('expTitle').value,
                 category: document.getElementById('expCategory').value,
-                date: document.getElementById('expDate').value,
+                date: expenseDate,
                 amount: document.getElementById('expAmount').value,
                 note: document.getElementById('expNote').value,
             };
