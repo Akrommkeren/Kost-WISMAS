@@ -526,19 +526,16 @@
     <!-- ========================================================================= -->
     <div id="tenantDetailModal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative border border-slate-200 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center pb-3 border-b border-slate-200 mb-4">
-                <div class="flex items-center space-x-2.5">
-                    <div class="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-sm">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-extrabold text-base text-navy-950" id="tenantModalTitle">Detail Penghuni</h3>
-                        <p class="text-xs text-slate-500">Informasi identitas akun dan masa sewa kamar</p>
-                    </div>
-                </div>
-                <button onclick="closeTenantModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition">
-                    <i class="fa-solid fa-xmark"></i>
+            <!-- Modal Header: Logo Kost di paling atas & center, teks judul & subjudul center -->
+            <div class="relative pb-4 border-b border-slate-200 mb-5 text-center">
+                <button onclick="closeTenantModal()" class="absolute top-0 right-0 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition focus:outline-none" title="Tutup Modal">
+                    <i class="fa-solid fa-xmark text-sm"></i>
                 </button>
+                <div class="w-14 h-14 rounded-2xl bg-white shadow-sm border border-slate-200 p-1 flex items-center justify-center overflow-hidden mx-auto mb-2.5">
+                    <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
+                </div>
+                <h3 class="font-extrabold text-base text-navy-950" id="tenantModalTitle">Detail Penghuni</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Informasi identitas akun dan masa sewa kamar</p>
             </div>
 
             <!-- Profile Overview Header -->
