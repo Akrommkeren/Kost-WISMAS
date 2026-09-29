@@ -209,19 +209,29 @@
                             <p class="text-xs text-slate-500 mt-0.5">Kelola status ketersediaan kamar, tarif sewa bulanan, data penghuni aktif, dan dokumen KTP.</p>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <div class="relative inline-flex items-center">
-                                <select id="filterRoomStatus" onchange="filterRoomsTable()" class="appearance-none bg-white hover:bg-slate-50 border border-slate-300 hover:border-slate-400 text-xs font-bold text-slate-700 pl-3.5 pr-8 py-2 rounded-xl focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:outline-none shadow-2xs cursor-pointer transition">
-                                    <option value="all">Semua Status Kamar</option>
-                                    <option value="available">Hanya Kamar Tersedia</option>
-                                    <option value="occupied">Hanya Kamar Terisi</option>
-                                </select>
-                                <i class="fa-solid fa-chevron-down absolute right-3 text-[10px] text-slate-400 pointer-events-none"></i>
+                            <div class="relative custom-dropdown-wrapper">
+                                <input type="hidden" id="filterRoomStatus" value="all">
+                                <button type="button" onclick="toggleOwnerDropdown('RoomStatus', event)" id="btnFilterRoomStatus" class="bg-slate-50 hover:bg-white border border-slate-300 hover:border-slate-400 text-slate-900 text-xs rounded-xl px-3.5 py-2 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:outline-none font-medium flex items-center justify-between transition shadow-2xs min-w-[175px]">
+                                    <span id="displayFilterRoomStatus" class="truncate text-left font-semibold">Semua Status Kamar</span>
+                                    <i id="arrowFilterRoomStatus" class="fa-solid fa-chevron-down text-slate-500 text-[10px] shrink-0 ml-2 transition-transform duration-200"></i>
+                                </button>
+                                <div id="menuFilterRoomStatus" class="hidden absolute right-0 top-full mt-1.5 z-50 bg-white rounded-xl shadow-xl border border-slate-200 p-1 space-y-0.5 min-w-[185px]">
+                                    <div onclick="selectOwnerFilterOption('RoomStatus', 'all', 'Semua Status Kamar')" data-val="all" class="room-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-semibold text-slate-900 bg-slate-100 truncate">
+                                        Semua Status Kamar
+                                    </div>
+                                    <div onclick="selectOwnerFilterOption('RoomStatus', 'available', 'Hanya Kamar Tersedia')" data-val="available" class="room-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
+                                        Hanya Kamar Tersedia
+                                    </div>
+                                    <div onclick="selectOwnerFilterOption('RoomStatus', 'occupied', 'Hanya Kamar Terisi')" data-val="occupied" class="room-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
+                                        Hanya Kamar Terisi
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="p-6">
-                        <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                        <div class="overflow-x-auto border border-slate-200 rounded-xl min-h-[260px]">
                             <table class="w-full text-left border-collapse text-xs">
                                 <thead>
                                     <tr class="border-b border-slate-200 text-[11px] font-extrabold uppercase text-slate-500 tracking-wider bg-slate-50/80">
@@ -255,13 +265,23 @@
                             <p class="text-xs text-slate-500 mt-0.5">Pantau waktu jatuh tempo sewa, verifikasi bukti transfer masuk, serta konfirmasi status pelunasan penghuni.</p>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <div class="relative inline-flex items-center">
-                                <select id="filterPaymentStatus" onchange="filterDueDateTable()" class="appearance-none bg-white hover:bg-slate-50 border border-slate-300 hover:border-slate-400 text-xs font-bold text-slate-700 pl-3.5 pr-8 py-2 rounded-xl focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:outline-none shadow-2xs cursor-pointer transition">
-                                    <option value="all">Semua Status Tagihan</option>
-                                    <option value="pending">Menunggu Verifikasi (Pending)</option>
-                                    <option value="approved">Lunas (Disetujui)</option>
-                                </select>
-                                <i class="fa-solid fa-chevron-down absolute right-3 text-[10px] text-slate-400 pointer-events-none"></i>
+                            <div class="relative custom-dropdown-wrapper">
+                                <input type="hidden" id="filterPaymentStatus" value="all">
+                                <button type="button" onclick="toggleOwnerDropdown('PaymentStatus', event)" id="btnFilterPaymentStatus" class="bg-slate-50 hover:bg-white border border-slate-300 hover:border-slate-400 text-slate-900 text-xs rounded-xl px-3.5 py-2 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:outline-none font-medium flex items-center justify-between transition shadow-2xs min-w-[200px]">
+                                    <span id="displayFilterPaymentStatus" class="truncate text-left font-semibold">Semua Status Tagihan</span>
+                                    <i id="arrowFilterPaymentStatus" class="fa-solid fa-chevron-down text-slate-500 text-[10px] shrink-0 ml-2 transition-transform duration-200"></i>
+                                </button>
+                                <div id="menuFilterPaymentStatus" class="hidden absolute right-0 top-full mt-1.5 z-50 bg-white rounded-xl shadow-xl border border-slate-200 p-1 space-y-0.5 min-w-[220px]">
+                                    <div onclick="selectOwnerFilterOption('PaymentStatus', 'all', 'Semua Status Tagihan')" data-val="all" class="payment-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-semibold text-slate-900 bg-slate-100 truncate">
+                                        Semua Status Tagihan
+                                    </div>
+                                    <div onclick="selectOwnerFilterOption('PaymentStatus', 'pending', 'Menunggu Verifikasi (Pending)')" data-val="pending" class="payment-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
+                                        Menunggu Verifikasi (Pending)
+                                    </div>
+                                    <div onclick="selectOwnerFilterOption('PaymentStatus', 'approved', 'Lunas (Disetujui)')" data-val="approved" class="payment-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
+                                        Lunas (Disetujui)
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -332,13 +352,23 @@
                                 <p class="text-xs text-slate-500 mt-0.5">Catatan seluruh arus kas pemasukan sewa kamar dan biaya operasional kost.</p>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <div class="relative inline-flex items-center">
-                                    <select id="filterFinanceType" onchange="filterFinancesTable()" class="appearance-none bg-white hover:bg-slate-50 border border-slate-300 hover:border-slate-400 text-xs font-bold text-slate-700 pl-3.5 pr-8 py-2 rounded-xl focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:outline-none shadow-2xs cursor-pointer transition">
-                                        <option value="all">Semua Transaksi (Keluar & Masuk)</option>
-                                        <option value="in">Hanya Uang Masuk (Pemasukan)</option>
-                                        <option value="out">Hanya Uang Keluar (Pengeluaran)</option>
-                                    </select>
-                                    <i class="fa-solid fa-chevron-down absolute right-3 text-[10px] text-slate-400 pointer-events-none"></i>
+                                <div class="relative custom-dropdown-wrapper">
+                                    <input type="hidden" id="filterFinanceType" value="all">
+                                    <button type="button" onclick="toggleOwnerDropdown('FinanceType', event)" id="btnFilterFinanceType" class="bg-slate-50 hover:bg-white border border-slate-300 hover:border-slate-400 text-slate-900 text-xs rounded-xl px-3.5 py-2 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:outline-none font-medium flex items-center justify-between transition shadow-2xs min-w-[210px]">
+                                        <span id="displayFilterFinanceType" class="truncate text-left font-semibold">Semua Transaksi (Keluar & Masuk)</span>
+                                        <i id="arrowFilterFinanceType" class="fa-solid fa-chevron-down text-slate-500 text-[10px] shrink-0 ml-2 transition-transform duration-200"></i>
+                                    </button>
+                                    <div id="menuFilterFinanceType" class="hidden absolute right-0 top-full mt-1.5 z-50 bg-white rounded-xl shadow-xl border border-slate-200 p-1 space-y-0.5 min-w-[230px]">
+                                        <div onclick="selectOwnerFilterOption('FinanceType', 'all', 'Semua Transaksi (Keluar & Masuk)')" data-val="all" class="finance-type-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-semibold text-slate-900 bg-slate-100 truncate">
+                                            Semua Transaksi (Keluar & Masuk)
+                                        </div>
+                                        <div onclick="selectOwnerFilterOption('FinanceType', 'in', 'Hanya Uang Masuk (Pemasukan)')" data-val="in" class="finance-type-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
+                                            Hanya Uang Masuk (Pemasukan)
+                                        </div>
+                                        <div onclick="selectOwnerFilterOption('FinanceType', 'out', 'Hanya Uang Keluar (Pengeluaran)')" data-val="out" class="finance-type-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
+                                            Hanya Uang Keluar (Pengeluaran)
+                                        </div>
+                                    </div>
                                 </div>
                                 <button onclick="openAddExpenseModal()" class="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white font-extrabold text-xs rounded-xl shadow-md transition flex items-center shrink-0">
                                     <i class="fa-solid fa-plus mr-1.5"></i> Catat Pengeluaran Baru
@@ -384,14 +414,26 @@
                             <p class="text-xs text-slate-500 mt-0.5">Tinjau laporan kendala fasilitas penghuni yang belum diperbaiki agar segera ditindaklanjuti.</p>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <div class="relative inline-flex items-center">
-                                <select id="filterComplaintStatus" onchange="filterComplaintsTable()" class="appearance-none bg-white hover:bg-slate-50 border border-slate-300 hover:border-slate-400 text-xs font-bold text-slate-700 pl-3.5 pr-8 py-2 rounded-xl focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:outline-none shadow-2xs cursor-pointer transition">
-                                    <option value="all">Semua Status Pengaduan</option>
-                                    <option value="pending">Belum Diperbaiki (Perlu Tindakan)</option>
-                                    <option value="in_progress">Sedang Dikerjakan</option>
-                                    <option value="resolved">Selesai Diperbaiki</option>
-                                </select>
-                                <i class="fa-solid fa-chevron-down absolute right-3 text-[10px] text-slate-400 pointer-events-none"></i>
+                            <div class="relative custom-dropdown-wrapper">
+                                <input type="hidden" id="filterComplaintStatus" value="all">
+                                <button type="button" onclick="toggleOwnerDropdown('ComplaintStatus', event)" id="btnFilterComplaintStatus" class="bg-slate-50 hover:bg-white border border-slate-300 hover:border-slate-400 text-slate-900 text-xs rounded-xl px-3.5 py-2 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:outline-none font-medium flex items-center justify-between transition shadow-2xs min-w-[200px]">
+                                    <span id="displayFilterComplaintStatus" class="truncate text-left font-semibold">Semua Status Pengaduan</span>
+                                    <i id="arrowFilterComplaintStatus" class="fa-solid fa-chevron-down text-slate-500 text-[10px] shrink-0 ml-2 transition-transform duration-200"></i>
+                                </button>
+                                <div id="menuFilterComplaintStatus" class="hidden absolute right-0 top-full mt-1.5 z-50 bg-white rounded-xl shadow-xl border border-slate-200 p-1 space-y-0.5 min-w-[220px]">
+                                    <div onclick="selectOwnerFilterOption('ComplaintStatus', 'all', 'Semua Status Pengaduan')" data-val="all" class="complaint-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-semibold text-slate-900 bg-slate-100 truncate">
+                                        Semua Status Pengaduan
+                                    </div>
+                                    <div onclick="selectOwnerFilterOption('ComplaintStatus', 'pending', 'Belum Diperbaiki (Perlu Tindakan)')" data-val="pending" class="complaint-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
+                                        Belum Diperbaiki (Perlu Tindakan)
+                                    </div>
+                                    <div onclick="selectOwnerFilterOption('ComplaintStatus', 'in_progress', 'Sedang Dikerjakan')" data-val="in_progress" class="complaint-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
+                                        Sedang Dikerjakan
+                                    </div>
+                                    <div onclick="selectOwnerFilterOption('ComplaintStatus', 'resolved', 'Selesai Diperbaiki')" data-val="resolved" class="complaint-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
+                                        Selesai Diperbaiki
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -860,20 +902,27 @@
                         <i class="fa-solid fa-lock mr-1.5 text-slate-500"></i> Kamar Terisi
                        </button>`;
 
-                // Rental Period Dropdown (Mirip dropdown halaman publik/penghuni dengan chevron icon)
+                // Rental Period Dropdown (Custom Dropdown Menu persis seperti pada halaman penghuni/home)
                 const curPeriod = room.rental_period || 'Bulanan';
                 const periods = ['Harian', 'Mingguan', 'Bulanan', '3 Bulan', '6 Bulan', 'Tahunan'];
-                const periodOptions = periods.map(p => {
-                    const sel = (curPeriod.toLowerCase() === p.toLowerCase()) ? 'selected' : '';
-                    return `<option value="${p}" ${sel}>${p}</option>`;
+                const periodOptionsHtml = periods.map(p => {
+                    const isActive = (curPeriod.toLowerCase() === p.toLowerCase()) ? 'bg-slate-100 font-bold' : 'font-medium';
+                    return `
+                        <div onclick="selectRentalPeriod(${room.id}, '${p}', event)" data-period="${p}" class="period-opt-${room.id} px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs text-slate-900 ${isActive} truncate">
+                            ${p}
+                        </div>
+                    `;
                 }).join('');
 
                 const periodDropdown = `
-                    <div class="relative inline-flex items-center">
-                        <select onchange="updateRentalPeriod(${room.id}, this.value)" class="appearance-none bg-slate-50 hover:bg-white border border-slate-300 hover:border-slate-400 text-slate-800 text-xs font-bold rounded-lg pl-3 pr-8 py-1.5 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:outline-none shadow-2xs cursor-pointer transition">
-                            ${periodOptions}
-                        </select>
-                        <i class="fa-solid fa-chevron-down absolute right-3 text-[10px] text-slate-400 pointer-events-none"></i>
+                    <div id="wrapperPeriod-${room.id}" class="relative custom-dropdown-wrapper inline-block text-left">
+                        <button type="button" onclick="toggleRentalPeriodDropdown(${room.id}, event)" id="btnPeriod-${room.id}" class="bg-slate-50 hover:bg-white border border-slate-300 hover:border-slate-400 text-slate-900 text-xs font-semibold rounded-lg pl-3 pr-2.5 py-1.5 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:outline-none flex items-center justify-between space-x-2 transition shadow-2xs min-w-[105px]">
+                            <span id="displayPeriod-${room.id}" class="truncate font-bold">${curPeriod}</span>
+                            <i id="arrowPeriod-${room.id}" class="fa-solid fa-chevron-down text-slate-500 text-[10px] shrink-0 transition-transform duration-200"></i>
+                        </button>
+                        <div id="menuPeriod-${room.id}" class="hidden absolute left-0 top-full mt-1.5 z-50 bg-white rounded-xl shadow-xl border border-slate-200 p-1 space-y-0.5 min-w-[125px]">
+                            ${periodOptionsHtml}
+                        </div>
                     </div>
                 `;
 
@@ -1202,6 +1251,150 @@
                 `;
             }).join('');
         }
+
+        // =========================================================================
+        // CUSTOM DROPDOWN HANDLERS (PERSIS MODEL DROPDOWN HALAMAN PENGHUNI)
+        // =========================================================================
+        function closeAllCustomDropdowns() {
+            ['RoomStatus', 'PaymentStatus', 'FinanceType', 'ComplaintStatus'].forEach(name => {
+                const menu = document.getElementById(`menuFilter${name}`);
+                const arrow = document.getElementById(`arrowFilter${name}`);
+                if (menu) menu.classList.add('hidden');
+                if (arrow) arrow.style.transform = 'rotate(0deg)';
+            });
+
+            document.querySelectorAll('[id^="menuPeriod-"]').forEach(menu => {
+                menu.classList.add('hidden');
+            });
+            document.querySelectorAll('[id^="arrowPeriod-"]').forEach(arrow => {
+                arrow.style.transform = 'rotate(0deg)';
+            });
+            document.querySelectorAll('[id^="wrapperPeriod-"]').forEach(wrapper => {
+                wrapper.style.zIndex = 'auto';
+            });
+        }
+
+        function toggleOwnerDropdown(name, event) {
+            if (event) event.stopPropagation();
+            const menu = document.getElementById(`menuFilter${name}`);
+            const arrow = document.getElementById(`arrowFilter${name}`);
+            if (!menu) return;
+
+            const isHidden = menu.classList.contains('hidden');
+            closeAllCustomDropdowns();
+
+            if (isHidden) {
+                menu.classList.remove('hidden');
+                if (arrow) arrow.style.transform = 'rotate(180deg)';
+            } else {
+                menu.classList.add('hidden');
+                if (arrow) arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function selectOwnerFilterOption(name, val, labelText) {
+            const input = document.getElementById(`filter${name}`);
+            if (input) input.value = val;
+
+            const display = document.getElementById(`displayFilter${name}`);
+            if (display) display.textContent = labelText;
+
+            const menu = document.getElementById(`menuFilter${name}`);
+            if (menu) {
+                const optClass = name === 'RoomStatus' ? '.room-status-opt'
+                    : name === 'PaymentStatus' ? '.payment-status-opt'
+                    : name === 'FinanceType' ? '.finance-type-opt'
+                    : '.complaint-status-opt';
+                menu.querySelectorAll(optClass).forEach(item => {
+                    if (item.dataset.val === String(val)) {
+                        item.classList.add('bg-slate-100', 'font-semibold');
+                        item.classList.remove('font-medium');
+                    } else {
+                        item.classList.remove('bg-slate-100', 'font-semibold');
+                        item.classList.add('font-medium');
+                    }
+                });
+                menu.classList.add('hidden');
+            }
+
+            const arrow = document.getElementById(`arrowFilter${name}`);
+            if (arrow) arrow.style.transform = 'rotate(0deg)';
+
+            // Trigger corresponding table filter handler
+            if (name === 'RoomStatus') filterRoomsTable();
+            else if (name === 'PaymentStatus') filterDueDateTable();
+            else if (name === 'FinanceType') filterFinancesTable();
+            else if (name === 'ComplaintStatus') filterComplaintsTable();
+        }
+
+        // Custom Dropdown Periode Sewa per Baris Kamar
+        function toggleRentalPeriodDropdown(roomId, event) {
+            if (event) event.stopPropagation();
+            const menu = document.getElementById(`menuPeriod-${roomId}`);
+            const arrow = document.getElementById(`arrowPeriod-${roomId}`);
+            const wrapper = document.getElementById(`wrapperPeriod-${roomId}`);
+            if (!menu) return;
+
+            const isHidden = menu.classList.contains('hidden');
+            closeAllCustomDropdowns();
+
+            if (isHidden) {
+                if (wrapper) wrapper.style.zIndex = '40';
+                const btn = document.getElementById(`btnPeriod-${roomId}`);
+                if (btn) {
+                    const rect = btn.getBoundingClientRect();
+                    const spaceBelow = window.innerHeight - rect.bottom;
+                    if (spaceBelow < 220) {
+                        menu.classList.remove('top-full', 'mt-1.5');
+                        menu.classList.add('bottom-full', 'mb-1.5');
+                    } else {
+                        menu.classList.remove('bottom-full', 'mb-1.5');
+                        menu.classList.add('top-full', 'mt-1.5');
+                    }
+                }
+                menu.classList.remove('hidden');
+                if (arrow) arrow.style.transform = 'rotate(180deg)';
+            } else {
+                if (wrapper) wrapper.style.zIndex = 'auto';
+                menu.classList.add('hidden');
+                if (arrow) arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function selectRentalPeriod(roomId, period, event) {
+            if (event) event.stopPropagation();
+            const display = document.getElementById(`displayPeriod-${roomId}`);
+            if (display) display.textContent = period;
+
+            const menu = document.getElementById(`menuPeriod-${roomId}`);
+            if (menu) {
+                menu.querySelectorAll(`.period-opt-${roomId}`).forEach(el => {
+                    if (el.getAttribute('data-period') === period) {
+                        el.classList.add('bg-slate-100', 'font-bold');
+                        el.classList.remove('font-medium');
+                    } else {
+                        el.classList.remove('bg-slate-100', 'font-bold');
+                        el.classList.add('font-medium');
+                    }
+                });
+                menu.classList.add('hidden');
+            }
+
+            const arrow = document.getElementById(`arrowPeriod-${roomId}`);
+            if (arrow) arrow.style.transform = 'rotate(0deg)';
+
+            const wrapper = document.getElementById(`wrapperPeriod-${roomId}`);
+            if (wrapper) wrapper.style.zIndex = 'auto';
+
+            updateRentalPeriod(roomId, period);
+        }
+
+        // Close dropdown when clicked outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.custom-dropdown-wrapper')) {
+                closeAllCustomDropdowns();
+            }
+        });
 
         // =========================================================================
         // FILTER HANDLERS
