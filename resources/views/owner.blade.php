@@ -81,38 +81,21 @@
                         <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost Wisma S" class="w-full h-full object-contain">
                     </div>
                     <div class="flex flex-col justify-center">
-                        <div class="flex items-center space-x-1.5">
-                            <span class="text-xs font-black text-orange-600 tracking-widest uppercase leading-none">Kost</span>
-                            <span class="px-1.5 py-0.5 rounded text-[9px] font-black bg-orange-100 text-orange-700 border border-orange-200 uppercase tracking-wider">Owner</span>
-                        </div>
+                        <span class="text-xs font-black text-orange-600 tracking-widest uppercase leading-none mb-0.5">Kost</span>
                         <span class="text-lg sm:text-xl font-black text-navy-950 tracking-tight leading-tight">WISMA S</span>
                     </div>
                 </a>
 
                 <!-- Desktop Navigation Menu (Kamar & Penghuni, Tenggat Waktu Bayar, Keuangan, Daftar Pengaduan) -->
-                <nav class="hidden lg:flex items-center space-x-6 text-xs font-bold uppercase tracking-wider">
-                    <button type="button" onclick="switchSection('rooms')" id="navLinkRooms" class="nav-link-btn pb-1 border-b-2 border-orange-600 text-orange-600 hover:text-orange-600 transition flex items-center">
-                        <i class="fa-solid fa-bed mr-2 text-sm"></i> Kamar & Penghuni
-                    </button>
-                    <button type="button" onclick="switchSection('dueDate')" id="navLinkDueDate" class="nav-link-btn pb-1 border-b-2 border-transparent text-slate-700 hover:text-orange-600 transition flex items-center">
-                        <i class="fa-solid fa-calendar-check mr-2 text-sm"></i> Tenggat Waktu Bayar
-                    </button>
-                    <button type="button" onclick="switchSection('finances')" id="navLinkFinances" class="nav-link-btn pb-1 border-b-2 border-transparent text-slate-700 hover:text-orange-600 transition flex items-center">
-                        <i class="fa-solid fa-wallet mr-2 text-sm"></i> Keuangan
-                    </button>
-                    <button type="button" onclick="switchSection('complaints')" id="navLinkComplaints" class="nav-link-btn pb-1 border-b-2 border-transparent text-slate-700 hover:text-orange-600 transition flex items-center relative">
-                        <i class="fa-solid fa-clipboard-list mr-2 text-sm"></i>
-                        <span>Daftar Pengaduan</span>
-                        <span id="navBadgeComplaint" class="ml-1.5 px-1.5 py-0.5 rounded-full text-[10px] bg-amber-500 text-white font-extrabold hidden">0</span>
-                    </button>
+                <nav class="hidden lg:flex items-center space-x-7 text-xs font-bold uppercase tracking-wider">
+                    <button type="button" onclick="switchSection('rooms')" id="navLinkRooms" class="text-orange-600 hover:text-orange-600 transition">KAMAR & PENGHUNI</button>
+                    <button type="button" onclick="switchSection('dueDate')" id="navLinkDueDate" class="text-slate-700 hover:text-orange-600 transition">TENGGAT WAKTU BAYAR</button>
+                    <button type="button" onclick="switchSection('finances')" id="navLinkFinances" class="text-slate-700 hover:text-orange-600 transition">KEUANGAN</button>
+                    <button type="button" onclick="switchSection('complaints')" id="navLinkComplaints" class="text-slate-700 hover:text-orange-600 transition">DAFTAR PENGADUAN</button>
                 </nav>
 
                 <!-- Action Buttons & Owner Profile (Sama dengan Halaman Penghuni) -->
                 <div class="flex items-center space-x-3">
-                    <a href="{{ route('home') }}?view=preview" class="hidden sm:inline-flex items-center px-3 py-2 rounded-lg text-xs font-bold text-slate-600 hover:text-orange-600 bg-slate-100 hover:bg-orange-50 border border-slate-300 transition" title="Lihat tampilan website publik">
-                        <i class="fa-solid fa-desktop mr-1.5 text-orange-600"></i> Pratinjau Web
-                    </a>
-
                     <!-- Owner Profile Badge -->
                     <div class="hidden sm:flex px-3.5 py-2 text-xs font-bold text-navy-950 bg-slate-100 border border-slate-300 rounded-lg items-center shadow-sm">
                         <i class="fa-solid fa-user-shield text-orange-600 mr-2"></i>
@@ -135,23 +118,18 @@
 
         <!-- Mobile Drawer Navigation -->
         <div id="mobileMenu" class="lg:hidden hidden border-t border-slate-200 bg-white/95 px-4 pt-3 pb-4 space-y-1.5 text-xs font-bold uppercase tracking-wider">
-            <button type="button" onclick="switchSection('rooms'); toggleMobileMenu();" class="w-full text-left py-2.5 px-3 rounded-lg text-slate-700 hover:bg-orange-50 hover:text-orange-600 flex items-center">
-                <i class="fa-solid fa-bed mr-2.5 text-orange-600 w-5"></i> Kamar & Penghuni
+            <button type="button" onclick="switchSection('rooms'); toggleMobileMenu();" class="w-full text-left py-2.5 px-3 rounded-lg text-slate-700 hover:bg-orange-50 hover:text-orange-600">
+                KAMAR & PENGHUNI
             </button>
-            <button type="button" onclick="switchSection('dueDate'); toggleMobileMenu();" class="w-full text-left py-2.5 px-3 rounded-lg text-slate-700 hover:bg-orange-50 hover:text-orange-600 flex items-center">
-                <i class="fa-solid fa-calendar-check mr-2.5 text-orange-600 w-5"></i> Tenggat Waktu Bayar
+            <button type="button" onclick="switchSection('dueDate'); toggleMobileMenu();" class="w-full text-left py-2.5 px-3 rounded-lg text-slate-700 hover:bg-orange-50 hover:text-orange-600">
+                TENGGAT WAKTU BAYAR
             </button>
-            <button type="button" onclick="switchSection('finances'); toggleMobileMenu();" class="w-full text-left py-2.5 px-3 rounded-lg text-slate-700 hover:bg-orange-50 hover:text-orange-600 flex items-center">
-                <i class="fa-solid fa-wallet mr-2.5 text-orange-600 w-5"></i> Keuangan
+            <button type="button" onclick="switchSection('finances'); toggleMobileMenu();" class="w-full text-left py-2.5 px-3 rounded-lg text-slate-700 hover:bg-orange-50 hover:text-orange-600">
+                KEUANGAN
             </button>
-            <button type="button" onclick="switchSection('complaints'); toggleMobileMenu();" class="w-full text-left py-2.5 px-3 rounded-lg text-slate-700 hover:bg-orange-50 hover:text-orange-600 flex items-center">
-                <i class="fa-solid fa-clipboard-list mr-2.5 text-orange-600 w-5"></i> Daftar Pengaduan
+            <button type="button" onclick="switchSection('complaints'); toggleMobileMenu();" class="w-full text-left py-2.5 px-3 rounded-lg text-slate-700 hover:bg-orange-50 hover:text-orange-600">
+                DAFTAR PENGADUAN
             </button>
-            <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
-                <a href="{{ route('home') }}?view=preview" class="py-2 px-3 text-slate-600 hover:text-orange-600 flex items-center">
-                    <i class="fa-solid fa-desktop mr-2 text-slate-500"></i> Pratinjau Web Kost
-                </a>
-            </div>
         </div>
     </header>
 
@@ -273,10 +251,9 @@
                     <i class="fa-solid fa-wallet"></i>
                     <span>Keuangan</span>
                 </button>
-                <button id="pillComplaints" onclick="switchSection('complaints')" class="pill-btn flex-1 py-3 px-4 rounded-xl transition flex items-center justify-center space-x-2 bg-slate-50 text-slate-600 hover:text-navy-950 hover:bg-slate-100 relative">
+                <button id="pillComplaints" onclick="switchSection('complaints')" class="pill-btn flex-1 py-3 px-4 rounded-xl transition flex items-center justify-center space-x-2 bg-slate-50 text-slate-600 hover:text-navy-950 hover:bg-slate-100">
                     <i class="fa-solid fa-clipboard-list"></i>
                     <span>Daftar Pengaduan</span>
-                    <span id="pillBadgeComplaint" class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-amber-500 text-white font-extrabold hidden">0</span>
                 </button>
             </div>
 
@@ -531,7 +508,7 @@
                 <div class="md:col-span-2 lg:col-span-2 md:pl-4 lg:pl-8">
                     <h4 class="text-xs font-bold text-white uppercase mb-3 tracking-wider">Layanan</h4>
                     <ul class="space-y-2 text-xs">
-                        <li><a href="{{ route('home') }}?view=preview" class="hover:text-orange-400 transition">Pratinjau Web Kost</a></li>
+                        <li><a href="{{ route('home') }}?view=preview" class="hover:text-orange-400 transition">Beranda Kost</a></li>
                         <li><a href="{{ route('home') }}" class="hover:text-orange-400 transition font-bold text-orange-400">Portal Owner</a></li>
                     </ul>
                 </div>
@@ -749,7 +726,7 @@
                 if (s === section) {
                     if (el) el.classList.remove('hidden');
                     if (navBtn) {
-                        navBtn.className = "nav-link-btn pb-1 border-b-2 border-orange-600 text-orange-600 font-extrabold flex items-center";
+                        navBtn.className = "text-orange-600 hover:text-orange-600 transition";
                     }
                     if (pillBtn) {
                         pillBtn.className = "pill-btn flex-1 py-3 px-4 rounded-xl transition flex items-center justify-center space-x-2 bg-orange-600 text-white shadow-sm font-extrabold";
@@ -757,7 +734,7 @@
                 } else {
                     if (el) el.classList.add('hidden');
                     if (navBtn) {
-                        navBtn.className = "nav-link-btn pb-1 border-b-2 border-transparent text-slate-700 hover:text-orange-600 font-bold transition flex items-center";
+                        navBtn.className = "text-slate-700 hover:text-orange-600 transition";
                     }
                     if (pillBtn) {
                         pillBtn.className = "pill-btn flex-1 py-3 px-4 rounded-xl transition flex items-center justify-center space-x-2 bg-slate-50 text-slate-600 hover:text-navy-950 hover:bg-slate-100 font-bold";
@@ -814,19 +791,8 @@
 
                 // Complaints Badge
                 const unresolvedCount = data.stats.unresolvedComplaintsCount || 0;
-                document.getElementById('statUnresolvedComplaints').textContent = unresolvedCount;
-
-                ['navBadgeComplaint', 'pillBadgeComplaint'].forEach(bId => {
-                    const badge = document.getElementById(bId);
-                    if (badge) {
-                        if (unresolvedCount > 0) {
-                            badge.textContent = unresolvedCount;
-                            badge.classList.remove('hidden');
-                        } else {
-                            badge.classList.add('hidden');
-                        }
-                    }
-                });
+                const statUnresolvedEl = document.getElementById('statUnresolvedComplaints');
+                if (statUnresolvedEl) statUnresolvedEl.textContent = unresolvedCount;
 
                 // Render Tables
                 renderRoomsTable(data.rooms);
