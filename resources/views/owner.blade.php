@@ -879,112 +879,112 @@
     <!-- ========================================================================= -->
     <!-- MODAL INVOICE PEMBAYARAN DIGITAL (SESUAI CONTOH REFERENSI) -->
     <!-- ========================================================================= -->
-    <div id="receiptModal" class="hidden fixed inset-0 modal-overlay z-50 overflow-y-auto flex items-center justify-center p-3 sm:p-6">
-        <div id="receiptCard" class="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-10 shadow-2xl border border-slate-200 relative text-left">
-            <button type="button" onclick="closeReceiptModal()" class="no-print absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center transition cursor-pointer" title="Tutup">
-                <i class="fa-solid fa-xmark text-lg"></i>
+    <div id="receiptModal" class="hidden fixed inset-0 modal-overlay z-50 overflow-y-auto flex items-center justify-center p-3 sm:p-4">
+        <div id="receiptCard" class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-200 relative text-left">
+            <button type="button" onclick="closeReceiptModal()" class="no-print absolute top-3.5 right-3.5 text-slate-400 hover:text-slate-600 w-7 h-7 rounded-full hover:bg-slate-100 flex items-center justify-center transition cursor-pointer" title="Tutup">
+                <i class="fa-solid fa-xmark text-base"></i>
             </button>
 
             <!-- Invoice Header (Logo + Info Kost di Kiri, INVOICE di Kanan) -->
-            <div class="flex flex-row justify-between items-start pb-5 border-b border-slate-200 gap-4">
+            <div class="flex flex-row justify-between items-start pb-4 border-b border-slate-200 gap-3">
                 <!-- Left: Logo & Info Kost WISMA S -->
-                <div class="flex items-start space-x-3.5 sm:space-x-4">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-xl overflow-hidden border border-slate-200 bg-white flex items-center justify-center p-1 shadow-2xs">
+                <div class="flex items-start space-x-3">
+                    <div class="w-13 h-13 sm:w-15 sm:h-15 shrink-0 rounded-xl overflow-hidden border border-slate-200 bg-white flex items-center justify-center p-1 shadow-2xs" style="width: 3.5rem; height: 3.5rem;">
                         <img src="{{ asset('images/logo-kost.jpg') }}" alt="Logo Kost WISMA S" class="w-full h-full object-contain">
                     </div>
                     <div class="space-y-0.5">
-                        <h2 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight leading-snug">Kost WISMA S</h2>
-                        <p class="text-[11px] sm:text-xs text-slate-600 max-w-xs sm:max-w-sm leading-relaxed font-normal">
-                            Perumahan Griya Karang Indah Blok S-15 RT 01 RW 12 kel. Karang Pucung Kec. Purwokerto Selatan Kab. Banyumas
+                        <h2 class="text-base sm:text-lg font-black tracking-tight leading-snug">
+                            <span class="text-orange-600" style="color: #ea580c;">Kost</span> <span class="text-navy-900" style="color: #1e3a8a;">WISMA S</span>
+                        </h2>
+                        <p class="text-[10px] sm:text-[11px] text-slate-500 max-w-[240px] sm:max-w-[270px] leading-relaxed font-normal mt-0.5">
+                            Griya Karang Indah Blok S-15, Karangpucung, Purwokerto Selatan 53142
                         </p>
-                        <p class="text-[11px] sm:text-xs text-slate-600 font-medium">081225143752</p>
-                        <p class="text-[11px] sm:text-xs text-slate-600 font-medium">ovancuys@gmail.com</p>
                     </div>
                 </div>
 
-                <!-- Right: Title INVOICE -->
+                <!-- Right: Title INVOICE (Warna Biru Footer / Navy 900) -->
                 <div class="text-right shrink-0">
-                    <h1 class="text-3xl sm:text-4xl font-black text-blue-600 tracking-wider" style="color: #2563eb;">INVOICE</h1>
+                    <h1 class="text-2xl sm:text-3xl font-black text-navy-900 tracking-wider" style="color: #1e3a8a;">INVOICE</h1>
                 </div>
             </div>
 
             <!-- Bill To & Invoice Info (2 Kolom) -->
-            <div class="grid grid-cols-2 gap-4 py-5 text-xs sm:text-sm">
+            <div class="grid grid-cols-2 gap-3 py-3.5 text-xs">
                 <!-- BILL TO (Data Penghuni) -->
                 <div class="space-y-0.5">
-                    <span class="block text-[11px] sm:text-xs font-black uppercase tracking-wider text-slate-900 mb-1">BILL TO</span>
-                    <div id="rcpTenantName" class="text-sm sm:text-base font-black text-slate-900 leading-tight"></div>
-                    <div id="rcpRoomNumber" class="text-xs font-bold text-slate-700"></div>
-                    <div id="rcpTenantPhone" class="text-xs text-slate-600 font-medium"></div>
-                    <div id="rcpTenantEmail" class="text-xs text-slate-600 font-medium"></div>
+                    <span class="block text-[10px] font-black uppercase tracking-wider text-slate-900 mb-0.5">BILL TO</span>
+                    <div id="rcpTenantName" class="text-sm font-black text-slate-900 leading-tight"></div>
+                    <div id="rcpRoomNumber" class="text-[11px] font-bold text-slate-700"></div>
+                    <div id="rcpTenantPhone" class="text-[11px] text-slate-500 font-medium"></div>
+                    <div id="rcpTenantEmail" class="text-[11px] text-slate-500 font-medium"></div>
                 </div>
 
                 <!-- INVOICE META (INVOICE #, DATE, DUE DATE Rata Kanan) -->
                 <div class="flex flex-col items-end justify-start">
-                    <div class="w-full max-w-[240px] space-y-1.5 text-xs sm:text-sm">
-                        <div class="flex justify-between items-center gap-3">
-                            <span class="font-extrabold text-slate-900 uppercase tracking-wider text-[11px] sm:text-xs">INVOICE #</span>
+                    <div class="w-full max-w-[190px] sm:max-w-[210px] space-y-1 text-xs">
+                        <div class="flex justify-between items-center gap-2">
+                            <span class="font-extrabold text-slate-900 uppercase tracking-wider text-[10px]">INVOICE #</span>
                             <span id="rcpInvoiceNo" class="font-bold text-slate-900 text-right"></span>
                         </div>
-                        <div class="flex justify-between items-center gap-3">
-                            <span class="font-extrabold text-slate-900 uppercase tracking-wider text-[11px] sm:text-xs">DATE</span>
+                        <div class="flex justify-between items-center gap-2">
+                            <span class="font-extrabold text-slate-900 uppercase tracking-wider text-[10px]">DATE</span>
                             <span id="rcpDate" class="font-semibold text-slate-800 text-right"></span>
                         </div>
-                        <div class="flex justify-between items-center gap-3">
-                            <span class="font-extrabold text-slate-900 uppercase tracking-wider text-[11px] sm:text-xs">DUE DATE</span>
+                        <div class="flex justify-between items-center gap-2">
+                            <span class="font-extrabold text-slate-900 uppercase tracking-wider text-[10px]">DUE DATE</span>
                             <span id="rcpDueDate" class="font-semibold text-slate-800 text-right"></span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Tabel Item Transaksi (Header Biru) -->
-            <div class="overflow-x-auto my-2">
-                <table class="w-full border-collapse border border-blue-600 text-xs sm:text-sm">
+            <!-- Tabel Item Transaksi (Header Biru Footer / Navy 900) -->
+            <div class="overflow-x-auto my-1.5">
+                <table class="w-full border-collapse border border-navy-900 text-xs">
                     <thead>
-                        <tr class="bg-blue-600 text-white font-bold" style="background-color: #2563eb; color: #ffffff;">
-                            <th class="py-2.5 px-3 sm:px-4 text-left border-r border-blue-500 w-[50%]">Description</th>
-                            <th class="py-2.5 px-2 sm:px-3 text-center border-r border-blue-500 w-[12%]">QTY</th>
-                            <th class="py-2.5 px-3 sm:px-4 text-right border-r border-blue-500 w-[19%]">Price</th>
-                            <th class="py-2.5 px-3 sm:px-4 text-right w-[19%]">Amount</th>
+                        <tr class="bg-navy-900 text-white font-bold" style="background-color: #1e3a8a; color: #ffffff;">
+                            <th class="py-2 px-3 text-left border-r border-navy-800 w-[50%]">Description</th>
+                            <th class="py-2 px-2 text-center border-r border-navy-800 w-[12%]">QTY</th>
+                            <th class="py-2 px-3 text-right border-r border-navy-800 w-[19%]">Price</th>
+                            <th class="py-2 px-3 text-right w-[19%]">Amount</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="border-b border-blue-200">
-                            <td id="rcpDescription" class="py-3 px-3 sm:px-4 text-left font-bold text-slate-800 border-r border-blue-200 leading-snug"></td>
-                            <td id="rcpQty" class="py-3 px-2 sm:px-3 text-center font-bold text-slate-800 border-r border-blue-200">1</td>
-                            <td id="rcpPrice" class="py-3 px-3 sm:px-4 text-right font-bold text-slate-800 border-r border-blue-200"></td>
-                            <td id="rcpAmount" class="py-3 px-3 sm:px-4 text-right font-bold text-slate-800"></td>
+                        <tr class="border-b border-navy-200">
+                            <td id="rcpDescription" class="py-2.5 px-3 text-left font-bold text-slate-800 border-r border-navy-100 leading-snug"></td>
+                            <td id="rcpQty" class="py-2.5 px-2 text-center font-bold text-slate-800 border-r border-navy-100">1</td>
+                            <td id="rcpPrice" class="py-2.5 px-3 text-right font-bold text-slate-800 border-r border-navy-100"></td>
+                            <td id="rcpAmount" class="py-2.5 px-3 text-right font-bold text-slate-800"></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <!-- Ringkasan & Stempel "Paid" -->
-            <div class="relative py-3">
+            <div class="relative py-2.5">
                 <!-- STAMP PAID (WATERMARK STEMPEL HIJAU MIRING) -->
-                <div class="absolute right-36 sm:right-48 top-1 pointer-events-none select-none z-10" style="transform: rotate(-25deg);">
-                    <div class="border-4 sm:border-[5px] border-emerald-500 text-emerald-500 rounded-2xl sm:rounded-3xl px-5 py-0.5 sm:px-6 sm:py-1 font-black text-2xl sm:text-3xl tracking-wider uppercase opacity-90 shadow-2xs" style="border-color: #22c55e; color: #22c55e;">
+                <div class="absolute right-28 sm:right-36 top-0.5 pointer-events-none select-none z-10" style="transform: rotate(-25deg);">
+                    <div class="border-[3.5px] border-emerald-500 text-emerald-500 rounded-2xl px-4 py-0.5 font-black text-xl tracking-wider uppercase opacity-90 shadow-2xs" style="border-color: #22c55e; color: #22c55e;">
                         Paid
                     </div>
                 </div>
 
                 <!-- Summary Box (Rata Kanan) -->
                 <div class="flex justify-end">
-                    <div class="w-full sm:w-72 space-y-1 text-xs sm:text-sm font-semibold">
-                        <div class="flex justify-between py-1 border-b border-slate-100">
+                    <div class="w-full sm:w-60 space-y-0.5 text-xs font-semibold">
+                        <div class="flex justify-between py-0.5 border-b border-slate-100">
                             <span class="text-slate-700 font-bold">Subtotal</span>
                             <span id="rcpSubtotal" class="text-slate-900 font-extrabold text-right"></span>
                         </div>
-                        <div class="flex justify-between py-1 border-b border-slate-100">
+                        <div class="flex justify-between py-0.5 border-b border-slate-100">
                             <span class="text-slate-700 font-bold">Total</span>
                             <span id="rcpTotal" class="text-slate-900 font-extrabold text-right"></span>
                         </div>
-                        <div class="flex justify-between py-1 border-b border-slate-100">
+                        <div class="flex justify-between py-0.5 border-b border-slate-100">
                             <span class="text-slate-700 font-bold">Paid</span>
                             <span id="rcpPaid" class="text-slate-900 font-extrabold text-right"></span>
                         </div>
-                        <div class="flex justify-between items-center bg-blue-600 text-white px-3 py-2 font-black text-xs sm:text-sm tracking-wide" style="background-color: #2563eb; color: #ffffff;">
+                        <div class="flex justify-between items-center bg-navy-900 text-white px-2.5 py-1.5 font-black text-xs tracking-wide" style="background-color: #1e3a8a; color: #ffffff;">
                             <span>BALANCE DUE</span>
                             <span id="rcpBalanceDue" class="font-black">Rp0</span>
                         </div>
@@ -992,35 +992,34 @@
                 </div>
             </div>
 
-            <!-- Footer: Syarat atau Catatan & Tanda Tangan -->
-            <div class="grid grid-cols-2 gap-4 pt-6 mt-4 items-end border-t border-transparent">
-                <!-- Syarat atau Catatan -->
-                <div class="space-y-1">
-                    <h4 class="text-xs sm:text-sm font-extrabold text-slate-900">Syarat atau Catatan</h4>
-                    <p class="text-xs text-slate-600 font-medium">Terima kasih atas bisnis Anda.</p>
-                </div>
-
-                <!-- Tanda Tangan Digital Pengelola -->
-                <div class="flex flex-col items-end">
-                    <div class="flex flex-col items-center">
-                        <svg class="w-36 h-20 text-slate-900" viewBox="0 0 200 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M 25,70 C 15,65 15,45 35,40 C 50,36 60,50 55,68 C 50,82 25,85 18,80 C 10,75 15,65 30,62 C 60,58 110,65 155,75" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M 58,22 C 60,15 65,16 66,75 C 66,82 62,85 58,80" stroke="#0f172a" stroke-width="2.8" stroke-linecap="round"/>
-                            <path d="M 66,32 C 85,25 90,40 88,72 C 87,80 92,85 96,78 C 102,68 104,50 102,70 C 101,78 105,82 110,76" stroke="#0f172a" stroke-width="2.6" stroke-linecap="round"/>
-                            <path d="M 20,55 L 140,55" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round"/>
-                        </svg>
-                        <p class="text-xs font-bold text-slate-800 tracking-wide mt-1">Pengelola Kost WISMA S</p>
-                    </div>
+            <!-- Footer: Tanda Tangan Rata Kanan (Sesuai Contoh Gambar) -->
+            <div class="flex justify-end pt-2 mt-1">
+                <div class="flex flex-col items-center text-center">
+                    <svg class="w-28 h-16 sm:w-32 sm:h-18 text-slate-900" viewBox="0 0 160 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Horizontal top bar to vertical drop (kiri) -->
+                        <path d="M 45 32 L 95 30 L 93 84" stroke="#0f172a" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <!-- Bottom left loop -->
+                        <path d="M 93 84 C 75 87, 36 86, 36 68 C 36 54, 65 58, 98 63" stroke="#0f172a" stroke-width="2.6" stroke-linecap="round"/>
+                        <!-- First tall upright loop (extends higher than top bar) -->
+                        <path d="M 96 68 C 98 42, 102 14, 106 14 C 110 14, 107 48, 105 86" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
+                        <!-- Second tall upright loop -->
+                        <path d="M 105 78 C 112 60, 118 12, 122 12 C 126 12, 123 50, 121 90" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
+                        <!-- Horizontal cross line -->
+                        <path d="M 75 66 L 132 64" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round"/>
+                        <!-- Bottom hook / flourish -->
+                        <path d="M 103 84 C 112 88, 122 86, 128 82" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round"/>
+                    </svg>
+                    <p class="text-xs font-bold text-slate-800 tracking-wide mt-0.5">Iskandar</p>
                 </div>
             </div>
 
             <!-- Footer / Action Buttons (No Print) -->
-            <div class="no-print pt-6 mt-6 border-t border-slate-200 flex justify-end gap-3">
-                <button type="button" onclick="closeReceiptModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition flex items-center cursor-pointer">
+            <div class="no-print pt-4 mt-3 border-t border-slate-200 flex justify-end gap-2.5">
+                <button type="button" onclick="closeReceiptModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition flex items-center cursor-pointer">
                     Tutup
                 </button>
-                <button type="button" onclick="printReceipt()" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs rounded-xl transition flex items-center cursor-pointer shadow-md">
-                    <i class="fa-solid fa-print mr-2"></i> Cetak Invoice
+                <button type="button" onclick="printReceipt()" class="px-5 py-2 bg-orange-600 hover:bg-orange-700 text-white font-extrabold text-xs rounded-xl transition flex items-center cursor-pointer shadow-sm">
+                    <i class="fa-solid fa-print mr-1.5"></i> Cetak Invoice
                 </button>
             </div>
         </div>
