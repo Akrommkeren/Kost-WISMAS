@@ -1311,8 +1311,8 @@
             tbody.innerHTML = transactions.map(t => {
                 const isIncome = t.type === 'in';
                 const typeBadge = isIncome
-                    ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-200"><i class="fa-solid fa-arrow-down mr-1 text-[9px] text-emerald-600"></i> KAS MASUK</span>`
-                    : `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-rose-800 border border-rose-200"><i class="fa-solid fa-arrow-up mr-1 text-[9px] text-rose-600"></i> KAS KELUAR</span>`;
+                    ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-200"><i class="fa-solid fa-arrow-down mr-1 text-[9px] text-emerald-600"></i> PEMASUKAN</span>`
+                    : `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-rose-800 border border-rose-200"><i class="fa-solid fa-arrow-up mr-1 text-[9px] text-rose-600"></i> PENGELUARAN</span>`;
 
                 const amountFormatted = isIncome
                     ? `<span class="font-black text-emerald-600 text-sm">+ Rp ${t.amount.toLocaleString('id-ID')}</span>`
