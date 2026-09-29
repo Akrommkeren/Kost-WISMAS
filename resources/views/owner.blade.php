@@ -175,7 +175,7 @@
                     </div>
                     <div class="mt-2.5">
                         <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200/80">
-                            <span id="statAvailableCount">-</span>&nbsp;Kamar Tersedia
+                            <i class="fa-solid fa-door-open mr-1.5 text-emerald-600"></i><span id="statAvailableCount">-</span>&nbsp;Kamar Tersedia
                         </span>
                     </div>
                 </div>
@@ -186,7 +186,7 @@
                     <div class="text-xl sm:text-2xl font-black text-orange-600" id="statPendingAmount">Rp 0</div>
                     <div class="mt-2.5">
                         <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold bg-amber-50 text-amber-900 border border-amber-200/80">
-                            <span id="statPendingCount">0</span>&nbsp;tagihan menunggu verifikasi
+                            <i class="fa-solid fa-clock mr-1.5 text-amber-600"></i><span id="statPendingCount">0</span>&nbsp;tagihan menunggu verifikasi
                         </span>
                     </div>
                 </div>
@@ -200,7 +200,7 @@
                     </div>
                     <div class="mt-2.5">
                         <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold bg-rose-50 text-rose-800 border border-rose-200/80">
-                            Perlu tindak lanjut owner
+                            <i class="fa-solid fa-triangle-exclamation mr-1.5 text-rose-600"></i>Perlu tindak lanjut
                         </span>
                     </div>
                 </div>
