@@ -425,7 +425,7 @@
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                     <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/70 flex flex-wrap items-center justify-between gap-3">
                         <div>
-                            <h2 class="text-base font-extrabold text-navy-950 uppercase tracking-wider">Daftar Pengaduan Kendala Fasilitas</h2>
+                            <h2 class="text-base font-extrabold text-navy-950 uppercase tracking-wider">Daftar Pengaduan</h2>
                             <p class="text-xs text-slate-500 mt-0.5">Tinjau laporan kendala fasilitas penghuni yang belum diperbaiki agar segera ditindaklanjuti.</p>
                         </div>
                         <div class="flex items-center space-x-2">
@@ -439,8 +439,8 @@
                                     <div onclick="selectOwnerFilterOption('ComplaintStatus', 'all', 'Semua Status Pengaduan')" data-val="all" class="complaint-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-semibold text-slate-900 bg-slate-100 truncate">
                                         Semua Status Pengaduan
                                     </div>
-                                    <div onclick="selectOwnerFilterOption('ComplaintStatus', 'pending', 'Belum Diperbaiki (Perlu Tindakan)')" data-val="pending" class="complaint-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
-                                        Belum Diperbaiki (Perlu Tindakan)
+                                    <div onclick="selectOwnerFilterOption('ComplaintStatus', 'pending', 'Belum Diperbaiki')" data-val="pending" class="complaint-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
+                                        Belum Diperbaiki
                                     </div>
                                     <div onclick="selectOwnerFilterOption('ComplaintStatus', 'in_progress', 'Sedang Dikerjakan')" data-val="in_progress" class="complaint-status-opt px-3 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition text-xs font-medium text-slate-900 truncate">
                                         Sedang Dikerjakan
@@ -463,7 +463,7 @@
                                         <th class="py-3 px-4">Kategori</th>
                                         <th class="py-3 px-4" style="width: 36%;">Pesan Pengaduan Kendala</th>
                                         <th class="py-3 px-4 text-center">Status Perbaikan</th>
-                                        <th class="py-3 px-4 text-center">Tindakan Owner</th>
+                                        <th class="py-3 px-4 text-center">Tindakan</th>
                                     </tr>
                                 </thead>
                                 <tbody id="complaintsTableBody" class="divide-y divide-slate-100">
@@ -1371,10 +1371,35 @@
 
                 const userName = c.user ? c.user.name : 'Penghuni';
                 const userPhone = c.user ? c.user.phone : '-';
-                const roomInfo = c.room_number ? `Kamar ${c.room_number}` : 'Kamar Penghuni';
+                let roomInfo = 'Kamar Penghuni';
+                if (c.room_number) {
+                    roomInfo = c.room_number.toLowerCase().startsWith('kamar') ? c.room_number : `Kamar ${c.room_number}`;
+                }
                 const createdAt = new Date(c.created_at).toLocaleDateString('id-ID', {
                     day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
                 });
+
+                let actionHtml = '';
+                if (isPending) {
+                    actionHtml = `
+                        <div class="inline-flex items-center space-x-1.5">
+                            <button onclick="updateComplaintStatus(${c.id}, 'in_progress')" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded-lg text-[10px] border border-blue-200 transition cursor-pointer" title="Tandai Sedang Dikerjakan">
+                                <i class="fa-solid fa-wrench mr-1"></i> Proses
+                            </button>
+                            <button onclick="updateComplaintStatus(${c.id}, 'resolved')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[10px] transition shadow-2xs cursor-pointer" title="Tandai Selesai Diperbaiki">
+                                <i class="fa-solid fa-check mr-1"></i> Selesai
+                            </button>
+                        </div>
+                    `;
+                } else if (isInProgress) {
+                    actionHtml = `
+                        <button onclick="updateComplaintStatus(${c.id}, 'resolved')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[10px] transition shadow-2xs cursor-pointer" title="Tandai Selesai Diperbaiki">
+                            <i class="fa-solid fa-check mr-1"></i> Selesai
+                        </button>
+                    `;
+                } else {
+                    actionHtml = `<span class="text-slate-400 font-semibold text-xs">Selesai</span>`;
+                }
 
                 return `
                     <tr class="hover:bg-slate-50/80 transition ${isPending ? 'bg-orange-50/20' : ''}">
@@ -1382,8 +1407,8 @@
                             <i class="fa-regular fa-clock mr-1 text-slate-400"></i> ${createdAt}
                         </td>
                         <td class="py-4 px-4">
-                            <p class="font-extrabold text-navy-950 text-sm">${userName}</p>
-                            <p class="text-[11px] text-orange-600 font-semibold">${roomInfo}</p>
+                            <p class="font-bold text-navy-950 text-xs">${userName}</p>
+                            <p class="text-xs text-slate-500 font-medium mt-0.5">${roomInfo}</p>
                             ${userPhone && userPhone !== '-' ? `
                                 <a href="https://wa.me/${userPhone.replace(/[^0-9]/g, '')}?text=Halo%20${encodeURIComponent(userName)},%20terkait%20pengaduan%20fasilitas%20Anda:%20${encodeURIComponent(c.message)}" target="_blank" class="inline-flex items-center text-[10px] text-emerald-600 font-bold hover:underline mt-0.5">
                                     <i class="fa-brands fa-whatsapp mr-1"></i> Chat WhatsApp
@@ -1400,23 +1425,7 @@
                         </td>
                         <td class="py-4 px-4 text-center whitespace-nowrap">${badge}</td>
                         <td class="py-4 px-4 text-center whitespace-nowrap">
-                            <div class="inline-flex items-center space-x-1">
-                                ${!isResolved ? `
-                                    <button onclick="updateComplaintStatus(${c.id}, 'resolved')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[10px] transition shadow-2xs" title="Tandai Selesai Diperbaiki">
-                                        <i class="fa-solid fa-check mr-1"></i> Selesai
-                                    </button>
-                                ` : ''}
-                                ${isPending ? `
-                                    <button onclick="updateComplaintStatus(${c.id}, 'in_progress')" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded-lg text-[10px] border border-blue-200 transition" title="Tandai Sedang Dikerjakan">
-                                        <i class="fa-solid fa-wrench mr-1"></i> Proses
-                                    </button>
-                                ` : ''}
-                                ${isResolved ? `
-                                    <button onclick="updateComplaintStatus(${c.id}, 'pending')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-lg text-[10px]" title="Buka Kembali">
-                                        Buka Lagi
-                                    </button>
-                                ` : ''}
-                            </div>
+                            ${actionHtml}
                         </td>
                     </tr>
                 `;
