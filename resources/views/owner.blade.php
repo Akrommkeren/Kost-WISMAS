@@ -415,7 +415,7 @@
 
                             <!-- Tombol Export Data Keuangan di Pojok Kanan Bawah -->
                             <div class="mt-4 pt-3 flex justify-end border-t border-slate-100">
-                                <button type="button" onclick="exportFinances()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-sm transition flex items-center cursor-pointer" title="Export Laporan Keuangan ke format CSV / Excel">
+                                <button type="button" onclick="exportFinances()" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs rounded-xl shadow-sm transition flex items-center cursor-pointer" title="Export Laporan Keuangan ke format CSV / Excel">
                                     <i class="fa-solid fa-file-excel mr-1.5 text-sm"></i> Export CSV / Excel
                                 </button>
                             </div>
